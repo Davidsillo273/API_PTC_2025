@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Models.DTO;
+package DevSGMA_PTC.SGMA_PTC.Models.DTO.WorksOrders;
 
 import DevSGMA_PTC.SGMA_PTC.Models.Entities.WorkOrder.AcademicYear;
 import DevSGMA_PTC.SGMA_PTC.Models.Entities.WorkOrder.MaintenanceType;

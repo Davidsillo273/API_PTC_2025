@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Repositories;
+package DevSGMA_PTC.SGMA_PTC.Repositories.WorksOrders;
 
 import DevSGMA_PTC.SGMA_PTC.Models.Entities.WorkOrder;
 import org.springframework.data.jpa.repository.JpaRepository;

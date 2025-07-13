@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Entities.Rol;
+package DevSGMA_PTC.SGMA_PTC.Entities.Roles;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

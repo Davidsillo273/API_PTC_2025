@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Models.DTO;
+package DevSGMA_PTC.SGMA_PTC.Models.DTO.VehiclesEntrys;
 
 import DevSGMA_PTC.SGMA_PTC.Models.Entities.VehicleEntry.VehicleEntryStatus;
 import jakarta.validation.constraints.NotNull;

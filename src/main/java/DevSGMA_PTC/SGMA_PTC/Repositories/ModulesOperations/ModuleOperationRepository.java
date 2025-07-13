@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Repositories;
+package DevSGMA_PTC.SGMA_PTC.Repositories.ModulesOperations;
 
 import DevSGMA_PTC.SGMA_PTC.Models.Entities.ModuleOperation;
 import org.springframework.data.jpa.repository.JpaRepository;
