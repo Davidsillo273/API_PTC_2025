@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Models.DTO;
+package DevSGMA_PTC.SGMA_PTC.Models.DTO.Modules;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

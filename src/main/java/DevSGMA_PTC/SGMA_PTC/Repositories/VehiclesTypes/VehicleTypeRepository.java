@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Repositories;
+package DevSGMA_PTC.SGMA_PTC.Repositories.VehiclesTypes;
 
 import DevSGMA_PTC.SGMA_PTC.Models.Entities.VehicleType;
 import org.springframework.data.jpa.repository.JpaRepository;

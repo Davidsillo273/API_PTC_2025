@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Models.DTO;
+package DevSGMA_PTC.SGMA_PTC.Models.DTO.VehiclesTypes;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
