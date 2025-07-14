@@ -1,24 +1,15 @@
 package DevSGMA_PTC.SGMA_PTC.Models.DTO.VehiclesEntrys;
 
-import DevSGMA_PTC.SGMA_PTC.Models.Entities.VehicleEntry.VehicleEntryStatus;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "tbVehicleEntries")
 public class VehicleEntryRequestDTO {
-    @NotNull(message = "El ID del vehículo es obligatorio")
-    private Long vehicleId;
+    private String licensePlate; // No necesita @Column
+    private String brand;
+    private String model;
+    private String notes;
 
-    private LocalDateTime entryTime;
 
-    @NotNull(message = "El ID de la operación es obligatorio")
-    private Long operationId;
-
-    private VehicleEntryStatus status;
-}
+    }
