@@ -1,31 +1,37 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.Users;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-@Entity
-@Table(name = "tbUser")
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userId;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    @Column (name = "username", nullable = false, length = 50)
-    private String username;
+import javax.management.relation.Role;
 
-    @Column (name = "passwordHash", nullable = false, length = 225)
-    private String passwordHash;
+public class UserEntity {
 
-    @Column (name = "fullName", nullable = false, length = 100)
-    private String fullName;
+    // Esta clase representa la tabla tbUsers de la base de datos
+    @Entity
+    @Table(name = "tbUsers")
+    @Data // Lombok: genera automáticamente getters, setters, equals, hashCode y toString
+    @NoArgsConstructor // Lombok: constructor vacío
+    @AllArgsConstructor // Lombok: constructor con todos los campos
 
+    public class User {
 
+        @Id // Llave primaria
+        @GeneratedValue(strategy = GenerationType.IDENTITY) // Se genera automáticamente (autoincremental)
+        private Long userId;
+
+        @Column(nullable = false, unique = true)
+        private String username;
+
+        @Column(nullable = false)
+        private String passwordHash;
+
+        @Column(nullable = false)
+        private String fullName;
+
+        @ManyToOne // Muchos usuarios pueden tener un mismo rol
+        @JoinColumn(name = "roleId", nullable = false) // Columna que conecta con la tabla de roles
+        private Role role;}
 }
-
-
