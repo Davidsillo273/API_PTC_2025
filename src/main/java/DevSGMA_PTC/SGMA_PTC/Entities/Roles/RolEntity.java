@@ -1,46 +1,22 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.Roles;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-@Entity
-@Table(name = "tbRoles")
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-class RolEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roleId;
+import lombok.*;
 
+public class RolEntity{
 
-    @Column(name = "roleName", nullable = false, length = 50)
-    private String roleName;
-    public RolEntity() {
+    // Esta clase representa la tabla tbUsers de la base de datos
+    @Entity
+    @Table(name = "tbRoles")
+    @Data // Lombok: genera automáticamente getters, setters, equals, hashCode y toString
+    @NoArgsConstructor // Lombok: constructor vacío
+    @AllArgsConstructor // Lombok: constructor con todos los campos
+
+    public class Rol {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY) // Se genera automáticamente (autoincremental)
+        private Long roleId;
+
+        @Column(nullable = false)
+        private String roleName;
     }
-
-
-    public Long getRoleId() {
-        return roleId;
-    }
-
-
-    public void setRoleId(Long roleId)
-    {
-        this.roleId = roleId;
-    }
-
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-
-    public void setRoleName(String roleName)
-    {
-        this.roleName = roleName;
-    }
-
 }
