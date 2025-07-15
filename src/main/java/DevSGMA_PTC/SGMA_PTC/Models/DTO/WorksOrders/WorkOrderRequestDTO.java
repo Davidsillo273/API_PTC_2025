@@ -1,10 +1,11 @@
 package DevSGMA_PTC.SGMA_PTC.Models.DTO.WorksOrders;
 
-import DevSGMA_PTC.SGMA_PTC.Models.Entities.WorkOrder.AcademicYear;
-import DevSGMA_PTC.SGMA_PTC.Models.Entities.WorkOrder.MaintenanceType;
-import DevSGMA_PTC.SGMA_PTC.Models.Entities.WorkOrder.WorkOrderStatus;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -16,39 +17,47 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class WorkOrderRequestDTO {
 
-    @NotNull(message = "El ID del vehículo es obligatorio")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long workOrderId;
+
+    @Column(nullable = false)
     private Long vehicleId;
 
-    private AcademicYear academicYear;
+    @Column(length = 20)
+    private String academicYear;
 
     private Long instructorId;
 
-    @Size(max = 100, message = "El nombre del estudiante no puede exceder los 100 caracteres")
+    @Column(length = 100)
     private String studentName;
 
-    @Size(max = 8, message = "El ID del estudiante no puede exceder los 8 caracteres")
+    @Column(length = 8)
     private String studentId;
 
-    @NotNull(message = "El ID de la operación es obligatorio")
+    @Column(nullable = false)
     private Long operationId;
 
-    @NotNull(message = "El ID del módulo es obligatorio")
+    @Column(nullable = false)
     private Long moduleId;
 
-    private MaintenanceType maintenanceType;
+    @Column
+    private String maintenanceType;
 
-    @Size(max = 50, message = "El tiempo estimado no puede exceder los 50 caracteres")
+    @Column
     private String estimatedTime;
 
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime entryTime;
 
     private LocalDateTime exitTime;
 
-    @Size(max = 100, message = "El nombre del propietario no puede exceder los 100 caracteres")
+    @Column
     private String ownerName;
 
-    @Size(max = 10, message = "El DUI del propietario no puede exceder los 10 caracteres")
+    @Column
     private String ownerDui;
 
-    private WorkOrderStatus status;
+    @Column
+    private String status;
 }
