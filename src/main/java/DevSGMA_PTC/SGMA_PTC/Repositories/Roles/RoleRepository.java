@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 // Repositorio para la entidad Role. Hereda los métodos CRUD de JpaRepository.
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<RolEntity, Long> {
     // Búsqueda personalizada por nombre de rol
-    Optional<Role> findByRoleName(String roleName);
+    Optional<RolEntity> findByRoleName(String roleName);
 }
