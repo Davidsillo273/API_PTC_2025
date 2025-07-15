@@ -1,58 +1,57 @@
 package DevSGMA_PTC.SGMA_PTC.Services.VehiclesEntrys;
 
+import DevSGMA_PTC.SGMA_PTC.Entities.VehiclesEntrys.VehicleEntryEntity;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Vehicles.VehicleRequestDTO;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.VehiclesEntrys.VehicleEntryRequestDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.VehiclesEntrys.VehicleEntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
+
+import javax.management.relation.Role;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
 public class VehicleEntryService {
 
-//    @Autowired
-//    private VehicleEntryRepository vehicleEntryRepository;
-//
-//    @Override
-//    public List<VehicleEntry> getAllVehicleEntries() {
-//        return vehicleEntryRepository.findAll();
-//    }
-//
-//    @Override
-//    public VehicleEntry getVehicleEntryById(Long id) {
-//        return vehicleEntryRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Entrada de vehículo no encontrada"));
-//    }
-//
-//    @Override
-//    public VehicleEntry createVehicleEntry(VehicleEntry vehicleEntry) {
-//        vehicleEntry.setEntryDate(LocalDateTime.now());
-//        return vehicleEntryRepository.save(vehicleEntry);
-//    }
-//
-//    // Método adicional para crear desde DTO
-//    public VehicleEntry createFromDTO(VehicleEntryRequestDTO dto) {
-//        VehicleEntry entry = new VehicleEntry();
-//        entry.setLicensePlate(dto.getLicensePlate());
-//        entry.setBrand(dto.getBrand());
-//        entry.setModel(dto.getModel());
-//        entry.setNotes(dto.getNotes());
-//        return createVehicleEntry(entry);
-//    }
-//
-//    @Override
-//    public VehicleEntry updateVehicleEntry(Long id, VehicleEntry vehicleEntry) {
-//        VehicleEntry existingEntry = getVehicleEntryById(id);
-//        existingEntry.setLicensePlate(vehicleEntry.getLicensePlate());
-//        existingEntry.setBrand(vehicleEntry.getBrand());
-//        existingEntry.setModel(vehicleEntry.getModel());
-//        existingEntry.setNotes(vehicleEntry.getNotes());
-//        return vehicleEntryRepository.save(existingEntry);
-//    }
-//
-//    @Override
-//    public void deleteVehicleEntry(Long id) {
-//        vehicleEntryRepository.deleteById(id);
-   // }
+    @Autowired
+    VehicleEntryRepository VehicleRepository;
+
+    // Devuelve todos los roles
+    public List<VehicleEntryRequestDTO> VehicleEntries () {
+        List<VehicleEntryEntity>Vehicles = VehicleRepository.findAll();
+        return Vehicles.stream()
+                .map(this::convertVehiclesDTO)
+                .collect(Collectors.toList());
+
+    }
+
+    public VehicleEntryRequestDTO convertVehiclesDTO(VehicleEntryEntity entity){
+        VehicleEntryRequestDTO dto = new VehicleEntryRequestDTO();
+        dto.setBrand(entity.getBrand());
+        dto.setModel(entity.getModel());
+        dto.setNotes(entity.getNotes());
+        dto.setLicensePlate(entity.getLicensePlate());
+        return dto;
+    }
 }
+
+
+
+//    // Devuelve un rol específico por ID
+//    public Optional<Role> getRoleById(Long id) {
+//        return VehicleEntryRepository.findById(id);
+//    }
+//
+//    // Guarda o actualiza un rol
+//    public Role saveRole(Role role) {
+//        return VehicleEntryRepository.save(role);
+//    }
+//
+//    // Elimina un rol por ID
+//    public void deleteRole(Long id) {
+//        VehicleEntryRepository.deleteById(id);
+//    }
+
