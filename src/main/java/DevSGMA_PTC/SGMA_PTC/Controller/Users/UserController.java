@@ -2,9 +2,7 @@ package DevSGMA_PTC.SGMA_PTC.Controller.Users;
 
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Users.UserRequestDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.Users.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,12 +13,12 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    UserService userService;
 
-    //localhost:8080/apiUsuario/datosUsuarios
-    @GetMapping("/DatosUsers")
+    //localhost:8080/apiUsers/dataUsers
+    @GetMapping("/dataUsers")
     public List<UserRequestDTO> getAllData(){
-        return userService.getAllUsers();
+        return userService.getAllFromUsers();
 
     }
 //
