@@ -1,27 +1,23 @@
 package DevSGMA_PTC.SGMA_PTC.Controller.Roles;
 
-
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Roles.RoleRequestDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.Roles.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.management.relation.Role;
 import java.util.List;
 
 // Controlador REST que maneja las rutas relacionadas a roles
 @RestController
-@RequestMapping("/api/roles")
+@RequestMapping("/apiRoles")
 @CrossOrigin // Permite que otro origen haga solicitudes a esta API
 
 public class RoleController {
 
     @Autowired
-    private RoleService roleService;
+    RoleService roleService;
 
-    // GET /api/roles para listar los roles
-    @GetMapping("/DatosRoles")
+    // GET localhost:8080/apiRoles/dataRoles para listar los roles
+    @GetMapping("/dataRoles")
     public List<RoleRequestDTO> getAllData() {
         return roleService.getAllRoles();
     }

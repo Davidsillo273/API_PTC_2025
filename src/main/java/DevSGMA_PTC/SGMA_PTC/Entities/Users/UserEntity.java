@@ -1,33 +1,35 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.Users;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.Roles.RolEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Roles.RoleEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
 import lombok.*;
 
+@Entity
+@Table(name = "TBUSERS")
 @Getter @Setter
 public class UserEntity {
 
     //Atributos
-    @Column(name = "userId")
+    @Id
+    @Column(name = "USERID")
     private Long userId;
 
-    @Column(name = "email")
+    @Column(name = "EMAIL")
     private String email;
 
-    @Column(name = "name")
+    @Column(name = "USERNAME")
     private String username;
 
-    @Column(name = "passwordHash")
+    @Column(name = "PASSWORDHASH")
     private String passwordHash;
 
-    @Column(name = "fullName")
+    @Column(name = "FULLNAME")
     private String fullName;
 
     @ManyToOne
-    @JoinColumn(name = "roleId", referencedColumnName = "roleId")
-    private RolEntity role;
+    @JoinColumn(name = "ROLEID", referencedColumnName = "ROLEID")
+    private RoleEntity role;
 
 }
 

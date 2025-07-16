@@ -5,7 +5,8 @@ import lombok.*;
 
 @ToString
 @EqualsAndHashCode
-@Getter @Setter
+@Getter
+@Setter
 public class UserRequestDTO {
 
     private Long userId;
@@ -27,4 +28,7 @@ public class UserRequestDTO {
     @NotNull(message = "El ID del rol es obligatorio")
     @Positive(message = "El ID de cargo debe ser positivo")
     private Long roleId;
+
+    //Este es un campo adiccional para mostrar el nombre del rol, campo como tal no existe en Users
+    private String roleName;
 }

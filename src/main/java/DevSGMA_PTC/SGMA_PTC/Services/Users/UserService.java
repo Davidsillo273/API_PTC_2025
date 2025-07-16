@@ -3,37 +3,44 @@ package DevSGMA_PTC.SGMA_PTC.Services.Users;
 import DevSGMA_PTC.SGMA_PTC.Entities.Users.UserEntity;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Users.UserRequestDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Users.UserRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 // Capa de lógica de negocio. Aquí validamos antes de guardar o consultar datos
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository; // Repositorio que accede a la base de datos
+    UserRepository userRepository; // Repositorio que accede a la base de datos
 
     // Devuelve todos los usuarios
-    public List<UserRequestDTO> getAllUsers() {
+    public List<UserRequestDTO> getAllFromUsers() {
         List<UserEntity> User = userRepository.findAll();
         return User.stream()
                 .map(this::convertToUserDTO)
                 .collect(Collectors.toList());
     }
 
-    public UserRequestDTO convertToUserDTO(UserEntity entity){
+    public UserRequestDTO convertToUserDTO(UserEntity entity) {
 
-        //Este será el obj a retornar
+        //Se crea un obj de tipo DTO, este será el obj a retornar
         UserRequestDTO dto = new UserRequestDTO();
+        //Se transfieren los datos del Entity al DTO
         dto.setUserId(entity.getUserId());
         dto.setEmail(entity.getEmail());
         dto.setUsername(entity.getUsername());
-        dto.setFullName(entity.getFullName());
         dto.setPasswordHash(entity.getPasswordHash());
+        dto.setFullName(entity.getFullName());
+
+        //Si en caso el valor proveniente de Entity es null se procede a guardar null en el DTO
+        //En caso el cargo no sea Null, se guarda su ID
+        if (entity.getRole() != null) {
+            dto.setRoleName(entity.getRole().getRole());
+            dto.setRoleId(entity.getRole().getRoleId());
+        } else {
+            dto.setRoleName("Sin rol asignado");
+            dto.setRoleId(null);
+        }
         return dto;
     }
 }
