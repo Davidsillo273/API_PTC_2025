@@ -1,9 +1,9 @@
 package DevSGMA_PTC.SGMA_PTC.Repositories.VehiclesTypes;
 
-import DevSGMA_PTC.SGMA_PTC.Models.Entities.VehicleType;
+import DevSGMA_PTC.SGMA_PTC.Entities.vehicleTypeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface VehicleTypeRepository extends JpaRepository<VehicleType, Long> {
+public interface VehicleTypeRepository extends JpaRepository<vehicleTypeEntity, Long> {
 }
