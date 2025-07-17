@@ -1,11 +1,11 @@
-package DevSGMA_PTC.SGMA_PTC.Service;
+package DevSGMA_PTC.SGMA_PTC.Services.Vehicles;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.VehicleEntity;
-import DevSGMA_PTC.SGMA_PTC.Entities.vehicleTypeEntity;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.VehicleRequestDTO;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.VehicleResponseDTO;
-import DevSGMA_PTC.SGMA_PTC.Repositories.VehicleRepository;
-import DevSGMA_PTC.SGMA_PTC.Repositories.VehicleTypeRepository;
+import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.VehiclesTypes.vehicleTypeEntity;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Vehicles.VehicleRequestDTO;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Vehicles.VehicleResponseDTO;
+import DevSGMA_PTC.SGMA_PTC.Repositories.Vehicles.VehicleRepository;
+import DevSGMA_PTC.SGMA_PTC.Repositories.VehiclesTypes.VehicleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

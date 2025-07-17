@@ -1,6 +1,6 @@
 package DevSGMA_PTC.SGMA_PTC.Repositories.Vehicles;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.VehicleEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

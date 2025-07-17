@@ -1,6 +1,6 @@
-package DevSGMA_PTC.SGMA_PTC.Service;
+package DevSGMA_PTC.SGMA_PTC.Services.VehiclesTypes;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.vehicleTypeEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.VehiclesTypes.vehicleTypeEntity;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.VehiclesTypes.VehicleTypeResponseDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.VehiclesTypes.VehicleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

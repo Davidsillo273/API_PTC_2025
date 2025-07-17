@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Entities;
+package DevSGMA_PTC.SGMA_PTC.Entities.VehiclesTypes;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
