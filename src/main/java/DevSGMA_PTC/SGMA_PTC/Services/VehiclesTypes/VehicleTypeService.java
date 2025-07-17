@@ -1,5 +1,6 @@
 package DevSGMA_PTC.SGMA_PTC.Services.VehiclesTypes;
 
+
 import DevSGMA_PTC.SGMA_PTC.Entities.VehiclesTypes.vehicleTypeEntity;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.VehiclesTypes.VehicleTypeResponseDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.VehiclesTypes.VehicleTypeRepository;
@@ -35,8 +36,5 @@ public class VehicleTypeService {
 
     
 }
-
-
-
 
 

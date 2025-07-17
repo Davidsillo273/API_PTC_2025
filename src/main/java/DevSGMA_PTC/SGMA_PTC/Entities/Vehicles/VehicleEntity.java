@@ -1,6 +1,5 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.Vehicles;
 
-
 import DevSGMA_PTC.SGMA_PTC.Entities.VehiclesTypes.vehicleTypeEntity;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -47,6 +46,3 @@ public class VehicleEntity {
     //falta el de las imagenes
 
 
-
-
-}
