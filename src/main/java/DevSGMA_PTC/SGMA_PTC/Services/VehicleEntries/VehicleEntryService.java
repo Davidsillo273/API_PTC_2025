@@ -46,4 +46,15 @@ public class VehicleEntryService {
         }
         return false;
     }
+
+    public Optional<VehicleEntry> patchStatus(Long id, String status) {
+        Optional<VehicleEntry> entryOpt = vehicleEntryRepository.findById(id);
+        if (entryOpt.isPresent()) {
+            VehicleEntry entry = entryOpt.get();
+            entry.setStatus(status);
+            vehicleEntryRepository.save(entry);
+            return Optional.of(entry);
+        }
+        return Optional.empty();
+    }
 }

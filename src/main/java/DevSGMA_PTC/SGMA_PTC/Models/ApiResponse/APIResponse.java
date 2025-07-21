@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Models.ApiRespones;
+package DevSGMA_PTC.SGMA_PTC.Models.ApiResponse;
 
 public class APIResponse<T> {
     private boolean success;

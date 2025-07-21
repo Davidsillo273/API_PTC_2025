@@ -44,6 +44,26 @@ public class VehicleController {
         return ResponseEntity.ok(updated);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Vehicle> patchVehicle(@PathVariable Long id, @RequestBody Vehicle vehicle) {
+        Optional<Vehicle> existingOpt = vehicleService.getVehicleById(id);
+        if (existingOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Vehicle existing = existingOpt.get();
+
+        if (vehicle.getPlateNumber() != null) existing.setPlateNumber(vehicle.getPlateNumber());
+        if (vehicle.getBrand() != null) existing.setBrand(vehicle.getBrand());
+        if (vehicle.getModel() != null) existing.setModel(vehicle.getModel());
+        if (vehicle.getType() != null) existing.setType(vehicle.getType());
+        if (vehicle.getColor() != null) existing.setColor(vehicle.getColor());
+        if (vehicle.getCirculationCardNumber() != null) existing.setCirculationCardNumber(vehicle.getCirculationCardNumber());
+        if (vehicle.getVehicleImage() != null) existing.setVehicleImage(vehicle.getVehicleImage());
+
+        Vehicle saved = vehicleService.createVehicle(existing);
+        return ResponseEntity.ok(saved);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVehicle(@PathVariable Long id) {
         boolean deleted = vehicleService.deleteVehicle(id);

@@ -1,22 +1,44 @@
 package DevSGMA_PTC.SGMA_PTC.Controllers.WorkOrders;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrder;
+import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.Vehicle;
+import DevSGMA_PTC.SGMA_PTC.Entities.Users.Usuario;
+import DevSGMA_PTC.SGMA_PTC.Entities.Modules.Module;
+import DevSGMA_PTC.SGMA_PTC.Entities.ModuleOperations.ModuleOperation;
 import DevSGMA_PTC.SGMA_PTC.Services.WorkOrders.WorkOrderService;
+import DevSGMA_PTC.SGMA_PTC.Services.Vehicles.VehicleService;
+import DevSGMA_PTC.SGMA_PTC.Services.Users.UsuarioService;
+import DevSGMA_PTC.SGMA_PTC.Services.Modules.ModuleService;
+import DevSGMA_PTC.SGMA_PTC.Services.ModuleOperations.ModuleOperationService;
 
 @RestController
 @RequestMapping("/api/workorders")
 public class WorkOrderController {
 
     private final WorkOrderService workOrderService;
+    private final VehicleService vehicleService;
+    private final UsuarioService usuarioService;
+    private final ModuleService moduleService;
+    private final ModuleOperationService moduleOperationService;
 
-    public WorkOrderController(WorkOrderService workOrderService) {
+    public WorkOrderController(
+            WorkOrderService workOrderService,
+            VehicleService vehicleService,
+            UsuarioService usuarioService,
+            ModuleService moduleService,
+            ModuleOperationService moduleOperationService) {
         this.workOrderService = workOrderService;
+        this.vehicleService = vehicleService;
+        this.usuarioService = usuarioService;
+        this.moduleService = moduleService;
+        this.moduleOperationService = moduleOperationService;
     }
 
     @GetMapping
@@ -31,8 +53,14 @@ public class WorkOrderController {
     }
 
     @PostMapping
-    public WorkOrder createWorkOrder(@RequestBody WorkOrder workOrder) {
-        return workOrderService.createWorkOrder(workOrder);
+    public ResponseEntity<WorkOrder> createWorkOrder(@RequestBody WorkOrder workOrder) {
+        // Opcionalmente validar que las entidades relacionadas existan:
+        if (workOrder.getVehicle() == null || workOrder.getOperation() == null || workOrder.getModule() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        // Puedes agregar validaciones más estrictas según tu lógica.
+        WorkOrder created = workOrderService.createWorkOrder(workOrder);
+        return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}")
@@ -51,5 +79,94 @@ public class WorkOrderController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<WorkOrder> patchWorkOrder(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        Optional<WorkOrder> optionalWorkOrder = workOrderService.getWorkOrderById(id);
+        if (optionalWorkOrder.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        WorkOrder workOrder = optionalWorkOrder.get();
+
+        updates.forEach((key, value) -> {
+            switch (key) {
+                case "vehicleId":
+                    Long vehicleId = parseLong(value);
+                    if (vehicleId != null) {
+                        vehicleService.getVehicleById(vehicleId).ifPresent(workOrder::setVehicle);
+                    }
+                    break;
+                case "academicYear":
+                    workOrder.setAcademicYear((String) value);
+                    break;
+                case "instructorId":
+                    Long instructorId = parseLong(value);
+                    if (instructorId != null) {
+                        usuarioService.getUsuarioById(instructorId).ifPresent(workOrder::setInstructor);
+                    }
+                    break;
+                case "studentName":
+                    workOrder.setStudentName((String) value);
+                    break;
+                case "studentId":
+                    workOrder.setStudentId((String) value);
+                    break;
+                case "operationId":
+                    Long operationId = parseLong(value);
+                    if (operationId != null) {
+                        moduleOperationService.getOperationById(operationId).ifPresent(workOrder::setOperation);
+                    }
+                    break;
+                case "moduleId":
+                    Long moduleId = parseLong(value);
+                    if (moduleId != null) {
+                        moduleService.getModuleById(moduleId).ifPresent(workOrder::setModule);
+                    }
+                    break;
+                case "maintenanceType":
+                    workOrder.setMaintenanceType((String) value);
+                    break;
+                case "estimatedTime":
+                    workOrder.setEstimatedTime((String) value);
+                    break;
+                case "entryTime":
+                    if (value instanceof String) {
+                        // Puedes convertir String a Timestamp según formato esperado
+                        workOrder.setEntryTime(java.sql.Timestamp.valueOf((String) value));
+                    }
+                    break;
+                case "exitTime":
+                    if (value instanceof String) {
+                        workOrder.setExitTime(java.sql.Timestamp.valueOf((String) value));
+                    }
+                    break;
+                case "ownerName":
+                    workOrder.setOwnerName((String) value);
+                    break;
+                case "ownerDui":
+                    workOrder.setOwnerDui((String) value);
+                    break;
+                case "status":
+                    workOrder.setStatus((String) value);
+                    break;
+            }
+        });
+
+        WorkOrder updated = workOrderService.createWorkOrder(workOrder); // Guarda cambios (puedes usar update también)
+        return ResponseEntity.ok(updated);
+    }
+
+    private Long parseLong(Object value) {
+        if (value instanceof Integer) return ((Integer) value).longValue();
+        if (value instanceof Long) return (Long) value;
+        if (value instanceof String) {
+            try {
+                return Long.parseLong((String) value);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+        return null;
     }
 }

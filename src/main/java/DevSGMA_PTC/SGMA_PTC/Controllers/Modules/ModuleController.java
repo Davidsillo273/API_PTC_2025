@@ -1,6 +1,7 @@
 package DevSGMA_PTC.SGMA_PTC.Controllers.Modules;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -51,5 +52,23 @@ public class ModuleController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Module> patchModule(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        Optional<Module> optionalModule = moduleService.getModuleById(id);
+        if (optionalModule.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Module module = optionalModule.get();
+
+        updates.forEach((key, value) -> {
+            if ("name".equals(key)) {
+                module.setName((String) value);
+            }
+        });
+
+        Module updatedModule = moduleService.createModule(module);
+        return ResponseEntity.ok(updatedModule);
     }
 }

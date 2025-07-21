@@ -1,6 +1,7 @@
 package DevSGMA_PTC.SGMA_PTC.Controllers.VehicleTypes;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -51,5 +52,23 @@ public class VehicleTypeController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<VehicleType> patchVehicleType(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        Optional<VehicleType> optionalVehicleType = vehicleTypeService.getVehicleTypeById(id);
+        if (optionalVehicleType.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        VehicleType vehicleType = optionalVehicleType.get();
+
+        updates.forEach((key, value) -> {
+            if ("name".equals(key)) {
+                vehicleType.setName((String) value);
+            }
+        });
+
+        VehicleType updatedVehicleType = vehicleTypeService.createVehicleType(vehicleType);
+        return ResponseEntity.ok(updatedVehicleType);
     }
 }

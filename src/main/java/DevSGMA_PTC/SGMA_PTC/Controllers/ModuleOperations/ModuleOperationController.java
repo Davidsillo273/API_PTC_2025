@@ -1,6 +1,7 @@
 package DevSGMA_PTC.SGMA_PTC.Controllers.ModuleOperations;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -51,5 +52,23 @@ public class ModuleOperationController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ModuleOperation> patchOperation(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        Optional<ModuleOperation> optionalOperation = moduleOperationService.getOperationById(id);
+        if (optionalOperation.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        ModuleOperation operation = optionalOperation.get();
+
+        updates.forEach((key, value) -> {
+            if ("name".equals(key)) {
+                operation.setName((String) value);
+            }
+        });
+
+        ModuleOperation updatedOperation = moduleOperationService.createOperation(operation);
+        return ResponseEntity.ok(updatedOperation);
     }
 }

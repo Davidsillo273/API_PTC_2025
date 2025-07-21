@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.VehicleEntries.VehicleEntry;
+import DevSGMA_PTC.SGMA_PTC.Models.ApiResponse.APIResponse;
 import DevSGMA_PTC.SGMA_PTC.Services.VehicleEntries.VehicleEntryService;
 
 @RestController
@@ -42,6 +43,16 @@ public class VehicleEntryController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updated);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<APIResponse<VehicleEntry>> patchStatus(@PathVariable Long id, @RequestParam String status) {
+        Optional<VehicleEntry> updated = vehicleEntryService.patchStatus(id, status);
+        if (updated.isPresent()) {
+            return ResponseEntity.ok(new APIResponse<>(true, "Estado actualizado correctamente", updated.get()));
+        } else {
+            return ResponseEntity.status(404).body(new APIResponse<>(false, "Registro no encontrado", null));
+        }
     }
 
     @DeleteMapping("/{id}")

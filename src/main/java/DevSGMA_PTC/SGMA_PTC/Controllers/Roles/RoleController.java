@@ -37,7 +37,11 @@ public class RoleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Role> updateRole(@PathVariable Long id, @RequestBody Role role) {
-        Role updated = roleService.updateRole(id, role);
+        Role updated = roleService.getRoleById(id).map(existingRole -> {
+            existingRole.setName(role.getName());  // Aquí cambié setRoleName por setName
+            return roleService.createRole(existingRole);
+        }).orElse(null);
+
         if (updated == null) {
             return ResponseEntity.notFound().build();
         }
