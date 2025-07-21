@@ -1,64 +1,46 @@
 package DevSGMA_PTC.SGMA_PTC.Services.Modules;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleEntity;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Modules.ModuleRequestDTO;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Modules.ModuleResponseDTO;
-import DevSGMA_PTC.SGMA_PTC.Repositories.Modules.ModuleRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import DevSGMA_PTC.SGMA_PTC.Entities.Modules.Module;
+import DevSGMA_PTC.SGMA_PTC.Repositories.Modules.ModuleRepository;
 
 @Service
 public class ModuleService {
 
-    private final ModuleRepository repository;
+    private final ModuleRepository moduleRepository;
 
-    public ModuleService(ModuleRepository repository) {
-        this.repository = repository;
+    public ModuleService(ModuleRepository moduleRepository) {
+        this.moduleRepository = moduleRepository;
     }
 
-    public List<ModuleResponseDTO> findAll() {
-        return repository.findAll()
-                .stream()
-                .map(this::toResponseDTO)
-                .collect(Collectors.toList());
+    public List<Module> getAllModules() {
+        return moduleRepository.findAll();
     }
 
-    public Optional<ModuleResponseDTO> findById(Long id) {
-        return repository.findById(id)
-                .map(this::toResponseDTO);
+    public Optional<Module> getModuleById(Long id) {
+        return moduleRepository.findById(id);
     }
 
-    public ModuleResponseDTO save(ModuleRequestDTO dto) {
-        ModuleEntity entity = fromRequestDTO(dto);
-        ModuleEntity saved = repository.save(entity);
-        return toResponseDTO(saved);
+    public Module createModule(Module module) {
+        return moduleRepository.save(module);
     }
 
-    public ModuleResponseDTO update(Long id, ModuleRequestDTO dto) {
-        Optional<ModuleEntity> optional = repository.findById(id);
-        if(optional.isPresent()) {
-            ModuleEntity entity = optional.get();
-            entity.setModuleName(dto.getModuleName());
-            ModuleEntity updated = repository.save(entity);
-            return toResponseDTO(updated);
+    public Module updateModule(Long id, Module updatedModule) {
+        return moduleRepository.findById(id)
+                .map(m -> {
+                    m.setName(updatedModule.getName());
+                    return moduleRepository.save(m);
+                }).orElse(null);
+    }
+
+    public boolean deleteModule(Long id) {
+        if(moduleRepository.existsById(id)) {
+            moduleRepository.deleteById(id);
+            return true;
         }
-        return null;
-    }
-
-    public void delete(Long id) {
-        repository.deleteById(id);
-    }
-
-    private ModuleEntity fromRequestDTO(ModuleRequestDTO dto) {
-        ModuleEntity entity = new ModuleEntity();
-        entity.setModuleName(dto.getModuleName());
-        return entity;
-    }
-
-    private ModuleResponseDTO toResponseDTO(ModuleEntity entity) {
-        return new ModuleResponseDTO(entity.getModuleId(), entity.getModuleName());
+        return false;
     }
 }
