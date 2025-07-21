@@ -1,48 +1,52 @@
 package DevSGMA_PTC.SGMA_PTC.Services.Vehicles;
 
-
-import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
-import DevSGMA_PTC.SGMA_PTC.Entities.VehiclesTypes.vehicleTypeEntity;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Vehicles.VehicleRequestDTO;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Vehicles.VehicleResponseDTO;
-import DevSGMA_PTC.SGMA_PTC.Repositories.Vehicles.VehicleRepository;
-import DevSGMA_PTC.SGMA_PTC.Repositories.VehiclesTypes.VehicleTypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.Vehicle;
+import DevSGMA_PTC.SGMA_PTC.Repositories.Vehicles.VehicleRepository;
 
 @Service
 public class VehicleService {
 
-    @Autowired
-    private VehicleRepository repo;
+    private final VehicleRepository vehicleRepository;
 
-    @Autowired
-    private VehicleTypeRepository vehicleTypeRepository;
-
-    public List<VehicleResponseDTO> obtenerTodo() {
-
-        List<VehicleEntity> Vehicle = repo.findAll();
-        return Vehicle.stream()
-                .map(this::convertirVehicleDTO)
-                .collect(Collectors.toList());
+    public VehicleService(VehicleRepository vehicleRepository) {
+        this.vehicleRepository = vehicleRepository;
     }
 
-    public VehicleResponseDTO convertirVehicleDTO(VehicleEntity entity){
-
-        VehicleResponseDTO dto = new VehicleResponseDTO();
-        dto.setVehicleId(entity.getVehicleId());
-        dto.setPlateNumber(entity.getPlateNumber());
-        dto.setBrand(entity.getBrand());
-        dto.setModel(entity.getModel());
-        dto.setTypeId(entity.getTypeId());
-        dto.setColor(entity.getColor());
-        dto.setCirculationCardNumber(entity.getCirculationNumber());
-        //falta imagen de vehiculo
-        return dto;
+    public List<Vehicle> getAllVehicles() {
+        return vehicleRepository.findAll();
     }
 
+    public Optional<Vehicle> getVehicleById(Long id) {
+        return vehicleRepository.findById(id);
+    }
 
+    public Vehicle createVehicle(Vehicle vehicle) {
+        return vehicleRepository.save(vehicle);
+    }
+
+    public Vehicle updateVehicle(Long id, Vehicle updatedVehicle) {
+        return vehicleRepository.findById(id)
+                .map(v -> {
+                    v.setPlateNumber(updatedVehicle.getPlateNumber());
+                    v.setBrand(updatedVehicle.getBrand());
+                    v.setModel(updatedVehicle.getModel());
+                    v.setType(updatedVehicle.getType());
+                    v.setColor(updatedVehicle.getColor());
+                    v.setCirculationCardNumber(updatedVehicle.getCirculationCardNumber());
+                    v.setVehicleImage(updatedVehicle.getVehicleImage());
+                    return vehicleRepository.save(v);
+                }).orElse(null);
+    }
+
+    public boolean deleteVehicle(Long id) {
+        if(vehicleRepository.existsById(id)) {
+            vehicleRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }
