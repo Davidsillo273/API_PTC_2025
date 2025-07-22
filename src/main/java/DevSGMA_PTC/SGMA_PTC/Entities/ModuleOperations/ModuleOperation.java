@@ -1,33 +1,30 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.ModuleOperations;
 
-import jakarta.persistence.*;
 import DevSGMA_PTC.SGMA_PTC.Entities.Modules.Module;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 @Entity
 @Table(name = "tbModuleOperations")
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ModuleOperation {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "operationId")
-    @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 100)
+    @NotBlank(message = "El nombre de la operación es requerido")
+    @Size(max = 100, message = "El nombre no debe exceder 100 caracteres")
+    @Column(name = "operationName", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "route", nullable = false, length = 100)
-    private String route;
-
-    @ManyToOne
+    @NotNull(message = "El módulo es requerido")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moduleId", nullable = false)
     private Module module;
 }

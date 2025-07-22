@@ -4,11 +4,11 @@ import DevSGMA_PTC.SGMA_PTC.Models.DTO.ModuleOperations.ModuleOperationDTO;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Modules.ModuleDTO;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Users.UserDTO;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Vehicles.VehicleDTO;
-
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.EqualsAndHashCode;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter

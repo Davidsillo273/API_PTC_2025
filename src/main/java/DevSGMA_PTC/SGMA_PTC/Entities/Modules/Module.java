@@ -22,4 +22,6 @@ public class Module {
 
     @Column(name = "moduleName", length = 50, nullable = false)
     private String name;
+
+
 }

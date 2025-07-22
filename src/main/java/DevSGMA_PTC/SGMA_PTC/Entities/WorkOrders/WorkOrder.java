@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.Vehicle;
 import DevSGMA_PTC.SGMA_PTC.Entities.Users.Usuario;
 import DevSGMA_PTC.SGMA_PTC.Entities.Modules.Module;
-import DevSGMA_PTC.SGMA_PTC.Entities.ModuleOperations.ModuleOperation;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,9 +34,8 @@ public class WorkOrder {
     @Column(name = "studentId", length = 8)
     private String studentId;
 
-    @ManyToOne
-    @JoinColumn(name = "operationId", nullable = false)
-    private ModuleOperation operation;
+    @Column(name = "operationDescription", length = 255)
+    private String operationDescription;
 
     @ManyToOne
     @JoinColumn(name = "moduleId", nullable = false)
@@ -61,6 +58,9 @@ public class WorkOrder {
 
     @Column(name = "ownerDui", length = 10)
     private String ownerDui;
+
+    @Column(name = "ownerPhone", length = 10)
+    private String ownerPhone;
 
     @Column(name = "status", length = 20)
     private String status;

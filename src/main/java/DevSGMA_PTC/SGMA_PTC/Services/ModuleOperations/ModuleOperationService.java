@@ -2,7 +2,6 @@ package DevSGMA_PTC.SGMA_PTC.Services.ModuleOperations;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import DevSGMA_PTC.SGMA_PTC.Entities.ModuleOperations.ModuleOperation;
 import DevSGMA_PTC.SGMA_PTC.Repositories.ModuleOperations.ModuleOperationRepository;
@@ -32,7 +31,6 @@ public class ModuleOperationService {
         return moduleOperationRepository.findById(id)
                 .map(op -> {
                     op.setName(updatedOperation.getName());
-                    op.setRoute(updatedOperation.getRoute());
                     op.setModule(updatedOperation.getModule());
                     return moduleOperationRepository.save(op);
                 }).orElse(null);

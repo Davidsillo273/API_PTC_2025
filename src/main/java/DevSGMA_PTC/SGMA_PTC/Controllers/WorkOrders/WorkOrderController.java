@@ -3,16 +3,14 @@ package DevSGMA_PTC.SGMA_PTC.Controllers.WorkOrders;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrder;
 import DevSGMA_PTC.SGMA_PTC.Services.WorkOrders.WorkOrderService;
 import DevSGMA_PTC.SGMA_PTC.Services.Vehicles.VehicleService;
 import DevSGMA_PTC.SGMA_PTC.Services.Users.UsuarioService;
 import DevSGMA_PTC.SGMA_PTC.Services.Modules.ModuleService;
-import DevSGMA_PTC.SGMA_PTC.Services.ModuleOperations.ModuleOperationService;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/workorders")
@@ -22,19 +20,16 @@ public class WorkOrderController {
     private final VehicleService vehicleService;
     private final UsuarioService usuarioService;
     private final ModuleService moduleService;
-    private final ModuleOperationService moduleOperationService;
 
     public WorkOrderController(
             WorkOrderService workOrderService,
             VehicleService vehicleService,
             UsuarioService usuarioService,
-            ModuleService moduleService,
-            ModuleOperationService moduleOperationService) {
+            ModuleService moduleService) {
         this.workOrderService = workOrderService;
         this.vehicleService = vehicleService;
         this.usuarioService = usuarioService;
         this.moduleService = moduleService;
-        this.moduleOperationService = moduleOperationService;
     }
 
     @GetMapping
@@ -49,17 +44,48 @@ public class WorkOrderController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkOrder> createWorkOrder(@RequestBody WorkOrder workOrder) {
-        if (workOrder.getVehicle() == null || workOrder.getOperation() == null || workOrder.getModule() == null) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> createWorkOrder(@RequestBody Map<String, Object> request) {
+        try {
+            WorkOrder workOrder = new WorkOrder();
+
+            workOrder.setVehicle(vehicleService.getVehicleById(Long.parseLong(request.get("vehicleId").toString()))
+                    .orElseThrow(() -> new IllegalArgumentException("Vehículo no encontrado")));
+
+            workOrder.setModule(moduleService.getModuleById(Long.parseLong(request.get("moduleId").toString()))
+                    .orElseThrow(() -> new IllegalArgumentException("Módulo no encontrado")));
+
+            workOrder.setAcademicYear(request.get("academicYear").toString());
+            workOrder.setMaintenanceType(request.get("maintenanceType").toString());
+
+            if (request.containsKey("operationDescription")) {
+                workOrder.setOperationDescription(request.get("operationDescription").toString());
+            }
+
+            if (request.containsKey("instructorId")) {
+                workOrder.setInstructor(usuarioService.getUsuarioById(Long.parseLong(request.get("instructorId").toString())).orElse(null));
+            }
+
+            if (request.containsKey("studentName")) {
+                workOrder.setStudentName(request.get("studentName").toString());
+            }
+
+            if (request.containsKey("studentId")) {
+                workOrder.setStudentId(request.get("studentId").toString());
+            }
+
+            WorkOrder created = workOrderService.createWorkOrder(workOrder);
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al crear la orden de trabajo");
         }
-        WorkOrder created = workOrderService.createWorkOrder(workOrder);
-        return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<WorkOrder> updateWorkOrder(@PathVariable Long id, @RequestBody WorkOrder workOrder) {
-        WorkOrder updated = workOrderService.updateWorkOrder(id, workOrder);
+        WorkOrder updated = workOrderService.updateWorkOrder(workOrder);
         if (updated == null) {
             return ResponseEntity.notFound().build();
         }
@@ -68,11 +94,8 @@ public class WorkOrderController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWorkOrder(@PathVariable Long id) {
-        boolean deleted = workOrderService.deleteWorkOrder(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        workOrderService.deleteWorkOrder(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
@@ -106,11 +129,8 @@ public class WorkOrderController {
                 case "studentId":
                     workOrder.setStudentId((String) value);
                     break;
-                case "operationId":
-                    Long operationId = parseLong(value);
-                    if (operationId != null) {
-                        moduleOperationService.getOperationById(operationId).ifPresent(workOrder::setOperation);
-                    }
+                case "operationDescription":
+                    workOrder.setOperationDescription((String) value);
                     break;
                 case "moduleId":
                     Long moduleId = parseLong(value);
@@ -146,7 +166,7 @@ public class WorkOrderController {
             }
         });
 
-        WorkOrder updated = workOrderService.createWorkOrder(workOrder);
+        WorkOrder updated = workOrderService.updateWorkOrder(workOrder);
         return ResponseEntity.ok(updated);
     }
 

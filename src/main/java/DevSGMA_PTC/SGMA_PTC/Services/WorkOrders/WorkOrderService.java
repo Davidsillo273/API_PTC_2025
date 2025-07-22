@@ -1,15 +1,14 @@
 package DevSGMA_PTC.SGMA_PTC.Services.WorkOrders;
 
+import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrder;
+import DevSGMA_PTC.SGMA_PTC.Repositories.WorkOrders.WorkOrderRepository;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
-import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrder;
-import DevSGMA_PTC.SGMA_PTC.Repositories.WorkOrders.WorkOrderRepository;
-
 @Service
 public class WorkOrderService {
-
     private final WorkOrderRepository workOrderRepository;
 
     public WorkOrderService(WorkOrderRepository workOrderRepository) {
@@ -28,33 +27,11 @@ public class WorkOrderService {
         return workOrderRepository.save(workOrder);
     }
 
-    public WorkOrder updateWorkOrder(Long id, WorkOrder updatedWorkOrder) {
-        return workOrderRepository.findById(id)
-                .map(existingWorkOrder -> {
-                    existingWorkOrder.setVehicle(updatedWorkOrder.getVehicle());
-                    existingWorkOrder.setAcademicYear(updatedWorkOrder.getAcademicYear());
-                    existingWorkOrder.setInstructor(updatedWorkOrder.getInstructor());
-                    existingWorkOrder.setStudentName(updatedWorkOrder.getStudentName());
-                    existingWorkOrder.setStudentId(updatedWorkOrder.getStudentId());
-                    existingWorkOrder.setOperation(updatedWorkOrder.getOperation());
-                    existingWorkOrder.setModule(updatedWorkOrder.getModule());
-                    existingWorkOrder.setMaintenanceType(updatedWorkOrder.getMaintenanceType());
-                    existingWorkOrder.setEstimatedTime(updatedWorkOrder.getEstimatedTime());
-                    existingWorkOrder.setEntryTime(updatedWorkOrder.getEntryTime());
-                    existingWorkOrder.setExitTime(updatedWorkOrder.getExitTime());
-                    existingWorkOrder.setOwnerName(updatedWorkOrder.getOwnerName());
-                    existingWorkOrder.setOwnerDui(updatedWorkOrder.getOwnerDui());
-                    existingWorkOrder.setStatus(updatedWorkOrder.getStatus());
-                    return workOrderRepository.save(existingWorkOrder);
-                })
-                .orElse(null);
+    public WorkOrder updateWorkOrder(WorkOrder workOrder) {
+        return workOrderRepository.save(workOrder);
     }
 
-    public boolean deleteWorkOrder(Long id) {
-        if (workOrderRepository.existsById(id)) {
-            workOrderRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deleteWorkOrder(Long id) {
+        workOrderRepository.deleteById(id);
     }
 }

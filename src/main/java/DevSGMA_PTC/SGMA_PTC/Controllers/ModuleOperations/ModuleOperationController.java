@@ -3,10 +3,10 @@ package DevSGMA_PTC.SGMA_PTC.Controllers.ModuleOperations;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import DevSGMA_PTC.SGMA_PTC.Entities.ModuleOperations.ModuleOperation;
 import DevSGMA_PTC.SGMA_PTC.Services.ModuleOperations.ModuleOperationService;
 
@@ -32,8 +32,21 @@ public class ModuleOperationController {
     }
 
     @PostMapping
-    public ModuleOperation createOperation(@RequestBody ModuleOperation operation) {
-        return moduleOperationService.createOperation(operation);
+    public ResponseEntity<?> createOperation(@RequestBody ModuleOperation operation) {
+        try {
+            if (operation.getName() == null || operation.getName().trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("El nombre de la operación es requerido");
+            }
+            if (operation.getModule() == null || operation.getModule().getId() == null) {
+                return ResponseEntity.badRequest().body("El ID del módulo es requerido");
+            }
+            ModuleOperation savedOperation = moduleOperationService.createOperation(operation);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedOperation);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear la operación");
+        }
     }
 
     @PutMapping("/{id}")
