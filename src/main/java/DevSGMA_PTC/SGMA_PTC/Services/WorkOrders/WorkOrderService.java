@@ -30,27 +30,28 @@ public class WorkOrderService {
 
     public WorkOrder updateWorkOrder(Long id, WorkOrder updatedWorkOrder) {
         return workOrderRepository.findById(id)
-                .map(wo -> {
-                    wo.setVehicle(updatedWorkOrder.getVehicle());
-                    wo.setAcademicYear(updatedWorkOrder.getAcademicYear());
-                    wo.setInstructor(updatedWorkOrder.getInstructor());
-                    wo.setStudentName(updatedWorkOrder.getStudentName());
-                    wo.setStudentId(updatedWorkOrder.getStudentId());
-                    wo.setOperation(updatedWorkOrder.getOperation());
-                    wo.setModule(updatedWorkOrder.getModule());
-                    wo.setMaintenanceType(updatedWorkOrder.getMaintenanceType());
-                    wo.setEstimatedTime(updatedWorkOrder.getEstimatedTime());
-                    wo.setEntryTime(updatedWorkOrder.getEntryTime());
-                    wo.setExitTime(updatedWorkOrder.getExitTime());
-                    wo.setOwnerName(updatedWorkOrder.getOwnerName());
-                    wo.setOwnerDui(updatedWorkOrder.getOwnerDui());
-                    wo.setStatus(updatedWorkOrder.getStatus());
-                    return workOrderRepository.save(wo);
-                }).orElse(null);
+                .map(existingWorkOrder -> {
+                    existingWorkOrder.setVehicle(updatedWorkOrder.getVehicle());
+                    existingWorkOrder.setAcademicYear(updatedWorkOrder.getAcademicYear());
+                    existingWorkOrder.setInstructor(updatedWorkOrder.getInstructor());
+                    existingWorkOrder.setStudentName(updatedWorkOrder.getStudentName());
+                    existingWorkOrder.setStudentId(updatedWorkOrder.getStudentId());
+                    existingWorkOrder.setOperation(updatedWorkOrder.getOperation());
+                    existingWorkOrder.setModule(updatedWorkOrder.getModule());
+                    existingWorkOrder.setMaintenanceType(updatedWorkOrder.getMaintenanceType());
+                    existingWorkOrder.setEstimatedTime(updatedWorkOrder.getEstimatedTime());
+                    existingWorkOrder.setEntryTime(updatedWorkOrder.getEntryTime());
+                    existingWorkOrder.setExitTime(updatedWorkOrder.getExitTime());
+                    existingWorkOrder.setOwnerName(updatedWorkOrder.getOwnerName());
+                    existingWorkOrder.setOwnerDui(updatedWorkOrder.getOwnerDui());
+                    existingWorkOrder.setStatus(updatedWorkOrder.getStatus());
+                    return workOrderRepository.save(existingWorkOrder);
+                })
+                .orElse(null);
     }
 
     public boolean deleteWorkOrder(Long id) {
-        if(workOrderRepository.existsById(id)) {
+        if (workOrderRepository.existsById(id)) {
             workOrderRepository.deleteById(id);
             return true;
         }

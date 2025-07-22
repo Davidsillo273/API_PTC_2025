@@ -8,10 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrder;
-import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.Vehicle;
-import DevSGMA_PTC.SGMA_PTC.Entities.Users.Usuario;
-import DevSGMA_PTC.SGMA_PTC.Entities.Modules.Module;
-import DevSGMA_PTC.SGMA_PTC.Entities.ModuleOperations.ModuleOperation;
 import DevSGMA_PTC.SGMA_PTC.Services.WorkOrders.WorkOrderService;
 import DevSGMA_PTC.SGMA_PTC.Services.Vehicles.VehicleService;
 import DevSGMA_PTC.SGMA_PTC.Services.Users.UsuarioService;
@@ -54,11 +50,9 @@ public class WorkOrderController {
 
     @PostMapping
     public ResponseEntity<WorkOrder> createWorkOrder(@RequestBody WorkOrder workOrder) {
-        // Opcionalmente validar que las entidades relacionadas existan:
         if (workOrder.getVehicle() == null || workOrder.getOperation() == null || workOrder.getModule() == null) {
             return ResponseEntity.badRequest().build();
         }
-        // Puedes agregar validaciones más estrictas según tu lógica.
         WorkOrder created = workOrderService.createWorkOrder(workOrder);
         return ResponseEntity.ok(created);
     }
@@ -132,7 +126,6 @@ public class WorkOrderController {
                     break;
                 case "entryTime":
                     if (value instanceof String) {
-                        // Puedes convertir String a Timestamp según formato esperado
                         workOrder.setEntryTime(java.sql.Timestamp.valueOf((String) value));
                     }
                     break;
@@ -153,7 +146,7 @@ public class WorkOrderController {
             }
         });
 
-        WorkOrder updated = workOrderService.createWorkOrder(workOrder); // Guarda cambios (puedes usar update también)
+        WorkOrder updated = workOrderService.createWorkOrder(workOrder);
         return ResponseEntity.ok(updated);
     }
 
