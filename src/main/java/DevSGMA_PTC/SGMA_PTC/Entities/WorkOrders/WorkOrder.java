@@ -2,14 +2,14 @@ package DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders;
 
 import jakarta.persistence.*;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.Vehicle;
-import DevSGMA_PTC.SGMA_PTC.Entities.Users.Usuario;
+import DevSGMA_PTC.SGMA_PTC.Entities.Users.UserEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Modules.Module;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
+@jakarta.persistence.Entity
 @Table(name = "tbWorkOrders")
 public class WorkOrder {
     @Id
@@ -26,7 +26,7 @@ public class WorkOrder {
 
     @ManyToOne
     @JoinColumn(name = "instructorId")
-    private Usuario instructor;
+    private UserEntity instructor;
 
     @Column(name = "studentName", length = 100)
     private String studentName;

@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Setter
 @NoArgsConstructor
 public class RoleDTO {
-    private Long id;
-    private String name;
+//    private Long id;
+//    private String name;
 }

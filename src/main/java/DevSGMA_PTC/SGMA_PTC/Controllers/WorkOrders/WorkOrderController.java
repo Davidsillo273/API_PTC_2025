@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrder;
 import DevSGMA_PTC.SGMA_PTC.Services.WorkOrders.WorkOrderService;
 import DevSGMA_PTC.SGMA_PTC.Services.Vehicles.VehicleService;
-import DevSGMA_PTC.SGMA_PTC.Services.Users.UsuarioService;
+import DevSGMA_PTC.SGMA_PTC.Services.Users.UserService;
 import DevSGMA_PTC.SGMA_PTC.Services.Modules.ModuleService;
 import org.springframework.http.HttpStatus;
 
@@ -18,17 +18,17 @@ public class WorkOrderController {
 
     private final WorkOrderService workOrderService;
     private final VehicleService vehicleService;
-    private final UsuarioService usuarioService;
+    private final UserService userService;
     private final ModuleService moduleService;
 
     public WorkOrderController(
             WorkOrderService workOrderService,
             VehicleService vehicleService,
-            UsuarioService usuarioService,
+            UserService userService,
             ModuleService moduleService) {
         this.workOrderService = workOrderService;
         this.vehicleService = vehicleService;
-        this.usuarioService = usuarioService;
+        this.userService = userService;
         this.moduleService = moduleService;
     }
 
@@ -62,7 +62,7 @@ public class WorkOrderController {
             }
 
             if (request.containsKey("instructorId")) {
-                workOrder.setInstructor(usuarioService.getUsuarioById(Long.parseLong(request.get("instructorId").toString())).orElse(null));
+                workOrder.setInstructor(userService.getUser(Long.parseLong(request.get("instructorId").toString())).orElse(null));
             }
 
             if (request.containsKey("studentName")) {
@@ -120,7 +120,7 @@ public class WorkOrderController {
                 case "instructorId":
                     Long instructorId = parseLong(value);
                     if (instructorId != null) {
-                        usuarioService.getUsuarioById(instructorId).ifPresent(workOrder::setInstructor);
+                        userService.getUser(instructorId).ifPresent(workOrder::setInstructor);
                     }
                     break;
                 case "studentName":
