@@ -17,7 +17,7 @@ import DevSGMA_PTC.SGMA_PTC.Services.Users.UserService;
 
 @RestController // Indica que esta clase es un controlador REST
 @RequestMapping("/api/users") // Ruta base para todos los endpoints de esta clase
-public class UsuarioController {
+public class UserController {
 
     @Autowired // Inyección automática del servicio de usuarios
     private UserService userService;
