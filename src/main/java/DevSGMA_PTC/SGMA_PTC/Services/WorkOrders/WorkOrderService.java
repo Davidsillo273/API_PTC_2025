@@ -1,59 +1,59 @@
 package DevSGMA_PTC.SGMA_PTC.Services.WorkOrders;
 
-import java.util.List;
-import java.util.Optional;
-
+import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrderEntity;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders.WorkOrderDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrder;
 import DevSGMA_PTC.SGMA_PTC.Repositories.WorkOrders.WorkOrderRepository;
+
+import java.util.Optional;
 
 @Service
 public class WorkOrderService {
 
-    private final WorkOrderRepository workOrderRepository;
+   @Autowired
+    private WorkOrderRepository workOrderRepository;
 
-    public WorkOrderService(WorkOrderRepository workOrderRepository) {
-        this.workOrderRepository = workOrderRepository;
+    /**
+     * Obtiene todas las ordenes de trabajo paginados y los convierte a DTO.
+     * @param page Número de página a consulta.
+     * @param size Tamaño de la pagina (cantidad de elementos por página).
+     * @return Página de usuaros en formato DTO
+     */
+   public Page<WorkOrderDTO> getAllUsers(int page, int size){
+       Pageable pageable = PageRequest.of(page,size);
+       Page<WorkOrderEntity> workOrderEntityPage = workOrderRepository.findAll(pageable);
+       return workOrderEntityPage.map(this::ConvertToDTO);
     }
 
-    public List<WorkOrder> getAllWorkOrders() {
-        return workOrderRepository.findAll();
+    public Optional<WorkOrderEntity> getWorkOrderID(long id){
+       return WorkOrderRepository.findById(id);
     }
 
-    public Optional<WorkOrder> getWorkOrderById(Long id) {
-        return workOrderRepository.findById(id);
+    private WorkOrderDTO ConvertToDTO(WorkOrderEntity workOrderEntity) {
+       WorkOrderDTO dto = new WorkOrderDTO();
+       dto.setWorkOrderid(workOrderEntity.getWorkOrderid());
+       dto.setVehicleId(workOrderEntity.getVehicleId());
+       dto.setAcademicYear(workOrderEntity.getAcademicYear());
+       dto.setInstructor(workOrderEntity.getInstructor());
+       dto.setStudentName(workOrderEntity.getStudentName());
+       dto.setStudentId(workOrderEntity.getStudentId());
+       dto.setOperationDescription(workOrderEntity.getOperationDescription());
+       dto.setModuleId(workOrderEntity.getModuleId());
+       dto.setMaintenanceType(workOrderEntity.getMaintenanceType());
+       dto.setEstimatedTime(workOrderEntity.getEstimatedTime());
+       dto.setEntryTime(workOrderEntity.getEntryTime());
+       dto.setExitTime(workOrderEntity.getExitTime());
+       dto.setOwnerName(workOrderEntity.getOwnerName());
+       dto.setOwnerDui(workOrderEntity.getOwnerDui());
+       dto.setStatus(workOrderEntity.getStatus());
+        return dto;
     }
 
-    public WorkOrder createWorkOrder(WorkOrder workOrder) {
-        return workOrderRepository.save(workOrder);
-    }
+    public WorkOrderDTO
 
-    public WorkOrder updateWorkOrder(Long id, WorkOrder updatedWorkOrder) {
-        return workOrderRepository.findById(id)
-                .map(wo -> {
-                    wo.setVehicle(updatedWorkOrder.getVehicle());
-                    wo.setAcademicYear(updatedWorkOrder.getAcademicYear());
-                    wo.setInstructor(updatedWorkOrder.getInstructor());
-                    wo.setStudentName(updatedWorkOrder.getStudentName());
-                    wo.setStudentId(updatedWorkOrder.getStudentId());
-                    wo.setOperation(updatedWorkOrder.getOperation());
-                    wo.setModule(updatedWorkOrder.getModule());
-                    wo.setMaintenanceType(updatedWorkOrder.getMaintenanceType());
-                    wo.setEstimatedTime(updatedWorkOrder.getEstimatedTime());
-                    wo.setEntryTime(updatedWorkOrder.getEntryTime());
-                    wo.setExitTime(updatedWorkOrder.getExitTime());
-                    wo.setOwnerName(updatedWorkOrder.getOwnerName());
-                    wo.setOwnerDui(updatedWorkOrder.getOwnerDui());
-                    wo.setStatus(updatedWorkOrder.getStatus());
-                    return workOrderRepository.save(wo);
-                }).orElse(null);
-    }
 
-    public boolean deleteWorkOrder(Long id) {
-        if(workOrderRepository.existsById(id)) {
-            workOrderRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
 }

@@ -5,13 +5,15 @@ public class APIResponse<T> {
     private String message;
     private T data;
 
-    public APIResponse() {
-    }
-
     public APIResponse(boolean success, String message, T data) {
         this.success = success;
         this.message = message;
         this.data = data;
+    }
+
+    // Método estático de conveniencia
+    public static <T> APIResponse<T> success(String message, T data) {
+        return new APIResponse<>(true, message, data);
     }
 
     public boolean isSuccess() {
@@ -30,7 +32,6 @@ public class APIResponse<T> {
         this.message = message;
     }
 
-    // Getter y Setter para data
     public T getData() {
         return data;
     }

@@ -1,55 +1,50 @@
 package DevSGMA_PTC.SGMA_PTC.Controllers.WorkOrders;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import DevSGMA_PTC.SGMA_PTC.Models.ApiRespones.APIResponse;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders.WorkOrderDTO;
+import org.apache.coyote.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrder;
+import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrderEntity;
 import DevSGMA_PTC.SGMA_PTC.Services.WorkOrders.WorkOrderService;
 
 @RestController
 @RequestMapping("/api/workorders")
 public class WorkOrderController {
 
-    private final WorkOrderService workOrderService;
+    @Autowired
+    private  WorkOrderService workOrderService;
 
-    public WorkOrderController(WorkOrderService workOrderService) {
-        this.workOrderService = workOrderService;
-    }
-
-    @GetMapping
-    public List<WorkOrder> getAllWorkOrders() {
-        return workOrderService.getAllWorkOrders();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<WorkOrder> getWorkOrderById(@PathVariable Long id) {
-        Optional<WorkOrder> workOrder = workOrderService.getWorkOrderById(id);
-        return workOrder.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public WorkOrder createWorkOrder(@RequestBody WorkOrder workOrder) {
-        return workOrderService.createWorkOrder(workOrder);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<WorkOrder> updateWorkOrder(@PathVariable Long id, @RequestBody WorkOrder workOrder) {
-        WorkOrder updated = workOrderService.updateWorkOrder(id, workOrder);
-        if (updated == null) {
-            return ResponseEntity.notFound().build();
+    @GetMapping("/getDataWorkOrders")
+    public ResponseEntity<APIResponse<Page<WorkOrderDTO>>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page, //Pagina por defecto 0
+            @RequestParam(defaultValue = "10") int size
+    ){
+        //validacion del tema;o de la pagina: debe estar entre 1 y 50
+        if(size <= 0 || size > 50) {
+            ResponseEntity.badRequest().body(Map.of(
+                    "status", "La páginación de datos debe estar entre 1 y 50"
+            ));
+            return ResponseEntity.ok(null); // Devuelve nulo si la validación falla
         }
-        return ResponseEntity.ok(updated);
-    }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteWorkOrder(@PathVariable Long id) {
-        boolean deleted = workOrderService.deleteWorkOrder(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
+        //Obtiene los usuarios paginados desdew el servicio
+        Page<WorkOrderDTO> WorkOrders = workOrderService.getAllUsers(page, size);
+
+        // SI ocurre u nerror al obtener los datos
+        if( WorkOrders == null){
+            ResponseEntity.badRequest().body(Map.of(
+                    "status", "Error al obtener datos"
+            ));
         }
-        return ResponseEntity.notFound().build();
+        //Retorna respuesta exitosa con los datos
+        return ResponseEntity.ok(APIResponse.success("Datps consultados correctamente", WorkOrders));
     }
 }
