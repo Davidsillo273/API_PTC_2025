@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Repositories.Users;
+package DevSGMA_PTC.SGMA_PTC.Repository.User;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Users.UserEntity;
 import org.springframework.data.domain.Page;

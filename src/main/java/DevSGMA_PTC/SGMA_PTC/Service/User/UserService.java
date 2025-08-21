@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Services.Users;
+package DevSGMA_PTC.SGMA_PTC.Service.User;
 
 import java.util.Optional;
 
@@ -7,8 +7,8 @@ import DevSGMA_PTC.SGMA_PTC.Entities.Roles.RoleEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Roles.RoleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Users.EmailUserDuplicateException;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Users.UserNotFoundException;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Users.UserDTO;
-import DevSGMA_PTC.SGMA_PTC.Repositories.Roles.RoleRepository;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.User.UserDTO;
+import DevSGMA_PTC.SGMA_PTC.Repository.Roles.RoleRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Users.UserEntity;
-import DevSGMA_PTC.SGMA_PTC.Repositories.Users.UserRepository;
+import DevSGMA_PTC.SGMA_PTC.Repository.User.UserRepository;
 
 @Slf4j
 @Service

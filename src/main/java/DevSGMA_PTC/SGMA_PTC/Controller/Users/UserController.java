@@ -1,11 +1,11 @@
-package DevSGMA_PTC.SGMA_PTC.Controllers.Users;
+package DevSGMA_PTC.SGMA_PTC.Controller.Users;
 
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Users.ExceptionUserDontInsert;
 import DevSGMA_PTC.SGMA_PTC.Models.ApiResponse.ApiResponse;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Users.UserDTO;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.User.UserDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import DevSGMA_PTC.SGMA_PTC.Services.Users.UserService;
+import DevSGMA_PTC.SGMA_PTC.Service.User.UserService;
 
 @RestController // Indica que esta clase es un controlador REST
 @RequestMapping("/api/users") // Ruta base para todos los endpoints de esta clase

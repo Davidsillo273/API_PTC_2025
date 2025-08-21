@@ -1,6 +1,5 @@
-package DevSGMA_PTC.SGMA_PTC.Models.DTO.Users;
+package DevSGMA_PTC.SGMA_PTC.Models.DTO.User;
 
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Roles.RoleDTO;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
