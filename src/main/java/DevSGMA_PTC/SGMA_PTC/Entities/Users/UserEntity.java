@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import DevSGMA_PTC.SGMA_PTC.Entities.Roles.RoleEntity;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "tbUsers")
 @Getter
@@ -39,9 +42,11 @@ public class UserEntity {
     @JoinColumn(name = "ROLEID", nullable = false) // Columna que conecta con la tabla de roles
     private RoleEntity roleId;
 
-    @OneToMany // Un usuario puede tener muchas Ordenes de trabajo
-    @Column(name = "INSTRUCTORID")
-    private WorkOrderEntity instructorId;
+    //*** ONETOMANYS ***\\
+
+    @OneToMany(mappedBy = "instructorId", cascade = CascadeType.ALL) // Relación OneToMany con WorkOrderEntity
+    private List<WorkOrderEntity> instructor = new ArrayList<>(); // Relación OneToMany con WorkOrderEntity
+
 
 
 }

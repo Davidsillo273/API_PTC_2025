@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Controller.WorkOrders;
+package DevSGMA_PTC.SGMA_PTC.Controllers.WorkOrders;
 
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotfound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrder.WorkOrderDTO;

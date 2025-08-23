@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Controller.Users;
+package DevSGMA_PTC.SGMA_PTC.Controllers.Users;
 
 import java.time.Instant;
 import java.util.HashMap;

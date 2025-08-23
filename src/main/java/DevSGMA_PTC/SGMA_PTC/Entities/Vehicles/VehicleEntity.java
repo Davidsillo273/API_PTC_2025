@@ -1,14 +1,15 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.Vehicles;
 
+import DevSGMA_PTC.SGMA_PTC.Entities.Users.UserEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrder.WorkOrderEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,8 +20,7 @@ import lombok.ToString;
 public class VehicleEntity {
 
     @Column(name = "VEHICLEID")
-    @OneToMany
-    private WorkOrderEntity vehicleId;
+    private long vehicleId;
 
     @Column(name = "PLATENUMBER")
     private Long plateNumber;
@@ -42,5 +42,10 @@ public class VehicleEntity {
 
     @Column(name = "VEHICLEIMAGE")
     private String vehicleImage;
+
+    //*** ONETOMANYS ***\\
+
+    @OneToMany(mappedBy = "vehicleId", cascade = CascadeType.ALL) // Relación OneToMany con WorkOrderEntity
+    private List<WorkOrderEntity> vehicle = new ArrayList<>(); // Relación OneToMany con WorkOrderEntity
 
 }

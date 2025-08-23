@@ -25,7 +25,6 @@ public class VehicleEntriesEntity {
     @Column(name = "OPERATIONID")
     private Number operationId;
 
-    @JoinColumn(name = "STATUS", nullable = false)
-    @ManyToOne
-    private WorkOrderEntity Status;
+    @Column(name = "STATUS")
+    private String Status;
 }

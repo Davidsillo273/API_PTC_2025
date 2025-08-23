@@ -23,17 +23,25 @@ public class WorkOrderEntity {
     @Column(name = "WORKORDERID")
     private Number workOrderId;
 
-    @ManyToOne
-    @Column(name = "VEHICLEID")
-    @JoinColumn(nullable = false)
-    private VehicleEntity vehicleId;
+//    @ManyToOne
+//    @Column(name = "VEHICLEID")
+//    @JoinColumn(nullable = false)
+//    private VehicleEntity vehicleId;
+
+    @ManyToOne // Relación ManyToOne con VehicleEntity
+    @JoinColumn(name = "VEHICLEID", referencedColumnName = "VEHICLEID") // Columna que conecta con la tabla de Vehículos
+    private VehicleEntity vehicleId; // Relación ManyToOne con VehicleEntity
 
     @Column(name = "ACADEMICYEAR")
     private String academicYear;
 
-    @ManyToOne
-    @JoinColumn(name = "INSTRUCTORID", nullable = false)
-    private UserEntity instructorId;
+//    @ManyToOne
+//    @JoinColumn(name = "INSTRUCTORID", nullable = false)
+//    private UserEntity instructorId;
+
+    @ManyToOne // Relación ManyToOne con VehicleEntity
+    @JoinColumn(name = "INSTRUCTORID", referencedColumnName = "USERID") // Columna que conecta con la tabla de Vehículos
+    private UserEntity instructorId; // Relación ManyToOne con VehicleEntity
 
     @Column(name = "STUDENTNAME")
     private String studentName;
@@ -45,7 +53,7 @@ public class WorkOrderEntity {
     private String operationDescription;
 
     @ManyToOne
-    @JoinColumn(name = "MODULEID", nullable = false) // Columna que conecta con la tabla de Modulos
+    @JoinColumn(name = "MODULEID", referencedColumnName = "MODULEID") // Columna que conecta con la tabla de Modulos
     private ModuleEntity moduleId;
 
     @Column(name = "MAINTENANCETYPE")
@@ -71,6 +79,5 @@ public class WorkOrderEntity {
     private String ownerPhone;
 
     @Column(name = "STATUS")
-    @OneToMany
-    private VehicleEntriesEntity Status;
+    private long Status;
 }

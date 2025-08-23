@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Controller.VehicleEntries;
+package DevSGMA_PTC.SGMA_PTC.Controllers.VehicleEntries;
 
 import DevSGMA_PTC.SGMA_PTC.Exceptions.VehicleEntries.ExceptionVehicleEntrieNotFound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.VehicleEntries.VehicleEntriesDTO;
