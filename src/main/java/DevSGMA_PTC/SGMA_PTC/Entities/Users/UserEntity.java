@@ -1,5 +1,6 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.Users;
 
+import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrder.WorkOrderEntity;
 import jakarta.persistence.*;
 import DevSGMA_PTC.SGMA_PTC.Entities.Roles.RoleEntity;
 import lombok.*;
@@ -14,27 +15,33 @@ import lombok.*;
 public class UserEntity {
 
     @Id
-    @Column(name = "userId")
+    @Column(name = "USERID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long userId;
 
-    @Column(name = "username", length = 50, nullable = false)
+    @Column(name = "USERNAME", length = 50, nullable = false)
     private String userName;
 
-    @Column(name = "lastName", length = 50, nullable = false)
+    @Column(name = "LASTNAME", length = 50, nullable = false)
     private String lastName;
 
-    @Column(name = "instiEmail", nullable = false, unique = true)
+    @Column(name = "INSTIEMAIL", nullable = false, unique = true)
     private String instiEmail;
 
-    @Column(name = "password", length = 255, nullable = false)
+    @Column(name = "PASSWORD", length = 255, nullable = false)
     private String password;
 
-    @Column(name = "grade", length = 25, nullable = false)
+    @Column(name = "GRADE", length = 25, nullable = false)
     private String grade;
 
     @ManyToOne // Muchos usuarios pueden tener un mismo rol
-    @JoinColumn(name = "roleId", nullable = false) // Columna que conecta con la tabla de roles
+    @JoinColumn(name = "ROLEID", nullable = false) // Columna que conecta con la tabla de roles
     private RoleEntity roleId;
+
+    @OneToMany // Un usuario puede tener muchas Ordenes de trabajo
+    @Column(name = "INSTRUCTORID")
+    private WorkOrderEntity instructorId;
+
+
 }

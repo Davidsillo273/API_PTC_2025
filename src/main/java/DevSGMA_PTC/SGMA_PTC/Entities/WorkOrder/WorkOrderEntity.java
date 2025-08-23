@@ -1,10 +1,11 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.WorkOrder;
 
+import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Users.UserEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.VehicleEntries.VehicleEntriesEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,18 +20,57 @@ import lombok.ToString;
 public class WorkOrderEntity {
 
     @Id
+    @Column(name = "WORKORDERID")
     private Number workOrderId;
 
-
+    @ManyToOne
+    @Column(name = "VEHICLEID")
+    @JoinColumn(nullable = false)
     private VehicleEntity vehicleId;
 
+    @Column(name = "ACADEMICYEAR")
     private String academicYear;
 
+    @ManyToOne
+    @JoinColumn(name = "INSTRUCTORID", nullable = false)
+    private UserEntity instructorId;
 
+    @Column(name = "STUDENTNAME")
+    private String studentName;
 
+    @Column(name = "STUDENTID")
+    private String studentId;
 
+    @Column(name = "OPERATIONDESCRIPTION")
+    private String operationDescription;
 
+    @ManyToOne
+    @JoinColumn(name = "MODULEID", nullable = false) // Columna que conecta con la tabla de Modulos
+    private ModuleEntity moduleId;
 
+    @Column(name = "MAINTENANCETYPE")
+    private String maintenanceType;
 
+    @Column(name = "ESTIMATEDTIME")
+    private String estimatedTime;
 
+    @Column(name = "ENTRYTIME")
+    @OneToMany
+    private String entryTime;
+
+    @Column(name = "EXITTIME")
+    private String exitTime;
+
+    @Column(name = "OWNERNAME")
+    private String ownerName;
+
+    @Column(name = "OWNERDUI")
+    private String OwnerDui;
+
+    @Column(name = "OWNERPHONE")
+    private String ownerPhone;
+
+    @Column(name = "STATUS")
+    @OneToMany
+    private VehicleEntriesEntity Status;
 }

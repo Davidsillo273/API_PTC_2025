@@ -7,7 +7,6 @@ import lombok.*;
 @Setter
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 public class UserDTO {
 
     @Positive
