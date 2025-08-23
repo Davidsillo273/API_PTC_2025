@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Users.ExceptionUserDontInsert;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Users.UserDontInsertException;
 import DevSGMA_PTC.SGMA_PTC.Models.ApiResponse.ApiResponse;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Users.UserDTO;
 import jakarta.validation.Valid;
@@ -75,7 +75,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserDTO>> createUser(@Valid @RequestBody UserDTO json) {
         // Verifica si el JSON recibido es nulo
         if (json == null) {
-            throw new ExceptionUserDontInsert("Error al recibir y procesar la información del usuario");
+            throw new UserDontInsertException("Error al recibir y procesar la información del usuario");
         }
 
         // Intenta guardar el usuario usando el servicio
@@ -83,7 +83,7 @@ public class UserController {
 
         // Si el usuario no se guarda correctamente
         if (userSaved == null) {
-            throw new ExceptionUserDontInsert("El usuario no pudo ser registrado debido a un problema en los datos");
+            throw new UserDontInsertException("El usuario no pudo ser registrado debido a un problema en los datos");
         }
 
         // Retorna respuesta exitosa con el usuario guardado
@@ -118,8 +118,8 @@ public class UserController {
 
         try {
             // Intenta actualizar el usuario con el ID proporcionado
-            UserDTO usuarioActualizado = userService.updateUser(id, json);
-            return ResponseEntity.ok(usuarioActualizado); // Respuesta exitosa
+            UserDTO userUpdated = userService.updateUser(id, json);
+            return ResponseEntity.ok(userUpdated); // Respuesta exitosa
         } catch (Exception e) {
             // Si ocurre algún error durante la actualización
             return ResponseEntity.badRequest().body("Error al modificar el usuario");
@@ -174,9 +174,9 @@ public class UserController {
      * Elimina un usuario del sistema según su ID.
      *
      * @param id ID del usuario que se le desea actualizar la contraseña.
-     * @Valid Anotación para validar el ID del usuario.
-     * @throws Exception Si ocurre un error durante el proceso de actualización.
      * @return ResponseEntity con mensaje de éxito si se actualiza la contraseña correctamente.
+     * @throws Exception Si ocurre un error durante el proceso de actualización.
+     * @Valid Anotación para validar el ID del usuario.
      */
     @PutMapping("/update/{id}/password")
     private ResponseEntity<Map<String, Object>> resetPassword(@Valid @PathVariable Long id) {
