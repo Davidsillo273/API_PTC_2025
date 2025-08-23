@@ -28,13 +28,20 @@ public class UserEntity {
     @Column(name = "instiEmail", nullable = false, unique = true)
     private String instiEmail;
 
-    @Column(name = "password", length = 255, nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "grade", length = 25, nullable = false)
     private String grade;
 
+    //*** MANYTOONEs ***\\
+
     @ManyToOne // Muchos usuarios pueden tener un mismo rol
     @JoinColumn(name = "roleId", nullable = false) // Columna que conecta con la tabla de roles
     private RoleEntity roleId;
+
+    //*** ONETOMANYS ***\\
+//
+//    @OneToMany(mappedBy = "instructorId", cascade = CascadeType.ALL) // Relación OneToMany con WorkOrderEntity
+//    private List<WorkOrderEntity> instructor = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al usuario
 }
