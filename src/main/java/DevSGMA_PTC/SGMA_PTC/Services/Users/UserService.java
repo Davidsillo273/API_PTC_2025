@@ -2,9 +2,9 @@ package DevSGMA_PTC.SGMA_PTC.Services.Users;
 
 import DevSGMA_PTC.SGMA_PTC.Config.Security.Crypto.Argon2Password;
 import DevSGMA_PTC.SGMA_PTC.Entities.Roles.RoleEntity;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Roles.RoleNotFoundException;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Users.EmailUserDuplicateException;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Users.UserNotFoundException;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Roles.ExceptionRoleNotFound;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Users.ExceptionEmailUserDuplicate;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Users.ExceptionUserNotFound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Users.UserDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Roles.RoleRepository;
 import DevSGMA_PTC.SGMA_PTC.Utils.PasswordGenerator;
@@ -53,11 +53,11 @@ public class UserService {
      *
      * @param json Objeto UserDTO con los datos del usuario.
      * @return Objeto UserDTO del usuario creado.
-     * @throws EmailUserDuplicateException si el correo ya existe.
+     * @throws ExceptionEmailUserDuplicate si el correo ya existe.
      */
     public UserDTO createUser(@Valid UserDTO json) {
         if (verifyUserExist(json.getInstiEmail())) {
-            throw new EmailUserDuplicateException("El correo ya esta registrado en la base de datos");
+            throw new ExceptionEmailUserDuplicate("El correo ya esta registrado en la base de datos");
         }
         UserEntity objEntity = ConvertToEntity(json);
         UserEntity savedUser = userRepository.save(objEntity);
@@ -72,17 +72,17 @@ public class UserService {
      * @param id   ID del usuario a actualizar.
      * @param json Objeto UserDTO con los nuevos datos.
      * @return Objeto UserDTO actualizado.
-     * @throws UserNotFoundException       si el usuario no existe.
-     * @throws EmailUserDuplicateException si el nuevo correo ya está registrado.
-     * @throws RoleNotFoundException       si el rol proporcionado no existe.
+     * @throws ExceptionUserNotFound       si el usuario no existe.
+     * @throws ExceptionEmailUserDuplicate si el nuevo correo ya está registrado.
+     * @throws ExceptionRoleNotFound       si el rol proporcionado no existe.
      */
     public UserDTO updateUser(@Valid Long id, UserDTO json) {
         //Se verifica la existencia
         UserEntity exist = userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("Usuario no encontrado"));
+                new ExceptionUserNotFound("Usuario no encontrado"));
         if (!exist.getInstiEmail().equals(json.getInstiEmail())) {
             if (verifyUserExist(json.getInstiEmail())) {
-                throw new EmailUserDuplicateException("El coreo que se quiere registrar ya existe en la base de datos");
+                throw new ExceptionEmailUserDuplicate("El coreo que se quiere registrar ya existe en la base de datos");
             }
         }
         //Actualizar valores
@@ -101,7 +101,7 @@ public class UserService {
         // Actualizar el rol si se proporciona un nuevo ID de rol
         if (json.getRoleId() != null) {
             RoleEntity entityRole = roleRepository.findById(json.getRoleId())
-                    .orElseThrow(() -> new RoleNotFoundException("ID del rol del usuario no encontrado"));
+                    .orElseThrow(() -> new ExceptionRoleNotFound("ID del rol del usuario no encontrado"));
             exist.setRoleId(entityRole);
         }
         UserEntity userUpdated = userRepository.save(exist);
@@ -133,10 +133,10 @@ public class UserService {
      *
      * @param id ID del usuario cuya contraseña se va a resetear.
      * @return true si la contraseña se reseteó exitosamente, false si el usuario no fue encontrado. False si el usuario no fue encontrado.
-     * @throws UserNotFoundException si el usuario no existe.
+     * @throws ExceptionUserNotFound si el usuario no existe.
      */
     public boolean resetPassword(@Valid Long id) {
-        UserEntity existing = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+        UserEntity existing = userRepository.findById(id).orElseThrow(() -> new ExceptionUserNotFound("Usuario no encontrado"));
         if (existing != null) {
             String newPassword = PasswordGenerator.generateSecurePassword(12);
             existing.setPassword(argon2.EncryptPassword(newPassword));
@@ -189,7 +189,7 @@ public class UserService {
      *
      * @param json Objeto UserDTO con los datos del usuario.
      * @return Objeto UserEntity con los datos listos para guardar en la base de datos.
-     * @throws RoleNotFoundException si el ID del rol no existe en la base.
+     * @throws ExceptionRoleNotFound si el ID del rol no existe en la base.
      */
     private UserEntity ConvertToEntity(@Valid UserDTO json) {
         Argon2Password objHash = new Argon2Password();
@@ -204,7 +204,7 @@ public class UserService {
         // Asigna el rol si se proporciona un ID de rol
         if (json.getRoleId() != null) {
             RoleEntity entityRole = roleRepository.findById(json.getRoleId())
-                    .orElseThrow(() -> new RoleNotFoundException("ID del rol del usuario no encontrado"));
+                    .orElseThrow(() -> new ExceptionRoleNotFound("ID del rol del usuario no encontrado"));
             entity.setRoleId(entityRole);
         }
         return entity;

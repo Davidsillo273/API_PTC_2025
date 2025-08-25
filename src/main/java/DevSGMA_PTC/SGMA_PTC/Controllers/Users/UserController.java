@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Users.UserDontInsertException;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Users.ExceptionUserDontInsert;
 import DevSGMA_PTC.SGMA_PTC.Models.ApiResponse.ApiResponse;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Users.UserDTO;
 import jakarta.validation.Valid;
@@ -75,7 +75,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserDTO>> createUser(@Valid @RequestBody UserDTO json) {
         // Verifica si el JSON recibido es nulo
         if (json == null) {
-            throw new UserDontInsertException("Error al recibir y procesar la información del usuario");
+            throw new ExceptionUserDontInsert("Error al recibir y procesar la información del usuario");
         }
 
         // Intenta guardar el usuario usando el servicio
@@ -83,7 +83,7 @@ public class UserController {
 
         // Si el usuario no se guarda correctamente
         if (userSaved == null) {
-            throw new UserDontInsertException("El usuario no pudo ser registrado debido a un problema en los datos");
+            throw new ExceptionUserDontInsert("El usuario no pudo ser registrado debido a un problema en los datos");
         }
 
         // Retorna respuesta exitosa con el usuario guardado
