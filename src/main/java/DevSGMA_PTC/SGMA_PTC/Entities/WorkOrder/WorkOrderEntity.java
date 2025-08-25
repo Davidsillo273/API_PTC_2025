@@ -23,10 +23,6 @@ public class WorkOrderEntity {
     @Column(name = "WORKORDERID")
     private Number workOrderId;
 
-//    @ManyToOne
-//    @Column(name = "VEHICLEID")
-//    @JoinColumn(nullable = false)
-//    private VehicleEntity vehicleId;
 
     @ManyToOne // Relación ManyToOne con VehicleEntity
     @JoinColumn(name = "VEHICLEID", referencedColumnName = "VEHICLEID") // Columna que conecta con la tabla de Vehículos

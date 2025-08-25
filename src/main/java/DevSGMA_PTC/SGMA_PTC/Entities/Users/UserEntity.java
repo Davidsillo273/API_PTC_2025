@@ -42,10 +42,6 @@ public class UserEntity {
     @JoinColumn(name = "ROLEID", nullable = false) // Columna que conecta con la tabla de roles
     private RoleEntity roleId;
 
-    //*** ONETOMANYS ***\\
-
-    @OneToMany(mappedBy = "instructorId", cascade = CascadeType.ALL) // Relación OneToMany con WorkOrderEntity
-    private List<WorkOrderEntity> instructor = new ArrayList<>(); // Relación OneToMany con WorkOrderEntity
 
 
 

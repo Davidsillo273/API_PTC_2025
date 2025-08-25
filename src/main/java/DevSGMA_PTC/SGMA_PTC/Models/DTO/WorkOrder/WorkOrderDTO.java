@@ -67,5 +67,5 @@ public class WorkOrderDTO {
     private String ownerPhone;
 
     @NotBlank(message = "Es necesario justificar el estado del vehículo")
-    private VehicleEntriesEntity Status;
+    private Long Status;
 }

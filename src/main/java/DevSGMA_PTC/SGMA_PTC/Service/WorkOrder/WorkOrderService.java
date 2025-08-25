@@ -7,7 +7,6 @@ import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrder.WorkOrderDTO;
 import DevSGMA_PTC.SGMA_PTC.Repository.WorkOrders.WorkOrderRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.jdbc.Work;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

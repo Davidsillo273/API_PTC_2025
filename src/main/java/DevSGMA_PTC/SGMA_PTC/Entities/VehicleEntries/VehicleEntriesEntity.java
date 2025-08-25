@@ -1,6 +1,5 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.VehicleEntries;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrder.WorkOrderEntity;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
