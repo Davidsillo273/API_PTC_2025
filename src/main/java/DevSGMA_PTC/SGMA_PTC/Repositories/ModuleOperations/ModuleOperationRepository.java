@@ -1,6 +1,6 @@
-package DevSGMA_PTC.SGMA_PTC.Repositories.Modules;
+package DevSGMA_PTC.SGMA_PTC.Repositories.ModuleOperations;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleOperationEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.ModuleOperations.ModuleOperationEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

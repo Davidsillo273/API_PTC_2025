@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Entities.Modules;
+package DevSGMA_PTC.SGMA_PTC.Entities.ModuleOperations;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;

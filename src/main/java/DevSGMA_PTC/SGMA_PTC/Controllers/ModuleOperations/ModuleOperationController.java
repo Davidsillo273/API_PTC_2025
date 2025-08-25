@@ -1,9 +1,9 @@
-package DevSGMA_PTC.SGMA_PTC.Controllers.Modules;
+package DevSGMA_PTC.SGMA_PTC.Controllers.ModuleOperations;
 
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Modules.ExceptionModuleOperationNotFound;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Modules.ExceptionModuleOperationNotRegister;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Modules.ModuleOperationDTO;
-import DevSGMA_PTC.SGMA_PTC.Services.Modules.ModuleOperationService;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.ModuleOperations.ExceptionModuleOperationNotFound;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.ModuleOperations.ExceptionModuleOperationNotRegister;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.ModuleOperations.ModuleOperationDTO;
+import DevSGMA_PTC.SGMA_PTC.Services.ModuleOperations.ModuleOperationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

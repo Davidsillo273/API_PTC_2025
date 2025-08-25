@@ -1,10 +1,10 @@
-package DevSGMA_PTC.SGMA_PTC.Services.Modules;
+package DevSGMA_PTC.SGMA_PTC.Services.ModuleOperations;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleOperationEntity;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Modules.ExceptionModuleOperationNotFound;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Modules.ExceptionModuleOperationNotRegister;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Modules.ModuleOperationDTO;
-import DevSGMA_PTC.SGMA_PTC.Repositories.Modules.ModuleOperationRepository;
+import DevSGMA_PTC.SGMA_PTC.Entities.ModuleOperations.ModuleOperationEntity;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.ModuleOperations.ExceptionModuleOperationNotFound;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.ModuleOperations.ExceptionModuleOperationNotRegister;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.ModuleOperations.ModuleOperationDTO;
+import DevSGMA_PTC.SGMA_PTC.Repositories.ModuleOperations.ModuleOperationRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
