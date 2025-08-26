@@ -1,6 +1,6 @@
 package DevSGMA_PTC.SGMA_PTC.Repositories.WorkOrders;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrder.WorkOrderEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrderEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

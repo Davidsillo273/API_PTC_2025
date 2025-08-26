@@ -1,7 +1,7 @@
 package DevSGMA_PTC.SGMA_PTC.Controllers.WorkOrders;
 
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotfound;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrder.WorkOrderDTO;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders.WorkOrderDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.WorkOrders.WorkOrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
