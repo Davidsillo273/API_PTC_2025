@@ -1,8 +1,7 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleEntity;
-import DevSGMA_PTC.SGMA_PTC.Entities.Users.UserEntity;
-import DevSGMA_PTC.SGMA_PTC.Entities.VehicleEntries.VehicleEntriesEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
 import jakarta.persistence.*;
 
@@ -33,7 +32,7 @@ public class WorkOrderEntity {
 
     @ManyToOne // Relación ManyToOne con VehicleEntity
     @JoinColumn(name = "INSTRUCTORID", referencedColumnName = "USERID") // Columna que conecta con la tabla de Vehículos
-    private UserEntity instructorId; // Relación ManyToOne con VehicleEntity
+    private StudentEntity instructorId; // Relación ManyToOne con VehicleEntity
 
     @Column(name = "STUDENTNAME")
     private String studentName;

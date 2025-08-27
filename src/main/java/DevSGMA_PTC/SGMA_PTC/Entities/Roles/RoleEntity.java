@@ -1,6 +1,6 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.Roles;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.Users.UserEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +31,6 @@ public class RoleEntity {
     private String roleName;
 
     @OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL) // Relación OneToMany con WorkOrderEntity
-    private List<UserEntity> users = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al usuario
+    private List<StudentEntity> users = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al usuario
 
 }
