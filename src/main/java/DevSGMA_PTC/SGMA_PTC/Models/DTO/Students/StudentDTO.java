@@ -19,16 +19,19 @@ public class StudentDTO {
     //Validaciones para los nombres del estudiante
     @NotBlank(message = "Los nombres del estudiante son obligatorio")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
-    @Size(min = 5, max = 50, message = "Los nombres del estudiante no pueden exceder los 50 caracteres y deben tener al menos 5 caracteres")
+    @Size(min = 5, message = "El nombre del estudiante debe tener al menos 5 caracteres")
     // Validación para el tamaño máximo del nombre
+    @Size(max = 50, message = "El nombre del estudiante no puede exceder los 50 caracteres")
     // Validación para el tamaño mínimo del nombre
+
     private String firstName;
 
     //Validaciones para los apellidos del estudiante
     @NotBlank(message = "Los apellidos del estudiante son obligatorio")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
-    @Size(min = 5, max = 50, message = "los apellidos del estudiante no pueden exceder los 50 caracteres y deben tener al menos 5 caracteres")
+    @Size(min = 5, message = "El apellido del estudiante debe tener al menos 5 caracteres")
     // Validación para el tamaño máximo del apellido
+    @Size(max = 50, message = "El apellido del estudiante no puede exceder los 50 caracteres")
     // Validación para el tamaño mínimo del apellido
     private String lastName;
 
@@ -42,15 +45,17 @@ public class StudentDTO {
     private String email;
 
     //Validaciones para la contraseña del estudiante
-    @NotBlank(message = "La contraseña es obligatoria")
+    @NotBlank(message = "La contraseña del estudiante es obligatoria")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
-    @Size(min = 8, max = 255, message = "La contraseña no puede exceder los 255 caracteres y debe tener al menos 8 caracteres")
+    @Size(min = 8, message = "La contraseña del estudiante debe tener al menos 8 dígitos")
     // Validación para el tamaño mínimo de la contraseña
+    @Size(max = 255, message = ("La contraseña del estudiante no puede exceder los 255 dígitos"))
     // Validación para el tamaño máximo de la contraseña
     private String password;
 
     //Validaciones para el año académico del estudiante
-    @Positive(message = "El ID del año académico debe ser positivo") // Validación para que el ID del año académico sea positivo
+    @Positive(message = "El ID del año académico debe ser positivo")
+    // Validación para que el ID del año académico sea positivo
     private String levelId;
 
     private String levelName;  // Campo adicional para mostrar el nombre del año académico, campo como tal no existe en tbStudents

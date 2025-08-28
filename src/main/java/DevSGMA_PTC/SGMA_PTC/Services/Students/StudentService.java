@@ -99,7 +99,7 @@ public class StudentService {
         // Actualizar el año académico si se proporciona un nuevo ID de rol
         if (json.getLevelId() != null) {
             LevelEntity levelEntity = levelRepository.findById(json.getLevelId())
-                    .orElseThrow(() -> new ExceptionRoleNotFound("ID del año académico del estudiante no encontrado"));
+                    .orElseThrow(() -> new ExceptionLevelNotFound("ID del año académico del estudiante no encontrado"));
             exist.setStudentId(levelEntity);
         }
         StudentEntity studentUpdated = studentsRepository.save(exist);
@@ -199,7 +199,7 @@ public class StudentService {
         // Asigna el año académico si se proporciona un ID de año académico
         if (json.getLevelId() != null) {
             LevelEntity levelEntity = levelRepository.findById(json.getLevelId())
-                    .orElseThrow(() -> new ExceptionRoleNotFound("ID del año académico del estudiante no encontrado"));
+                    .orElseThrow(() -> new ExceptionLevelNotFound("ID del año académico del estudiante no encontrado"));
             entity.setLevelId(levelEntity);
         }
         return entity;

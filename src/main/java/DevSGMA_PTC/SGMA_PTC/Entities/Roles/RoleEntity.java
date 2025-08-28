@@ -1,5 +1,6 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.Roles;
 
+import DevSGMA_PTC.SGMA_PTC.Entities.Instructors.InstructorEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,13 +25,13 @@ public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ROLEID")
     @EqualsAndHashCode.Include
-    private Long roleId;
+    private Long id;
 
     // Nombre del rol, no puede ser nulo y tiene un tamaño máximo de 50 caracteres
     @Column(name = "ROLENAME", length = 50, nullable = false)
     private String roleName;
 
-    @OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL) // Relación OneToMany con WorkOrderEntity
-    private List<StudentEntity> users = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al usuario
+    @OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL) // Relación OneToMany con tbInstructor
+    private List<InstructorEntity> roleid = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al Instructor
 
 }
