@@ -32,8 +32,8 @@ public class WorkOrderService {
         }
         try {
             WorkOrderEntity objData = ConvertirAEntity(json);
-            WorkOrderEntity WorkOrderSaved = repo.save(objData);
-            return ConvertirADTO(WorkOrderSaved);
+            WorkOrderEntity workOrderEntity = repo.save(objData);
+            return ConvertirADTO(workOrderEntity);
         } catch (Exception e) {
             log.error("Error al regstrar una Orden de Trabajo" + e.getMessage());
             throw new ExceptionWorkOrdernotRegistred("La orden de trabajo no pudo ser registrada");
@@ -57,9 +57,7 @@ public class WorkOrderService {
         WorkOrderEntity workOrderExist = repo.findById(id).orElseThrow(() -> new ExceptionWorkOrdernotfound("Orden de trabajo no encontrada."));
         // 2. Actuaización de campos
         workOrderExist.setWorkOrderId(json.getWorkOrderId());
-        workOrderExist.setVehicleId(json.getVehicleId());
-        workOrderExist.setModuleId(json.getModuleId());
-        workOrderExist.setEstimatedTime(json.getEstimatedTime());
+
         workOrderExist.setStatus(json.getStatus());
         //3. Actualización del registro
         WorkOrderEntity WorkOrderUpdated = repo.save(workOrderExist);
@@ -67,27 +65,30 @@ public class WorkOrderService {
         return ConvertirADTO(WorkOrderUpdated);
     }
 
-    // ----------- CONVERTIR A DTO --------------- ///
     private WorkOrderDTO ConvertirADTO(WorkOrderEntity workOrderEntity) {
         WorkOrderDTO dto = new WorkOrderDTO();
         dto.setWorkOrderId(workOrderEntity.getWorkOrderId());
         dto.setVehicleId(workOrderEntity.getVehicleId());
-        dto.setModuleId(workOrderEntity.getModuleId());
-        dto.setEstimatedTime(workOrderEntity.getEstimatedTime());
+        dto.setMaintenanceExpo(workOrderEntity.getMaintenanceExpo());
+        dto.setWorkOrdersImage(workOrderEntity.getWorkOrdersImage());
         dto.setStatus(workOrderEntity.getStatus());
+
         return dto;
     }
 
-    // ----------- CONVERTIR A ENTITY --------------- ///
     private WorkOrderEntity ConvertirAEntity(@Valid WorkOrderDTO json) {
         WorkOrderEntity entity = new WorkOrderEntity();
         entity.setWorkOrderId(json.getWorkOrderId());
         entity.setVehicleId(json.getVehicleId());
-        entity.setModuleId(json.getModuleId());
-        entity.setEstimatedTime(json.getEstimatedTime());
+        entity.setMaintenanceExpo(json.getMaintenanceExpo());
+        entity.setWorkOrdersImage(json.getWorkOrdersImage());
         entity.setStatus(json.getStatus());
+
         return entity;
     }
+
+
+
 
 
 }

@@ -1,13 +1,12 @@
 package DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleEntity;
-import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+
+import lombok.*;
+
 
 @Getter
 @Setter
@@ -15,21 +14,30 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class WorkOrderDTO {
 
-    @Positive
+
+    @NotNull(message = "El ID de la orden de trabajo es obligatorio")
+    @Positive(message = "El ID de la orden de trabajo debe ser positivo")
     private Number workOrderId;
 
-    @Positive
-    private VehicleEntity vehicleId;
+    @NotNull(message = "El ID del vehículo es obligatorio")
+    @Positive(message = "El ID del vehículo debe ser positivo")
+    private Long vehicleId;
 
-    @Positive
-    private ModuleEntity moduleId;
-    
-    @NotBlank(message = "El tipo de mantenimiento debe ser ingresado")
+    @NotNull(message = "El ID del módulo es obligatorio")
+    @Positive(message = "El ID del módulo debe ser positivo")
+    private Long moduleId;
+
+    @NotNull(message = "El valor de mantenimiento expo es obligatorio")
+    @Positive(message = "El valor de mantenimiento expo debe ser positivo")
     private String maintenanceExpo;
 
-    @NotBlank(message = "El tiempo estimado es obligatorio")
-    private String estimatedTime;
+    @FutureOrPresent(message = "El tiempo estimado debe ser en el presente o futuro")
+    private Long estimatedTime;
 
-    @NotBlank(message = "Es necesario justificar el estado del vehículo")
-    private Long Status;
+    @NotNull(message = "La imagen de la orden de trabajo es obligatoria")
+    private Long workOrdersImage;
+
+    @NotNull(message = "El estado es obligatorio")
+    private Long status;
+
 }

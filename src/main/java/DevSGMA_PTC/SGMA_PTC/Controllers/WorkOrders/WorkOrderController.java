@@ -59,7 +59,7 @@ public class WorkOrderController {
      * y finalmente como tercer caso, un error que no pudo crearse la orden de trabajo
      */
     @PostMapping("/newWorkOrders")
-    private ResponseEntity<Map<String, Object>> insertWorOrder(@Valid @RequestBody WorkOrderDTO json, HttpServletRequest request){
+    private ResponseEntity<Map<String, Object>> insertWorkOrder(@Valid @RequestBody WorkOrderDTO json, HttpServletRequest request){
         try{
             WorkOrderDTO response =service.insert(json);
             if (response == null){

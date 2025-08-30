@@ -1,9 +1,6 @@
 package DevSGMA_PTC.SGMA_PTC.Models.DTO.Vehicles;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.VehicleType.VehicleTypeDTO;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -37,9 +34,5 @@ public class VehiclesDTO {
     @NotBlank(message = "El número de tarjeta de circulación es obligatorio")
     @Size(max = 20, message = "El número de tarjeta no puede exceder 20 caracteres")
     private String circulationCardNumber;
-
-    private byte[] vehicleImage;
-
-
 
 }
