@@ -8,5 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ModuleRepository extends JpaRepository<ModuleEntity, Long> {
+
+    // Método para obtener módulos paginados
     Page<ModuleEntity> findAll(Pageable pageable);
 }
