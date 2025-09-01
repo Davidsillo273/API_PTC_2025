@@ -1,11 +1,10 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleEntity;
+
 import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
 import jakarta.persistence.*;
-
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +13,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
 @Table(name = "TBWORKORDERS")
 public class WorkOrderEntity {
 
@@ -22,9 +20,9 @@ public class WorkOrderEntity {
     @Column(name = "WORKORDERID")
     private Number workOrderId;
 
-
     @ManyToOne // Relación ManyToOne con VehicleEntity
     @JoinColumn(name = "VEHICLEID", referencedColumnName = "VEHICLEID") // Columna que conecta con la tabla de Vehículos
+    private Long vehicleId; // Relación ManyToOne con VehicleEntity
     private VehicleEntity vehicleId; // Relación ManyToOne con VehicleEntity
 
     @Column(name = "ACADEMICYEAR")
@@ -47,28 +45,15 @@ public class WorkOrderEntity {
     @JoinColumn(name = "MODULEID", referencedColumnName = "MODULEID") // Columna que conecta con la tabla de Modulos
     private ModuleEntity moduleId;
 
-    @Column(name = "MAINTENANCETYPE")
-    private String maintenanceType;
+    @Column(name = "MAINTENANCEEXPO")
+    private String maintenanceExpo;
 
     @Column(name = "ESTIMATEDTIME")
     private String estimatedTime;
 
-    @Column(name = "ENTRYTIME")
-    @OneToMany
-    private String entryTime;
-
-    @Column(name = "EXITTIME")
-    private String exitTime;
-
-    @Column(name = "OWNERNAME")
-    private String ownerName;
-
-    @Column(name = "OWNERDUI")
-    private String OwnerDui;
-
-    @Column(name = "OWNERPHONE")
-    private String ownerPhone;
+    @Column(name = "WORKORDERSIMAGE")
+    private Long workOrdersImage;
 
     @Column(name = "STATUS")
-    private long Status;
+    private Long status;
 }

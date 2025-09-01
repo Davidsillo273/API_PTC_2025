@@ -1,21 +1,22 @@
 package DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders;
 
+import jakarta.validation.constraints.FutureOrPresent;
 import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+
+import lombok.*;
+
 
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
 public class WorkOrderDTO {
+
 
     @Positive
     private Number workOrderId;
@@ -29,42 +30,30 @@ public class WorkOrderDTO {
     @Positive
     private StudentEntity instructorId;
 
-    @NotBlank(message = "El nombre del estudiante es obligatorio ")
-    private String studentName;
 
-    @Positive
-    private String studentId;
+    @NotNull(message = "El ID de la orden de trabajo es obligatorio")
+    @Positive(message = "El ID de la orden de trabajo debe ser positivo")
+    private Number workOrderId;
 
-    @NotBlank(message = "La descripción de la operación debe ser obligatoria ")
-    @Size(min = 50, max = 500, message = "se debe constar almenos 50 carácteres en la descripcion pero con un límite de 500 caracteres")
-    private String operationDescription;
+    @NotNull(message = "El ID del vehículo es obligatorio")
+    @Positive(message = "El ID del vehículo debe ser positivo")
+    private Long vehicleId;
 
-    @Positive
-    private ModuleEntity moduleId;
+    @NotNull(message = "El ID del módulo es obligatorio")
+    @Positive(message = "El ID del módulo debe ser positivo")
+    private Long moduleId;
 
-    @NotBlank(message = "El tipo de mantenimiento debe ser ingresado")
-    private String maintenanceType;
+    @NotNull(message = "El valor de mantenimiento expo es obligatorio")
+    @Positive(message = "El valor de mantenimiento expo debe ser positivo")
+    private String maintenanceExpo;
 
-    @NotBlank(message = "El tiempo estimado es obligatorio")
-    private String estimatedTime;
+    @FutureOrPresent(message = "El tiempo estimado debe ser en el presente o futuro")
+    private Long estimatedTime;
 
-    @NotBlank(message = "el tiempo de entrada es obligatorio")
-    private String entryTime;
+    @NotNull(message = "La imagen de la orden de trabajo es obligatoria")
+    private Long workOrdersImage;
 
-    @NotBlank(message = "el tiempo de salida es obligatorio")
-    private String exitTime;
+    @NotNull(message = "El estado es obligatorio")
+    private Long status;
 
-    @NotBlank(message = "debe de ingresarse el autor o dueño de determinao vehículo")
-    @Size(min = 8, max = 50, message = "El nombre debe de tener un mínimo de 8 caracteres y no exceder el limite de 50 caracteres")
-    private String ownerName;
-
-    @NotBlank(message = "El DUI es requerido y obligatorio")
-    private String OwnerDui;
-
-    @NotBlank(message = "Debe proporiconar un numero telefonico")
-    @Size(max = 9, message = "El numero telefonico debe contener 9 caracteres por defecto")
-    private String ownerPhone;
-
-    @NotBlank(message = "Es necesario justificar el estado del vehículo")
-    private Long Status;
 }

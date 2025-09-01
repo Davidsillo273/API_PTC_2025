@@ -1,7 +1,7 @@
 package DevSGMA_PTC.SGMA_PTC.Controllers.WorkOrders;
 
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotfound;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrder.WorkOrderDTO;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders.WorkOrderDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.WorkOrders.WorkOrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -59,7 +59,7 @@ public class WorkOrderController {
      * y finalmente como tercer caso, un error que no pudo crearse la orden de trabajo
      */
     @PostMapping("/newWorkOrders")
-    private ResponseEntity<Map<String, Object>> insertWorOrder(@Valid @RequestBody WorkOrderDTO json, HttpServletRequest request){
+    private ResponseEntity<Map<String, Object>> insertWorkOrder(@Valid @RequestBody WorkOrderDTO json, HttpServletRequest request){
         try{
             WorkOrderDTO response =service.insert(json);
             if (response == null){

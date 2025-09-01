@@ -1,9 +1,9 @@
 package DevSGMA_PTC.SGMA_PTC.Services.WorkOrders;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrder.WorkOrderEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrderEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotRegistred;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotfound;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrder.WorkOrderDTO;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders.WorkOrderDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.WorkOrders.WorkOrderRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +32,8 @@ public class WorkOrderService {
         }
         try {
             WorkOrderEntity objData = ConvertirAEntity(json);
-            WorkOrderEntity WorkOrderSaved = repo.save(objData);
-            return ConvertirADTO(WorkOrderSaved);
+            WorkOrderEntity workOrderEntity = repo.save(objData);
+            return ConvertirADTO(workOrderEntity);
         } catch (Exception e) {
             log.error("Error al regstrar una Orden de Trabajo" + e.getMessage());
             throw new ExceptionWorkOrdernotRegistred("La orden de trabajo no pudo ser registrada");
@@ -57,20 +57,7 @@ public class WorkOrderService {
         WorkOrderEntity workOrderExist = repo.findById(id).orElseThrow(() -> new ExceptionWorkOrdernotfound("Orden de trabajo no encontrada."));
         // 2. Actuaización de campos
         workOrderExist.setWorkOrderId(json.getWorkOrderId());
-        workOrderExist.setVehicleId(json.getVehicleId());
-        workOrderExist.setAcademicYear(json.getAcademicYear());
-        workOrderExist.setAcademicYear(json.getAcademicYear());
-        workOrderExist.setInstructorId(json.getInstructorId());
-        workOrderExist.setStudentName(json.getStudentName());
-        workOrderExist.setStudentId(json.getStudentId());
-        workOrderExist.setOperationDescription(json.getOperationDescription());
-        workOrderExist.setModuleId(json.getModuleId());
-        workOrderExist.setMaintenanceType(json.getMaintenanceType());
-        workOrderExist.setEstimatedTime(json.getEstimatedTime());
-        workOrderExist.setExitTime(json.getExitTime());
-        workOrderExist.setOwnerName(json.getOwnerName());
-        workOrderExist.setOwnerDui(json.getOwnerDui());
-        workOrderExist.setOwnerPhone(json.getOwnerPhone());
+
         workOrderExist.setStatus(json.getStatus());
         //3. Actualización del registro
         WorkOrderEntity WorkOrderUpdated = repo.save(workOrderExist);
@@ -78,48 +65,30 @@ public class WorkOrderService {
         return ConvertirADTO(WorkOrderUpdated);
     }
 
-    // ----------- CONVERTIR A DTO --------------- ///
     private WorkOrderDTO ConvertirADTO(WorkOrderEntity workOrderEntity) {
         WorkOrderDTO dto = new WorkOrderDTO();
         dto.setWorkOrderId(workOrderEntity.getWorkOrderId());
         dto.setVehicleId(workOrderEntity.getVehicleId());
-        dto.setAcademicYear(workOrderEntity.getAcademicYear());
-        dto.setInstructorId(workOrderEntity.getInstructorId());
-        dto.setStudentName(workOrderEntity.getStudentName());
-        dto.setStudentId(workOrderEntity.getStudentId());
-        dto.setOperationDescription(workOrderEntity.getOperationDescription());
-        dto.setModuleId(workOrderEntity.getModuleId());
-        dto.setMaintenanceType(workOrderEntity.getMaintenanceType());
-        dto.setEstimatedTime(workOrderEntity.getEstimatedTime());
-        dto.setExitTime(workOrderEntity.getExitTime());
-        dto.setOwnerName(workOrderEntity.getOwnerName());
-        dto.setOwnerDui(workOrderEntity.getOwnerDui());
-        dto.setOwnerPhone(workOrderEntity.getOwnerPhone());
+        dto.setMaintenanceExpo(workOrderEntity.getMaintenanceExpo());
+        dto.setWorkOrdersImage(workOrderEntity.getWorkOrdersImage());
         dto.setStatus(workOrderEntity.getStatus());
+
         return dto;
     }
 
-    // ----------- CONVERTIR A ENTITY --------------- ///
     private WorkOrderEntity ConvertirAEntity(@Valid WorkOrderDTO json) {
         WorkOrderEntity entity = new WorkOrderEntity();
         entity.setWorkOrderId(json.getWorkOrderId());
         entity.setVehicleId(json.getVehicleId());
-        entity.setAcademicYear(json.getAcademicYear());
-        entity.setAcademicYear(json.getAcademicYear());
-        entity.setInstructorId(json.getInstructorId());
-        entity.setStudentName(json.getStudentName());
-        entity.setStudentId(json.getStudentId());
-        entity.setOperationDescription(json.getOperationDescription());
-        entity.setModuleId(json.getModuleId());
-        entity.setMaintenanceType(json.getMaintenanceType());
-        entity.setEstimatedTime(json.getEstimatedTime());
-        entity.setExitTime(json.getExitTime());
-        entity.setOwnerName(json.getOwnerName());
-        entity.setOwnerDui(json.getOwnerDui());
-        entity.setOwnerPhone(json.getOwnerPhone());
+        entity.setMaintenanceExpo(json.getMaintenanceExpo());
+        entity.setWorkOrdersImage(json.getWorkOrdersImage());
         entity.setStatus(json.getStatus());
+
         return entity;
     }
+
+
+
 
 
 }
