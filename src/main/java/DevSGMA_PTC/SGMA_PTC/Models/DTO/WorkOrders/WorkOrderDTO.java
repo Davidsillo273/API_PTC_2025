@@ -1,8 +1,7 @@
-package DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrder;
+package DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleEntity;
-import DevSGMA_PTC.SGMA_PTC.Entities.Users.UserEntity;
-import DevSGMA_PTC.SGMA_PTC.Entities.VehicleEntries.VehicleEntriesEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -28,7 +27,7 @@ public class WorkOrderDTO {
     private String academicYear;
 
     @Positive
-    private UserEntity instructorId;
+    private StudentEntity instructorId;
 
     @NotBlank(message = "El nombre del estudiante es obligatorio ")
     private String studentName;
