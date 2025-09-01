@@ -1,12 +1,12 @@
-package DevSGMA_PTC.SGMA_PTC.Controllers.Users;
+package DevSGMA_PTC.SGMA_PTC.Controllers.Students;
 
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Users.ExceptionUserDontInsert;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentDontInsert;
 import DevSGMA_PTC.SGMA_PTC.Models.ApiResponse.ApiResponse;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Users.UserDTO;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Students.StudentDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,28 +14,28 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import DevSGMA_PTC.SGMA_PTC.Services.Users.UserService;
+import DevSGMA_PTC.SGMA_PTC.Services.Students.StudentService;
 
 @RestController // Indica que esta clase es un controlador REST
-@RequestMapping("/api/users") // Ruta base para todos los endpoints de esta clase
-public class UserController {
+@RequestMapping("/api/students") // Ruta base para todos los endpoints de esta clase
+public class StudentController {
 
-    @Autowired // Inyección automática del servicio de usuarios
-    private UserService userService; // Servicio que maneja la lógica de negocio relacionada con los usuarios
+    @Autowired // Inyección automática del servicio de estudiantes
+    private StudentService studentService; // Servicio que maneja la lógica de negocio relacionada con los estudiantes
 
-    //*** MÉTODO PARA OBTENER TODOS LOS USUARIOS CON PAGINACIÓN ***\\
+    //*** MÉTODO PARA OBTENER TODOS LOS ESTUDIANTES CON PAGINACIÓN ***\\
 
     /**
-     * Obtiene todos los usuarios del sistema con paginación.
+     * Obtiene todos los estudiantes del sistema con paginación.
      *
      * @param page Número de página solicitada.
      * @param size Cantidad de registros por página.
-     * @return ResponseEntity con un ApiResponse que contiene una página de usuarios (UserDTO).
+     * @return ResponseEntity con un ApiResponse que contiene una página de estudiantes (StudentDTO).
      * Retorna error si los parámetros son inválidos o si ocurre un problema en el servicio.
      */
 
-    @GetMapping("/getDataUsers")
-    public ResponseEntity<ApiResponse<Page<UserDTO>>> getAllUsers(
+    @GetMapping("/getDataStudents")
+    public ResponseEntity<ApiResponse<Page<StudentDTO>>> getAllStudents(
             @RequestParam(defaultValue = "0") int page, // Página por defecto 0
             @RequestParam(defaultValue = "10") int size // Tamaño por defecto 10
     ) {
@@ -47,63 +47,64 @@ public class UserController {
             return ResponseEntity.ok(null); // Devuelve nulo si la validación falla
         }
 
-        // Obtiene los usuarios paginados desde el servicio
-        Page<UserDTO> users = userService.getAllUsers(page, size);
+        // Obtiene los estudiantes paginados desde el servicio
+        Page<StudentDTO> students = studentService.getAllStudents(page, size);
 
         // Si ocurre un error al obtener los datos
-        if (users == null) {
+        if (students == null) {
             ResponseEntity.badRequest().body(Map.of(
                     "status", "Error al obtener los datos"
             ));
         }
 
         // Retorna respuesta exitosa con los datos
-        return ResponseEntity.ok(ApiResponse.success("Datos consultados correctamente", users));
+        return ResponseEntity.ok(ApiResponse.success("Datos consultados correctamente", students));
     }
 
-    //*** MÉTODO PARA AGREGAR UN NUEVO USUARIO ***\\
+    //*** MÉTODO PARA AGREGAR UN NUEVO ESTUDIANTE ***\\
 
     /**
-     * Crea un nuevo usuario en el sistema.
+     * Crea un nuevo estudiante en el sistema.
      *
-     * @param json Objeto UserDTO con los datos del usuario a registrar.
-     * @return ResponseEntity con un ApiResponse que contiene el usuario creado.
+     * @param json Objeto StudentDTO con los datos del estudiante a registrar.
+     * @return ResponseEntity con un ApiResponse que contiene el estudiante creado.
      * Lanza excepción si el JSON es nulo o si falla el guardado.
      */
 
-    @PostMapping("/addUser")
-    public ResponseEntity<ApiResponse<UserDTO>> createUser(@Valid @RequestBody UserDTO json) {
+    @PostMapping("/addNewStudent")
+    public ResponseEntity<ApiResponse<StudentDTO>> createStudent(@Valid @RequestBody StudentDTO json
+    ) {
         // Verifica si el JSON recibido es nulo
         if (json == null) {
-            throw new ExceptionUserDontInsert("Error al recibir y procesar la información del usuario");
+            throw new ExceptionStudentDontInsert("Error al recibir y procesar la información del estudiante");
         }
 
-        // Intenta guardar el usuario usando el servicio
-        UserDTO userSaved = userService.createUser(json);
+        // Intenta guardar el estudiante usando el servicio
+        StudentDTO studentSaved = studentService.createStudent(json);
 
-        // Si el usuario no se guarda correctamente
-        if (userSaved == null) {
-            throw new ExceptionUserDontInsert("El usuario no pudo ser registrado debido a un problema en los datos");
+        // Si el estudiante no se guarda correctamente
+        if (studentSaved == null) {
+            throw new ExceptionStudentDontInsert("El estudiante no pudo ser registrado debido a un problema en los datos");
         }
 
-        // Retorna respuesta exitosa con el usuario guardado
-        return ResponseEntity.ok(ApiResponse.success("Usuario registrado exitosamente", userSaved));
+        // Retorna respuesta exitosa con el estudiante guardado
+        return ResponseEntity.ok(ApiResponse.success("Estudiante registrado exitosamente", studentSaved));
     }
 
-    //*** MÉTODO PARA ACTUALIZAR UN USUARIO EXISTENTE ***\\
+    //*** MÉTODO PARA ACTUALIZAR UN ESTUDIANTE EXISTENTE ***\\
 
     /**
-     * Actualiza los datos de un usuario existente según su ID.
+     * Actualiza los datos de un estudiante existente según su ID.
      *
-     * @param id            ID del usuario a actualizar.
-     * @param json          Objeto UserDTO con los nuevos datos del usuario.
+     * @param id            ID del estudiante a actualizar.
+     * @param json          Objeto StudentDTO con los nuevos datos del estudiante.
      * @param bindingResult Objeto que contiene errores de validación si los hay.
-     * @return ResponseEntity con el usuario actualizado si la operación fue exitosa.
+     * @return ResponseEntity con el estudiante actualizado si la operación fue exitosa.
      * Si hay errores de validación, devuelve un mapa con los errores.
      * Si ocurre una excepción, devuelve un mensaje de error.
      */
-    @PutMapping("/updateUser/{id}")
-    public ResponseEntity<?> updateUser(@Valid @PathVariable Long id, @RequestBody UserDTO json, BindingResult bindingResult) {
+    @PutMapping("/updateStudent/{id}")
+    public ResponseEntity<?> updateStudent(@Valid @PathVariable Long id, @RequestBody StudentDTO json, BindingResult bindingResult) {
         // Si hay errores de validación en el DTO recibido
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -117,38 +118,38 @@ public class UserController {
         }
 
         try {
-            // Intenta actualizar el usuario con el ID proporcionado
-            UserDTO userUpdated = userService.updateUser(id, json);
-            return ResponseEntity.ok(userUpdated); // Respuesta exitosa
+            // Intenta actualizar el estudiante con el ID proporcionado
+            StudentDTO studentUpdated = studentService.updateStudent(id, json);
+            return ResponseEntity.ok(studentUpdated); // Respuesta exitosa
         } catch (Exception e) {
             // Si ocurre algún error durante la actualización
-            return ResponseEntity.badRequest().body("Error al modificar el usuario");
+            return ResponseEntity.badRequest().body("Error al modificar el estudiante");
         }
     }
 
-    //*** MÉTODO PARA ELIMINAR UN USUARIO POR ID ***\\
+    //*** MÉTODO PARA ELIMINAR UN ESTUDIANTE POR ID ***\\
 
     /**
-     * Elimina un usuario del sistema según su ID.
+     * Elimina un estudiante del sistema según su ID.
      *
-     * @param id ID del usuario que se desea eliminar.
+     * @param id ID del estudiante que se desea eliminar.
      * @return ResponseEntity con mensaje de éxito si se elimina correctamente.
-     * Si no se encuentra el usuario, retorna un mensaje de error con estado 404.
+     * Si no se encuentra el estudiante, retorna un mensaje de error con estado 404.
      * Si ocurre un error inesperado, retorna un mensaje de error con estado 500.
      */
-    @DeleteMapping("/deleteUser/{id}")
-    public ResponseEntity<Map<String, Object>> deleteUser(
+    @DeleteMapping("/deleteStudent/{id}")
+    public ResponseEntity<Map<String, Object>> deleteStudent(
             @PathVariable Long id
     ) {
         try {
-            // Intenta eliminar el usuario usando el servicio
-            if (!userService.deleteUser(id)) {
-                // Si el usuario no fue encontrado o no se pudo eliminar
+            // Intenta eliminar el estudiante usando el servicio
+            if (!studentService.deleteStudent(id)) {
+                // Si el estudiante no fue encontrado o no se pudo eliminar
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .header("Error", "El usuario no encontrado")
+                        .header("Error", "El estudiante no fue encontrado")
                         .body(Map.of(
                                 "Error", "NOT FOUND",
-                                "Mensaje", "El usuario no fue encontrado",
+                                "Mensaje", "El estudiante no fue encontrado",
                                 "Fecha y hora", Instant.now().toString()
                         ));
             }
@@ -156,38 +157,38 @@ public class UserController {
             // Si se elimina correctamente, devuelve mensaje de éxito
             return ResponseEntity.ok().body(Map.of(
                     "status", "Proceso completado",
-                    "mensaje", "Usuario eliminado exitosamente"
+                    "mensaje", "Estudiante eliminado exitosamente"
             ));
         } catch (Exception e) {
             // Captura cualquier error inesperado durante la eliminación
             return ResponseEntity.internalServerError().body(Map.of(
                     "status", "Error",  // Estado general
-                    "message", "Error al eliminar el usuario",  // Mensaje para el usuario
+                    "message", "Error al eliminar el estudiante",  // Mensaje para el usuario
                     "detail", e.getMessage()  // Detalles técnicos (para debugging)
             ));
         }
     }
 
-    //*** MÉTODO PARA ACTUALIZAR LA CONTRASEÑA DE USUARIO ***\\
+    //*** MÉTODO PARA ACTUALIZAR LA CONTRASEÑA DE ESTUDIANTE ***\\
 
     /**
-     * Elimina un usuario del sistema según su ID.
+     * Actualiza la contraseña de un estudiante según su ID.
      *
-     * @param id ID del usuario que se le desea actualizar la contraseña.
+     * @param id ID del estudiante que se le desea actualizar la contraseña.
      * @return ResponseEntity con mensaje de éxito si se actualiza la contraseña correctamente.
      * @throws Exception Si ocurre un error durante el proceso de actualización.
-     * @Valid Anotación para validar el ID del usuario.
+     * @Valid Anotación para validar el ID del estudiante.
      */
     @PutMapping("/update/{id}/password")
-    private ResponseEntity<Map<String, Object>> resetPassword(@Valid @PathVariable Long id) {
+    private ResponseEntity<Map<String, Object>> resetStudentPassword(@Valid @PathVariable Long id) {
         try {
-            // Llama al servicio para restablecer la contraseña del usuario con el ID proporcionado
-            boolean answer = userService.resetPassword(id);
+            // Llama al servicio para restablecer la contraseña del estudiante con el ID proporcionado
+            boolean answer = studentService.resetStudentPassword(id);
             if (answer) {
                 // Si el proceso fue exitoso, retorna mensaje de éxito
                 return ResponseEntity.ok().body(Map.of(
                         "Success", "Proceso completado exitosamente",
-                        "Message", "La contraseña fue restablecida correctamente"
+                        "Message", "La contraseña del estudiante fue restablecida correctamente"
                 ));
             }
             // Si el proceso no fue exitoso, retorna mensaje de error
