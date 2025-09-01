@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Models.DTO.Modules;
+package DevSGMA_PTC.SGMA_PTC.Models.DTO.Grades;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,12 +11,12 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class ModuleDTO {
+public class GradeDTO {
 
     private Long id;
 
-    @NotBlank(message = "El nombre del módulo no puede estar vacío")
-    private String moduleName;
+    @NotBlank(message = "El nombre del grupo no puede estar vacío")
+    private String groupName;
 
     @NotNull(message = "El nivel asociado es obligatorio")
     private Long levelId; // Referencia al LevelEntity
