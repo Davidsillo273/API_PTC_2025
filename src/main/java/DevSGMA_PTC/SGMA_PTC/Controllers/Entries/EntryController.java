@@ -1,8 +1,8 @@
-package DevSGMA_PTC.SGMA_PTC.Controllers.VehicleEntries;
+package DevSGMA_PTC.SGMA_PTC.Controllers.Entries;
 
-import DevSGMA_PTC.SGMA_PTC.Exceptions.VehicleEntries.ExceptionVehicleEntrieNotFound;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.VehicleEntries.VehicleEntriesDTO;
-import DevSGMA_PTC.SGMA_PTC.Services.VehicleEntries.VehicleEntriesService;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Entries.ExceptionEntryNotFound;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Entries.EntryDTO;
+import DevSGMA_PTC.SGMA_PTC.Services.Entries.EntryService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +17,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/VehicleEntries")
+@RequestMapping("/api/Entries")
 @CrossOrigin
-public class VehicleEntriesController {
+public class EntryController {
 
     @Autowired
-    private  VehicleEntriesService service;
+    private EntryService service;
 
     @GetMapping("/getAllVehicleEntries")
-    private ResponseEntity<Page<VehicleEntriesDTO>> getDataVehicleEntries(
+    private ResponseEntity<Page<EntryDTO>> getDataVehicleEntries(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ){
@@ -35,7 +35,7 @@ public class VehicleEntriesController {
             ));
             return ResponseEntity.ok(null);
         }
-        Page<VehicleEntriesDTO> VehicleEntries = service.getAllVehicleEntries(page, size);
+        Page<EntryDTO> VehicleEntries = service.getAllVehicleEntries(page, size);
         if (VehicleEntries == null){
             ResponseEntity.badRequest().body(Map.of(
                     "status", "No hay productos registrados"
@@ -45,9 +45,9 @@ public class VehicleEntriesController {
     }
 
     @PostMapping("/newVehicleEntries")
-    private ResponseEntity<Map<String, Object>> insertVehicleEntries(@Valid @RequestBody VehicleEntriesDTO json, HttpServletRequest request){
+    private ResponseEntity<Map<String, Object>> insertVehicleEntries(@Valid @RequestBody EntryDTO json, HttpServletRequest request){
         try{
-            VehicleEntriesDTO response =service.insert(json);
+            EntryDTO response =service.insert(json);
             if (response == null){
                 return ResponseEntity.badRequest().body(Map.of(
                         "Error", "Inserción incorrecta",
@@ -72,7 +72,7 @@ public class VehicleEntriesController {
     @PutMapping("/updateVehicleEntries/{id}")
     public ResponseEntity<?> modifyVehicleEntries(
             @PathVariable Long id,
-            @Valid @RequestBody VehicleEntriesDTO vehicleEntriesDTO,  // ← Corregí el nombre
+            @Valid @RequestBody EntryDTO entryDTO,  // ← Corregí el nombre
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -83,9 +83,9 @@ public class VehicleEntriesController {
         }
 
         try {
-            VehicleEntriesDTO vehicleEntriesUpdated = service.update(id, vehicleEntriesDTO);
+            EntryDTO vehicleEntriesUpdated = service.update(id, entryDTO);
             return ResponseEntity.ok(vehicleEntriesUpdated);  // ← Esto generará el JSON
-        } catch (ExceptionVehicleEntrieNotFound e) {
+        } catch (ExceptionEntryNotFound e) {
             return ResponseEntity.notFound().build();
         }
     }

@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Entities.VehicleEntries;
+package DevSGMA_PTC.SGMA_PTC.Entities.Entries;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @Table(name = "TBVEHICLEENTRIES")
-public class VehicleEntriesEntity {
+public class EntryEntity {
 
     @Column(name = "ENTRYID")
     private Number entryId;

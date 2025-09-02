@@ -2,22 +2,38 @@ package DevSGMA_PTC.SGMA_PTC.Models.DTO.Modules;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+// Anotaciones de Lombok para generar getters, setters, toString, equals y hashCode automáticamente
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
 public class ModuleDTO {
 
-    private Long id;
+    //*** ATRIBUTOS ***\\
 
+    @Positive // El ID del módulo debe ser positivo, generado por la base de datos
+    private Long moduleId;
+
+    // Validaciones para el nombre del módulo
     @NotBlank(message = "El nombre del módulo no puede estar vacío")
+    // Validación para que el campo no esté vacío o solo contenga espacios en blanco
+    @Size(min = 5, message = "El nombre del módulo debe tener al menos 5 caracteres")
+    // Validación para el tamaño máximo del nombre
+    @Size(max = 50, message = "El nombre del módulo no puede exceder los 50 caracteres")
+    // Validación para el tamaño mínimo del nombre
     private String moduleName;
 
+    // Validaciones para el nivel académico asociado al módulo
     @NotNull(message = "El nivel asociado es obligatorio")
     private Long levelId; // Referencia al LevelEntity
+
+    //Campo adicional
+    private String levelName;  // Campo adicional para mostrar el nombre del año académico, campo como tal no existe en tbModules
 }

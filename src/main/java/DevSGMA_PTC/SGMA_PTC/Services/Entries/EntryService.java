@@ -1,11 +1,11 @@
-package DevSGMA_PTC.SGMA_PTC.Services.VehicleEntries;
+package DevSGMA_PTC.SGMA_PTC.Services.Entries;
 
 
-import DevSGMA_PTC.SGMA_PTC.Entities.VehicleEntries.VehicleEntriesEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Entries.EntryEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotRegistred;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotfound;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.VehicleEntries.VehicleEntriesDTO;
-import DevSGMA_PTC.SGMA_PTC.Repositories.VehicleEntries.VehicleEntriesRepository;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Entries.EntryDTO;
+import DevSGMA_PTC.SGMA_PTC.Repositories.Entries.EntryRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,23 +17,23 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Slf4j
 @CrossOrigin
 @Service
-public class VehicleEntriesService {
+public class EntryService {
 
-    private VehicleEntriesRepository repo;
+    private EntryRepository repo;
 
-    public Page<VehicleEntriesDTO> getAllVehicleEntries(int page, int size) {
+    public Page<EntryDTO> getAllVehicleEntries(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<VehicleEntriesEntity> pageEntity = repo.findAll(pageable);
+        Page<EntryEntity> pageEntity = repo.findAll(pageable);
         return pageEntity.map(this::ConvertirADTO);
     }
 
-    public VehicleEntriesDTO insert(@Valid VehicleEntriesDTO json) {
+    public EntryDTO insert(@Valid EntryDTO json) {
         if (json == null){
             throw new IllegalArgumentException("Para insertar una nueva Entrada de vehículo asegurate de ingresar todos los campos requeridos");
         }
         try{
-            VehicleEntriesEntity objData = ConvertirAEntity(json);
-            VehicleEntriesEntity VehicleEntrieSaved = repo.save(objData);
+            EntryEntity objData = ConvertirAEntity(json);
+            EntryEntity VehicleEntrieSaved = repo.save(objData);
             return ConvertirADTO(VehicleEntrieSaved);
         }catch (Exception e){
             log.error("Error al registrar un ingreso de Vehiculo" + e.getMessage());
@@ -46,19 +46,19 @@ public class VehicleEntriesService {
 
 
     // ----------- CONVERTIR A DTO --------------- ///
-    private VehicleEntriesDTO ConvertirADTO(VehicleEntriesEntity vehicleEntriesEntity) {
-        VehicleEntriesDTO dto = new VehicleEntriesDTO();
-        dto.setEntryId(vehicleEntriesEntity.getEntryId());
-        dto.setEntryTime(vehicleEntriesEntity.getEntryTime());
-        dto.setOperationId(vehicleEntriesEntity.getOperationId());
-        dto.setStatus(vehicleEntriesEntity.getStatus());
+    private EntryDTO ConvertirADTO(EntryEntity entryEntity) {
+        EntryDTO dto = new EntryDTO();
+        dto.setEntryId(entryEntity.getEntryId());
+        dto.setEntryTime(entryEntity.getEntryTime());
+        dto.setOperationId(entryEntity.getOperationId());
+        dto.setStatus(entryEntity.getStatus());
         return dto;
     }
 
     // ----------- CONVERTIR A ENTITY --------------- ///
-    private VehicleEntriesEntity ConvertirAEntity(@Valid VehicleEntriesDTO json) {
-        //creamo un objeto de la clase VehicleEntriesEntity que se llamara Entity, el cual nos ayudara a convocar a nuestros set y get
-        VehicleEntriesEntity entity = new VehicleEntriesEntity();
+    private EntryEntity ConvertirAEntity(@Valid EntryDTO json) {
+        //creamo un objeto de la clase EntryEntity que se llamara Entity, el cual nos ayudara a convocar a nuestros set y get
+        EntryEntity entity = new EntryEntity();
         //Se colocan todos los datos del entity
         entity.setEntryId(json.getEntryId());
         entity.setEntryTime(json.getEntryTime());
@@ -68,19 +68,19 @@ public class VehicleEntriesService {
         return entity;
     }
 
-    public VehicleEntriesDTO update(Long id, @Valid VehicleEntriesDTO json) {
-        VehicleEntriesEntity vehicleEntriesExist = repo.findById(id).orElseThrow(()-> new ExceptionWorkOrdernotfound("Registro de ingreso de vehículos no encontrada"));
+    public EntryDTO update(Long id, @Valid EntryDTO json) {
+        EntryEntity vehicleEntriesExist = repo.findById(id).orElseThrow(()-> new ExceptionWorkOrdernotfound("Registro de ingreso de vehículos no encontrada"));
         vehicleEntriesExist.setEntryId(json.getEntryId());
         vehicleEntriesExist.setEntryTime(json.getEntryTime());
         vehicleEntriesExist.setOperationId(json.getOperationId());
         vehicleEntriesExist.setStatus(json.getStatus());
-        VehicleEntriesEntity VehicleEntrieUpdated = repo.save(vehicleEntriesExist);
+        EntryEntity VehicleEntrieUpdated = repo.save(vehicleEntriesExist);
         return ConvertirADTO(VehicleEntrieUpdated);
     }
 
     public boolean delete(Long id) {
         //1. Verificar la existencia del producto
-        VehicleEntriesEntity existence = repo.findById(id).orElse(null);
+        EntryEntity existence = repo.findById(id).orElse(null);
         //2. Si el valor existe lo elimina
         if (existence != null){
             repo.deleteById(id);
