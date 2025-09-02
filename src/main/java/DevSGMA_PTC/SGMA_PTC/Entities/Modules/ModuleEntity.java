@@ -2,6 +2,7 @@ package DevSGMA_PTC.SGMA_PTC.Entities.Modules;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Levels.LevelEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrderEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -43,5 +44,6 @@ public class ModuleEntity {
     //*** ONETOMANYS ***\\
 
     @OneToMany(mappedBy = "moduleId", cascade = CascadeType.ALL) // Relación OneToMany con tbWorkOrders
+    @JsonIgnore
     private List<WorkOrderEntity> workOrder = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al módulo
 }

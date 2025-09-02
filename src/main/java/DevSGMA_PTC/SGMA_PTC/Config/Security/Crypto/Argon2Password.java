@@ -2,7 +2,9 @@ package DevSGMA_PTC.SGMA_PTC.Config.Security.Crypto;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class Argon2Password {
 
     //Configuracion recomendada para Argon2id

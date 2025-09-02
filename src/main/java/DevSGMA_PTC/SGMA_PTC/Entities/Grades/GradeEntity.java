@@ -2,6 +2,7 @@ package DevSGMA_PTC.SGMA_PTC.Entities.Grades;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Levels.LevelEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +35,7 @@ public class GradeEntity {
     //*** ONETOMANYS ***\\
 
     @OneToMany(mappedBy = "gradeId", cascade = CascadeType.ALL) // Relación OneToMany con tbStudents
+    @JsonIgnore
     private List<StudentEntity> student = new ArrayList<>(); // Grado asociado al estudiante
 
 }

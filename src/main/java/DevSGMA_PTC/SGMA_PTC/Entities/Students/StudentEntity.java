@@ -2,6 +2,7 @@ package DevSGMA_PTC.SGMA_PTC.Entities.Students;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Grades.GradeEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -56,6 +57,7 @@ public class StudentEntity {
 //    *** ONETOMANYS ***\\
 
     @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL) // Relación OneToMany con tbVehicles
+    @JsonIgnore
     private List<VehicleEntity> vehicle = new ArrayList<>(); // Lista de vehículo asociadas al estudiante
 
 }

@@ -3,6 +3,7 @@ package DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders;
 import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Entries.EntryEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -53,5 +54,6 @@ public class WorkOrderEntity {
     //*** ONETOMANYS ***\\
 
     @OneToMany(mappedBy = "workOrderId", cascade = CascadeType.ALL) // Relación OneToMany con tbEntries
+    @JsonIgnore
     private List<EntryEntity> entry = new ArrayList<>(); // Lista de entradas asociadas a la orden de trabajo
 }

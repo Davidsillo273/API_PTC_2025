@@ -1,6 +1,7 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.Roles;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Instructors.InstructorEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,7 @@ public class RoleEntity {
     private String roleName;
 
     @OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL) // Relación OneToMany con tbInstructor
+    @JsonIgnore
     private List<InstructorEntity> instructor = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al Instructor
 
 }
