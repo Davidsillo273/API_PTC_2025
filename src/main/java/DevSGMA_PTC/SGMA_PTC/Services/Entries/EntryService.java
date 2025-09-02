@@ -1,11 +1,14 @@
 package DevSGMA_PTC.SGMA_PTC.Services.Entries;
 
 
+import DevSGMA_PTC.SGMA_PTC.Config.Security.Crypto.Argon2Password;
 import DevSGMA_PTC.SGMA_PTC.Entities.Entries.EntryEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotRegistred;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotfound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Entries.EntryDTO;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Students.StudentDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Entries.EntryRepository;
+import DevSGMA_PTC.SGMA_PTC.Repositories.WorkOrders.WorkOrderRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,22 +22,23 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Service
 public class EntryService {
 
-    private EntryRepository repo;
+    private EntryRepository entryRepository;
+    private WorkOrderRepository workOrderRepository;
 
-    public Page<EntryDTO> getAllVehicleEntries(int page, int size) {
+    public Page<EntryDTO> getAllEntries(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<EntryEntity> pageEntity = repo.findAll(pageable);
-        return pageEntity.map(this::ConvertirADTO);
+        Page<EntryEntity> pageEntity = entryRepository.findAll(pageable);
+        return pageEntity.map(this::ConvertToDTO);
     }
 
-    public EntryDTO insert(@Valid EntryDTO json) {
+    public EntryDTO createEntry(@Valid EntryDTO json) {
         if (json == null){
-            throw new IllegalArgumentException("Para insertar una nueva Entrada de vehículo asegurate de ingresar todos los campos requeridos");
+            throw new IllegalArgumentException("Es obligatorio enviar los datos del ingreso de un vehículo");
         }
         try{
-            EntryEntity objData = ConvertirAEntity(json);
-            EntryEntity VehicleEntrieSaved = repo.save(objData);
-            return ConvertirADTO(VehicleEntrieSaved);
+            EntryEntity objData = ConvertToEntity(json);
+            EntryEntity entrieSaved = entryRepository.save(objData);
+            return ConvertToDTO(entrieSaved);
         }catch (Exception e){
             log.error("Error al registrar un ingreso de Vehiculo" + e.getMessage());
             throw new ExceptionWorkOrdernotRegistred("la inserción del ingreso de un nuevo vehículo no se insertó");
@@ -42,51 +46,47 @@ public class EntryService {
     }
 
 
-
-
-
     // ----------- CONVERTIR A DTO --------------- ///
-    private EntryDTO ConvertirADTO(EntryEntity entryEntity) {
+    private EntryDTO ConvertToDTO(EntryEntity entryEntity) {
         EntryDTO dto = new EntryDTO();
         dto.setEntryId(entryEntity.getEntryId());
-        dto.setEntryTime(entryEntity.getEntryTime());
-        dto.setOperationId(entryEntity.getOperationId());
-        dto.setStatus(entryEntity.getStatus());
+        dto.setEntryDate(entryEntity.getEntryDate());
+        // Asigna el nombre y ID del año académico si el estudiante tiene uno asociado
+        if (entryEntity.getWorkOrderId() != null) {
+            dto.setPlateNumber(entryEntity.getWorkOrderId().get);
+            dto.setLevelId(studentEntity.getLevelId().getLevelId());
+        }
         return dto;
     }
 
     // ----------- CONVERTIR A ENTITY --------------- ///
-    private EntryEntity ConvertirAEntity(@Valid EntryDTO json) {
+    private EntryEntity ConvertToEntity(@Valid EntryDTO json) {
         //creamo un objeto de la clase EntryEntity que se llamara Entity, el cual nos ayudara a convocar a nuestros set y get
         EntryEntity entity = new EntryEntity();
         //Se colocan todos los datos del entity
         entity.setEntryId(json.getEntryId());
-        entity.setEntryTime(json.getEntryTime());
-        entity.setOperationId(json.getOperationId());
-        entity.setStatus(json.getStatus());
+        entity.setEntryDate(json.getEntryDate());
+        entity.setWorkOrderId();json.get());
         //Convertimos a entity
         return entity;
     }
 
-    public EntryDTO update(Long id, @Valid EntryDTO json) {
-        EntryEntity vehicleEntriesExist = repo.findById(id).orElseThrow(()-> new ExceptionWorkOrdernotfound("Registro de ingreso de vehículos no encontrada"));
-        vehicleEntriesExist.setEntryId(json.getEntryId());
-        vehicleEntriesExist.setEntryTime(json.getEntryTime());
-        vehicleEntriesExist.setOperationId(json.getOperationId());
-        vehicleEntriesExist.setStatus(json.getStatus());
-        EntryEntity VehicleEntrieUpdated = repo.save(vehicleEntriesExist);
-        return ConvertirADTO(VehicleEntrieUpdated);
+    private StudentEntity ConvertToEntity(@Valid StudentDTO json) {
+        Argon2Password objHash = new Argon2Password();
+        StudentEntity entity = new StudentEntity();
+        entity.setFirstName(json.getFirstName());
+        entity.setLastName(json.getLastName());
+        entity.setEmail(json.getEmail());
+        entity.setPassword(argon2.EncryptPassword(json.getPassword()));
+
+        // Asigna el año académico si se proporciona un ID de año académico
+        if (json.getLevelId() != null) {
+            LevelEntity levelEntity = levelRepository.findById(json.getLevelId())
+                    .orElseThrow(() -> new ExceptionLevelNotFound("ID del año académico del estudiante no encontrado"));
+            entity.setLevelId(levelEntity);
+        }
+        return entity;
     }
 
-    public boolean delete(Long id) {
-        //1. Verificar la existencia del producto
-        EntryEntity existence = repo.findById(id).orElse(null);
-        //2. Si el valor existe lo elimina
-        if (existence != null){
-            repo.deleteById(id);
-            return true;
-        }
-        return false;
-    }
 }
 

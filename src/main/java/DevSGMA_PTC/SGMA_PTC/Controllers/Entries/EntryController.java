@@ -47,7 +47,7 @@ public class EntryController {
     @PostMapping("/newVehicleEntries")
     private ResponseEntity<Map<String, Object>> insertVehicleEntries(@Valid @RequestBody EntryDTO json, HttpServletRequest request){
         try{
-            EntryDTO response =service.insert(json);
+            EntryDTO response =service.createEntry(json);
             if (response == null){
                 return ResponseEntity.badRequest().body(Map.of(
                         "Error", "Inserción incorrecta",
