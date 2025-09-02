@@ -1,15 +1,12 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.Instructors;
 
+import DevSGMA_PTC.SGMA_PTC.Entities.Levels.LevelEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Roles.RoleEntity;
-import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.ArrayList;
-import java.util.List;
 
 // Entity que representa a un instructor en la base de datos
 @Entity
@@ -59,10 +56,5 @@ public class InstructorEntity {
     @ManyToOne // Muchos instructores pueden tener un mismo rol
     @JoinColumn(name = "ROLEID", referencedColumnName = "ROLEID") // Columna que conecta con la tabla de tbRoles
     private RoleEntity roleId;
-
-    //*** ONETOMANYS ***\\
-
-    @OneToMany(mappedBy = "", cascade = CascadeType.ALL) // Relación OneToMany con tbVehicles
-    private List<VehicleEntity> vehicle = new ArrayList<>(); // Lista de vehículos asociadas al instructor
 
 }

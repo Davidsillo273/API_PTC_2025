@@ -3,24 +3,25 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
+// Entity que representa un tipo de vehículo en la base de datos
 @Entity
-@Table(name = "tbVehicleTypes")
+@Table(name = "TBVEHICLETYPES")
+// Anotaciones de Lombok para generar getters, setters y equals/hashCode automáticamente
 @Getter
 @Setter
-@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
-
 public class VehicleTypeEntity {
+    //*** ATRIBUTOS ***\\
+
+    // ID del tipo de vehículo, clave primaria generada automáticamente
     @Id
+    @Column(name = "TYPEID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "typeId")
     @EqualsAndHashCode.Include
-    private Long id;
+    private Long typeId;
 
-    @Column(name = "typeName", length = 50, nullable = false)
-    private String name;
+    // Nombre del tipo de vehículo, obligatorio y máximo 50 caracteres
+    @Column(name = "TYPENAME", length = 50, nullable = false)
+    private String typeName;
 }
-

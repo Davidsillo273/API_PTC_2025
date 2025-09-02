@@ -1,59 +1,57 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleEntity;
-
-import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Entries.EntryEntity;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import java.util.ArrayList;
+import java.util.List;
 
+// Entity que representa una orden de trabajo en la base de datos
 @Entity
+@Table(name = "TBWORKORDERS")
+// Anotaciones de Lombok para generar getters, setters, toString y equals/hashCode automáticamente
 @Getter
 @Setter
 @ToString
-@Table(name = "TBWORKORDERS")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class WorkOrderEntity {
 
+    //*** ATRIBUTOS ***\\
+
+    // ID de la orden de trabajo, clave primaria generada automáticamente
     @Id
     @Column(name = "WORKORDERID")
-    private Number workOrderId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
+    private Long workOrderId;
 
-    @ManyToOne // Relación ManyToOne con VehicleEntity
+    @ManyToOne // Muchas órdenes de trabajo pueden estar asociadas a un mismo vehículo
     @JoinColumn(name = "VEHICLEID", referencedColumnName = "VEHICLEID") // Columna que conecta con la tabla de Vehículos
-    private Long vehicleId; // Relación ManyToOne con VehicleEntity
-    private VehicleEntity vehicleId; // Relación ManyToOne con VehicleEntity
+    private VehicleEntity vehicleId;
 
-    @Column(name = "ACADEMICYEAR")
-    private String academicYear;
-
-    @ManyToOne // Relación ManyToOne con VehicleEntity
-    @JoinColumn(name = "INSTRUCTORID", referencedColumnName = "USERID") // Columna que conecta con la tabla de Vehículos
-    private StudentEntity instructorId; // Relación ManyToOne con VehicleEntity
-
-    @Column(name = "STUDENTNAME")
-    private String studentName;
-
-    @Column(name = "STUDENTID")
-    private String studentId;
-
-    @Column(name = "OPERATIONDESCRIPTION")
-    private String operationDescription;
-
-    @ManyToOne
-    @JoinColumn(name = "MODULEID", referencedColumnName = "MODULEID") // Columna que conecta con la tabla de Modulos
+    @ManyToOne // Muchas órdenes de trabajo pueden estar asociadas a un mismo módulo académico
+    @JoinColumn(name = "MODULEID", referencedColumnName = "MODULEID") // Columna que conecta con la tabla de Módulos
     private ModuleEntity moduleId;
 
-    @Column(name = "MAINTENANCEEXPO")
-    private String maintenanceExpo;
-
-    @Column(name = "ESTIMATEDTIME")
+    // Tiempo estimado para la orden de trabajo (puede ser en horas, minutos, etc.)
+    @Column(name = "ESTIMATEDTIME", length = 5)
     private String estimatedTime;
 
+    // Imagen asociada a la orden de trabajo (puede ser URL o base64)
     @Column(name = "WORKORDERSIMAGE")
-    private Long workOrdersImage;
+    private String workOrdersImage;
 
+    // Estado de la orden de trabajo (por ejemplo: pendiente, en proceso, finalizada)
     @Column(name = "STATUS")
     private Long status;
+
+    //*** ONETOMANYS ***\\
+
+    @OneToMany(mappedBy = "workOrderId", cascade = CascadeType.ALL) // Relación OneToMany con tbEntries
+    private List<EntryEntity> entry = new ArrayList<>(); // Lista de entradas asociadas a la orden de trabajo
 }

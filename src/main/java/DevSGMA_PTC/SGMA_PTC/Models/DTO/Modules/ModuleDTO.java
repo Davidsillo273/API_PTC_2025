@@ -1,7 +1,6 @@
 package DevSGMA_PTC.SGMA_PTC.Models.DTO.Modules;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
@@ -30,8 +29,7 @@ public class ModuleDTO {
     // Validación para el tamaño mínimo del nombre
     private String moduleName;
 
-    // Validaciones para el nivel académico asociado al módulo
-    @NotNull(message = "El nivel asociado es obligatorio")
+    @Positive // El ID del nivel debe ser positivo
     private Long levelId; // Referencia al LevelEntity
 
     //Campo adicional

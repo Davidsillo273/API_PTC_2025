@@ -1,5 +1,6 @@
 package DevSGMA_PTC.SGMA_PTC.Entities.Students;
 
+import DevSGMA_PTC.SGMA_PTC.Entities.Grades.GradeEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +27,10 @@ public class StudentEntity {
     @EqualsAndHashCode.Include
     private Long studentId;
 
+    // Carnet del estudiante, puede ser nulo y tiene un tamaño máximo de 8 caracteres
+    @Column(name = "STUDENTCARD", length = 8, nullable = false, unique = true)
+    private String studentCard;
+
     // Nombres del estudiante, no pueden ser nulo y tiene un tamaño máximo de 50 caracteres
     @Column(name = "FIRSTNAME", length = 50, nullable = false)
     private String firstName;
@@ -45,14 +50,12 @@ public class StudentEntity {
 //*** MANYTOONEs ***\\
 
     @ManyToOne // Muchos estudiantes pueden tener un mismo año académico
-    @JoinColumn(name = "LEVELID", referencedColumnName = "LEVELID") // Columna que conecta con la tabla de tbLevels
-    private LevelEntity levelId;
+    @JoinColumn(name = "GRADEID", referencedColumnName = "GRADEID") // Columna que conecta con la tabla de tbGrades
+    private GradeEntity gradeId; // Año académico del estudiante
 
 //    *** ONETOMANYS ***\\
 
-    @OneToMany(mappedBy = "", cascade = CascadeType.ALL) // Relación OneToMany con tbVehicles
+    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL) // Relación OneToMany con tbVehicles
     private List<VehicleEntity> vehicle = new ArrayList<>(); // Lista de vehículo asociadas al estudiante
 
-    @OneToMany(mappedBy = "", cascade = CascadeType.ALL) // Relación OneToMany con tbEntries
-    private List<EntriesEntity> entries = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al estudiante
 }
