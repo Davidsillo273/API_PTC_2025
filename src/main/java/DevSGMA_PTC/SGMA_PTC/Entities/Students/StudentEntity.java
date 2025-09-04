@@ -15,17 +15,15 @@ import java.util.List;
 // Anotaciones de Lombok para generar getters, setters, toString, equals y hashCode automáticamente
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class StudentEntity {
 
 //    *** ATRIBUTOS ***\\
 
     // ID del estudiante, clave primaria generada automáticamente
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_students")
+    @SequenceGenerator(name = "seq_students", sequenceName = "seq_students", allocationSize = 1)
     @Column(name = "STUDENTID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long studentId;
 
     // Carnet del estudiante, puede ser nulo y tiene un tamaño máximo de 8 caracteres
@@ -57,7 +55,7 @@ public class StudentEntity {
 //    *** ONETOMANYS ***\\
 
     @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL) // Relación OneToMany con tbVehicles
-    @JsonIgnore
+    @JsonIgnore // Ignorar en la serialización JSON para evitar referencias circulares
     private List<VehicleEntity> vehicle = new ArrayList<>(); // Lista de vehículo asociadas al estudiante
 
 }

@@ -1,21 +1,15 @@
+package DevSGMA_PTC.SGMA_PTC.Models.DTO.Auth.StudentsAuth;
 
-package DevSGMA_PTC.SGMA_PTC.Models.DTO.Students;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
-import jakarta.validation.constraints.*;
-import lombok.*;
-
-// Anotaciones de Lombok para generar getters, setters, toString, equals y hashCode automáticamente
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-public class StudentDTO {
+public class StudentAuthenticationDTO {
 
     //*** ATRIBUTOS ***\\
 
-    @Positive  //El ID es positivo ya qué es generado por la base de datos.
-    private Long studentId;
-
+    //Validaciones para la tarjeta de identificación del estudiante (Código)
     @NotBlank(message = "La tarjeta de identificación del estudiante es obligatoria")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
     @Size(min = 8, message = "El código del estudiante debe de ser de 8 caracteres")
@@ -61,10 +55,8 @@ public class StudentDTO {
     private String password;
 
     //Validaciones para el año académico del estudiante
-    @Positive(message = "El ID del año académico debe ser positivo")
-    // Validación para que el ID del año académico sea positivo
-    private Long gradeId;
+    @Positive(message = "El año académico debe ser positivo")
+    // Validación para que el año académico sea positivo
+    private Long grade;
 
-    //Campo adicional
-    private Long gradeGroup;  // Campo adicional para mostrar el nombre del año académico, campo como tal no existe en tbStudents
 }

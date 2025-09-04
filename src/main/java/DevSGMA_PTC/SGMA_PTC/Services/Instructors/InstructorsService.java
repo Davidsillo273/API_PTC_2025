@@ -1,13 +1,16 @@
 package DevSGMA_PTC.SGMA_PTC.Services.Instructors;
 
-import DevSGMA_PTC.SGMA_PTC.Config.Security.Crypto.Argon2Password;
+import DevSGMA_PTC.SGMA_PTC.Config.Crypto.Argon2Password;
 import DevSGMA_PTC.SGMA_PTC.Entities.Instructors.InstructorEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Levels.LevelEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Roles.RoleEntity;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Instructors.ExceptionEmailInstructorDuplicate;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Instructors.ExceptionEmailInstructorDuplicated;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Instructors.ExceptionInstructorNotFound;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Levels.ExceptionLevelNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Roles.ExceptionRoleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Instructors.InstructorDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Instructors.InstructorRepository;
+import DevSGMA_PTC.SGMA_PTC.Repositories.Levels.LevelRepository;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Roles.RoleRepository;
 import DevSGMA_PTC.SGMA_PTC.Utils.PasswordGenerator;
 import jakarta.validation.Valid;
@@ -55,11 +58,11 @@ public class InstructorsService {
      *
      * @param json Objeto InstructorDTO con los datos del instructor.
      * @return Objeto InstructorDTO del instructor creado.
-     * @throws ExceptionEmailInstructorDuplicate si el correo ya existe.
+     * @throws ExceptionEmailInstructorDuplicated si el correo ya existe.
      */
     public InstructorDTO createInstructor(@Valid InstructorDTO json) {
         if (verifyInstructorExist(json.getEmail())) {
-            throw new ExceptionEmailInstructorDuplicate("El correo ya está registrado en la base de datos");
+            throw new ExceptionEmailInstructorDuplicated("El correo del instructor ya está registrado en la base de datos");
         }
         InstructorEntity objEntity = ConvertToEntity(json);
         InstructorEntity saveInstructor = instructorRepository.save(objEntity);
@@ -76,38 +79,45 @@ public class InstructorsService {
      * @param json Objeto InstructorDTO con los nuevos datos.
      * @return Objeto InstructorDTO actualizado.
      * @throws ExceptionInstructorNotFound       si el instructor no existe.
-     * @throws ExceptionEmailInstructorDuplicate si el nuevo correo ya está registrado.
+     * @throws ExceptionEmailInstructorDuplicated si el nuevo correo ya está registrado.
      * @throws ExceptionRoleNotFound             si el año académico proporcionado no existe.
      */
     public InstructorDTO updateInstructor(@Valid Long id, InstructorDTO json) {
 
         //Se verifica la existencia
-        InstructorEntity exist = instructorRepository.findById(id).orElseThrow(() ->
+        InstructorEntity instructorExist = instructorRepository.findById(id).orElseThrow(() ->
                 new ExceptionInstructorNotFound("Instructor no encontrado"));
-        if (!exist.getEmail().equals(json.getEmail())) {
+        if (!instructorExist.getEmail().equals(json.getEmail())) {
             if (verifyInstructorExist(json.getEmail())) {
-                throw new ExceptionEmailInstructorDuplicate("El correo que se quiere registrar ya existe en la base de datos");
+                throw new ExceptionEmailInstructorDuplicated("El correo del instructor que se quiere registrar ya existe en la base de datos");
             }
         }
         //Actualizar valores
-        exist.setFirstName(json.getFirstName());
-        exist.setLastName(json.getLastName());
-        exist.setEmail(json.getEmail());
+        instructorExist.setFirstName(json.getFirstName());
+        instructorExist.setLastName(json.getLastName());
+        instructorExist.setEmail(json.getEmail());
 
         // Solo actualiza la contraseña si se proporciona una nueva
         if (json.getPassword() != null && !json.getPassword().isEmpty()) {
-            exist.setPassword(argon2.EncryptPassword(json.getPassword()));
+            instructorExist.setPassword(argon2.EncryptPassword(json.getPassword()));
         }
-
-        exist.setInstructorImage(json.getInstructorImage());
 
         // Actualizar el año académico si se proporciona un nuevo ID de nivel
         if (json.getLevelId() != null) {
             LevelEntity levelEntity = levelRepository.findById(json.getLevelId())
                     .orElseThrow(() -> new ExceptionLevelNotFound("ID del año académico del instructor no encontrado"));
-            exist.setLevelId(levelEntity);
+            instructorExist.setLevelId(levelEntity);
         }
-        InstructorEntity instructorUpdated = instructorRepository.save(exist);
+
+        // Actualizar el rol si se proporciona un nuevo ID de rol
+        if (json.getRoleId() != null) {
+            RoleEntity roleEntity = roleRepository.findById(json.getRoleId())
+                    .orElseThrow(() -> new ExceptionRoleNotFound("ID del rol del instructor no encontrado"));
+            instructorExist.setRoleId(roleEntity);
+        }
+
+        instructorExist.setInstructorImage(json.getInstructorImage());
+        InstructorEntity instructorUpdated = instructorRepository.save(instructorExist);
         return ConvertToDTO(instructorUpdated);
     }
 
@@ -121,6 +131,7 @@ public class InstructorsService {
      */
     public boolean deleteInstructor(Long id) {
         InstructorEntity exist = instructorRepository.findById(id).orElse(null);
+        // Verifica si el instructor existe antes de eliminar
         if (exist != null) {
             instructorRepository.deleteById(id);
             return true;
@@ -139,11 +150,11 @@ public class InstructorsService {
      * @throws ExceptionInstructorNotFound si el instructor no existe.
      */
     public boolean resetInstructorPassword(@Valid Long id) {
-        InstructorEntity existing = instructorRepository.findById(id).orElseThrow(() -> new ExceptionInstructorNotFound("Instructor no encontrado"));
-        if (existing != null) {
+        InstructorEntity instructorExisting = instructorRepository.findById(id).orElseThrow(() -> new ExceptionInstructorNotFound("Instructor no encontrado"));
+        if (instructorExisting != null) {
             String newPassword = PasswordGenerator.generateSecurePassword(12);
-            existing.setPassword(argon2.EncryptPassword(newPassword));
-            InstructorEntity instructorUpdated = instructorRepository.save(existing);
+            instructorExisting.setPassword(argon2.EncryptPassword(newPassword));
+            InstructorEntity instructorUpdated = instructorRepository.save(instructorExisting);
             return true;
         }
         return false;
@@ -175,7 +186,6 @@ public class InstructorsService {
         dto.setLastName(instructorEntity.getLastName());
         dto.setEmail(instructorEntity.getEmail());
         dto.setPassword(instructorEntity.getPassword());
-        dto.setInstructorImage(instructorEntity.getInstructorImage());
 
         // Asigna el nombre y ID del año académico si el instructor tiene uno asociado
         if (instructorEntity.getLevelId() != null) {
@@ -186,8 +196,10 @@ public class InstructorsService {
         // Asigna el nombre y ID del rol si el instructor tiene uno asociado
         if (instructorEntity.getRoleId() != null) {
             dto.setRoleName(instructorEntity.getRoleId().getRoleName());
-            dto.setRoleId(instructorEntity.getRoleId().getId());
+            dto.setRoleId(instructorEntity.getRoleId().getRoleId());
         }
+
+        dto.setInstructorImage(instructorEntity.getInstructorImage());
 
         return dto;
     }
@@ -206,7 +218,6 @@ public class InstructorsService {
         entity.setLastName(json.getLastName());
         entity.setEmail(json.getEmail());
         entity.setPassword(argon2.EncryptPassword(json.getPassword()));
-        entity.setInstructorImage(json.getInstructorImage());
 
         // Asigna el año académico si se proporciona un ID de año académico
         if (json.getLevelId() != null) {
@@ -221,6 +232,8 @@ public class InstructorsService {
                     .orElseThrow(() -> new ExceptionRoleNotFound("ID del rol del instructor no encontrado"));
             entity.setRoleId(roleEntity);
         }
+
+        entity.setInstructorImage(json.getInstructorImage());
 
         return entity;
     }

@@ -53,7 +53,7 @@ public class StudentController {
         // Si ocurre un error al obtener los datos
         if (students == null) {
             ResponseEntity.badRequest().body(Map.of(
-                    "status", "Error al obtener los datos"
+                    "status", "Error al obtener los datos del estudiante"
             ));
         }
 

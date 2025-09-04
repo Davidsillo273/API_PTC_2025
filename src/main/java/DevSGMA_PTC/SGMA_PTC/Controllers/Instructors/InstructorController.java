@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+
 // Indica que esta clase es un controlador REST
 @RestController
 // Ruta base para todos los endpoints de esta clase
@@ -52,11 +53,11 @@ public class InstructorController {
 
         if (instructor == null) {
             ResponseEntity.badRequest().body(Map.of(
-                    "status", "Error al obtener los datos"
+                    "status", "Error al obtener los datos del instructor"
             ));
         }
 
-        return ResponseEntity.ok(ApiResponse.success("Datos consultados correctamente", instructor));
+        return ResponseEntity.ok(ApiResponse.success("Datos del instructor consultados correctamente", instructor));
     }
 
     //*** MÉTODO PARA AGREGAR UN NUEVO INSTRUCTOR ***\\
@@ -70,8 +71,7 @@ public class InstructorController {
      */
 
     @PostMapping("/addNewInstructor")
-    public ResponseEntity<ApiResponse<InstructorDTO>> createInstructor(@Valid @RequestBody InstructorDTO json
-    ) {
+    public ResponseEntity<ApiResponse<InstructorDTO>> createInstructor(@Valid @RequestBody InstructorDTO json) {
         if (json == null) {
             throw new ExceptionInstructorDontInsert("Error al recibir y procesar la información del instructor");
         }
