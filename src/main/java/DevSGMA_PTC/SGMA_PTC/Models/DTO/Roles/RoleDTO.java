@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Models.DTO.RolesDTO;
+package DevSGMA_PTC.SGMA_PTC.Models.DTO.Roles;
 
 
 import jakarta.validation.constraints.NotBlank;
@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class RolDTO {
+public class RoleDTO {
 
     //*** ATRIBUTOS ***\\
 
@@ -26,7 +26,7 @@ public class RolDTO {
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
     @Size(min = 5, message = "El nombre del rol debe tener al menos 5 caracteres")
     // Validación para el tamaño máximo del nombre del rol
-    @Size(max = 50, message = "El nombre del rol no puede exceder los 50 caracteres")
+    @Size(max = 15, message = "El nombre del rol no puede exceder los 15 caracteres")
     // Validación para el tamaño mínimo del nombre del rol
     private String rolName;
 }

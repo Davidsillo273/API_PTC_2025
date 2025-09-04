@@ -1,4 +1,4 @@
-package DevSGMA_PTC.SGMA_PTC.Config.Security.Crypto;
+package DevSGMA_PTC.SGMA_PTC.Config.Crypto;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;

@@ -1,6 +1,6 @@
 package DevSGMA_PTC.SGMA_PTC.Services.Students;
 
-import DevSGMA_PTC.SGMA_PTC.Config.Security.Crypto.Argon2Password;
+import DevSGMA_PTC.SGMA_PTC.Config.Crypto.Argon2Password;
 import DevSGMA_PTC.SGMA_PTC.Entities.Grades.GradeEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Grades.ExceptionGradeNotFound;

@@ -1,6 +1,6 @@
 package DevSGMA_PTC.SGMA_PTC.Services.Instructors;
 
-import DevSGMA_PTC.SGMA_PTC.Config.Security.Crypto.Argon2Password;
+import DevSGMA_PTC.SGMA_PTC.Config.Crypto.Argon2Password;
 import DevSGMA_PTC.SGMA_PTC.Entities.Instructors.InstructorEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Levels.LevelEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Roles.RoleEntity;
