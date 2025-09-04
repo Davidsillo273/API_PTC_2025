@@ -14,25 +14,23 @@ import java.util.List;
 // Anotaciones de Lombok para generar getters, setters, toString, equals y hashCode automáticamente
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RoleEntity {
 
     //*** ATRIBUTOS ***\\
 
     // ID del rol, clave primaria generada automáticamente
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_roles")
+    @SequenceGenerator(name = "seq_roles", sequenceName = "seq_roles", allocationSize = 1)
     @Column(name = "ROLEID")
-    @EqualsAndHashCode.Include
-    private Long id;
+    private Long roleId;
 
     // Nombre del rol, no puede ser nulo y tiene un tamaño máximo de 50 caracteres
     @Column(name = "ROLENAME", length = 50, nullable = false)
     private String roleName;
 
     @OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL) // Relación OneToMany con tbInstructor
-    @JsonIgnore
+    @JsonIgnore // Ignorar en la serialización JSON para evitar referencias circulares
     private List<InstructorEntity> instructor = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al Instructor
 
 }

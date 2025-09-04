@@ -19,10 +19,10 @@ public class StudentDTO {
     @NotBlank(message = "La tarjeta de identificación del estudiante es obligatoria")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
     @Size(min = 8, message = "El código del estudiante debe de ser de 8 caracteres")
-    // Validación para el tamaño máximo del nombre
+    // Validación para el tamaño máximo del código
     @Size(max = 8, message = "El código del estudiante debe de ser de 8 caracteres")
-    // Validación para el tamaño mínimo del nombre
-    private String privateCard; // Campo para almacenar la tarjeta de identificación del estudiante (Código)
+    // Validación para el tamaño mínimo del código
+    private String studentCard; // Campo para almacenar la tarjeta de identificación del estudiante (Código)
 
     //Validaciones para los nombres del estudiante
     @NotBlank(message = "Los nombres del estudiante son obligatorio")

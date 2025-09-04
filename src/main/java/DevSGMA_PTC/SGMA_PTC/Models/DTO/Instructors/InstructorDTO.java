@@ -55,10 +55,6 @@ public class InstructorDTO {
     // Validación para el tamaño máximo de la contraseña
     private String password;
 
-    //Validaciones para la imagen del instructor
-    @NotBlank(message = "La imagen del instructor es obligatoria")
-    private String instructorImage; // Campo para almacenar la imagen del instructor (URL)
-
     //Validaciones para el año académico del instructor
     @Positive(message = "El ID del año académico debe ser positivo")
     // Validación para que el ID del año académico sea positivo
@@ -68,6 +64,10 @@ public class InstructorDTO {
     @Positive(message = "El ID del rol debe ser positivo")
     // Validación para que el ID del rol sea positivo
     private Long roleId;
+
+    //Validaciones para la imagen del instructor
+    @NotBlank(message = "La imagen del instructor es obligatoria")
+    private String instructorImage; // Campo para almacenar la imagen del instructor (URL)
 
     //Campo adicional
     private String levelName;  // Campo adicional para mostrar el nombre del año académico, campo como tal no existe en tbInstructors

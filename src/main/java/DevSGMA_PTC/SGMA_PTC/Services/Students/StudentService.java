@@ -1,11 +1,14 @@
 package DevSGMA_PTC.SGMA_PTC.Services.Students;
 
 import DevSGMA_PTC.SGMA_PTC.Config.Security.Crypto.Argon2Password;
+import DevSGMA_PTC.SGMA_PTC.Entities.Grades.GradeEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Grades.ExceptionGradeNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Roles.ExceptionRoleNotFound;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionEmailStudentDuplicate;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionEmailStudentDuplicated;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentNotFound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Students.StudentDTO;
+import DevSGMA_PTC.SGMA_PTC.Repositories.Grades.GradeRepository;
 import DevSGMA_PTC.SGMA_PTC.Utils.PasswordGenerator;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +25,7 @@ import DevSGMA_PTC.SGMA_PTC.Repositories.Students.StudentsRepository;
 public class StudentService {
 
     @Autowired
-    private LevelRepository levelRepository; // Repositorio que accede a los años académicos de los estudiantes
+    private GradeRepository gradeRepository; // Repositorio que accede a los años académicos de los estudiantes
     @Autowired
     private StudentsRepository studentsRepository; // Repositorio que accede a la base de datos
     @Autowired
@@ -52,11 +55,11 @@ public class StudentService {
      *
      * @param json Objeto StudentDTO con los datos del estudiante.
      * @return Objeto StudentDTO del estudiante creado.
-     * @throws ExceptionEmailStudentDuplicate si el correo ya existe.
+     * @throws ExceptionEmailStudentDuplicated si el correo ya existe.
      */
     public StudentDTO createStudent(@Valid StudentDTO json) {
         if (verifyStudentExist(json.getEmail())) {
-            throw new ExceptionEmailStudentDuplicate("El correo ya está registrado en la base de datos");
+            throw new ExceptionEmailStudentDuplicated("El correo del estudiante ya está registrado en la base de datos");
         }
         StudentEntity objEntity = ConvertToEntity(json);
         StudentEntity saveStudent = studentsRepository.save(objEntity);
@@ -73,7 +76,7 @@ public class StudentService {
      * @param json Objeto StudentDTO con los nuevos datos.
      * @return Objeto StudentDTO actualizado.
      * @throws ExceptionStudentNotFound       si el estudiante no existe.
-     * @throws ExceptionEmailStudentDuplicate si el nuevo correo ya está registrado.
+     * @throws ExceptionEmailStudentDuplicated si el nuevo correo ya está registrado.
      * @throws ExceptionRoleNotFound       si el año académico proporcionado no existe.
      */
     public StudentDTO updateStudent(@Valid Long id, StudentDTO json) {
@@ -83,10 +86,11 @@ public class StudentService {
                 new ExceptionStudentNotFound("Estudiante no encontrado"));
         if (!exist.getEmail().equals(json.getEmail())) {
             if (verifyStudentExist(json.getEmail())) {
-                throw new ExceptionEmailStudentDuplicate("El correo que se quiere registrar ya existe en la base de datos");
+                throw new ExceptionEmailStudentDuplicated("El correo del estudiante ya está registrado en la base de datos");
             }
         }
         //Actualizar valores
+        exist.setStudentCard(json.getStudentCard());
         exist.setFirstName(json.getFirstName());
         exist.setLastName(json.getLastName());
         exist.setEmail(json.getEmail());
@@ -96,11 +100,11 @@ public class StudentService {
             exist.setPassword(argon2.EncryptPassword(json.getPassword()));
         }
 
-        // Actualizar el año académico si se proporciona un nuevo ID de rol
-        if (json.getLevelId() != null) {
-            LevelEntity levelEntity = levelRepository.findById(json.getLevelId())
-                    .orElseThrow(() -> new ExceptionLevelNotFound("ID del año académico del estudiante no encontrado"));
-            exist.setStudentId(levelEntity);
+        // Actualizar el año académico si se proporciona un nuevo ID del rol
+        if (json.getGradeId() != null) {
+            GradeEntity gradeEntity = gradeRepository.findById(json.getGradeId())
+                    .orElseThrow(() -> new ExceptionGradeNotFound("ID del año académico del estudiante no encontrado"));
+            exist.setGradeId(gradeEntity);
         }
         StudentEntity studentUpdated = studentsRepository.save(exist);
         return ConvertToDTO(studentUpdated);
@@ -116,6 +120,7 @@ public class StudentService {
      */
     public boolean deleteStudent(Long id) {
         StudentEntity exist = studentsRepository.findById(id).orElse(null);
+        // Verifica si el usuario existe antes de eliminar
         if (exist != null) {
             studentsRepository.deleteById(id);
             return true;
@@ -167,15 +172,16 @@ public class StudentService {
     private StudentDTO ConvertToDTO(StudentEntity studentEntity) {
         StudentDTO dto = new StudentDTO();
         dto.setStudentId(studentEntity.getStudentId());
+        dto.setStudentCard(studentEntity.getStudentCard());
         dto.setFirstName(studentEntity.getFirstName());
         dto.setLastName(studentEntity.getLastName());
         dto.setEmail(studentEntity.getEmail());
         dto.setPassword(studentEntity.getPassword());
 
         // Asigna el nombre y ID del año académico si el estudiante tiene uno asociado
-        if (studentEntity.getLevelId() != null) {
-            dto.setLevelName(studentEntity.getLevelId().getLevelName());
-            dto.setLevelId(studentEntity.getLevelId().getLevelId());
+        if (studentEntity.getGradeId() != null) {
+            dto.setGradeGroup(studentEntity.getGradeId().getGradeGroup());
+            dto.setGradeId(studentEntity.getGradeId().getGradeId());
         }
 
         return dto;
@@ -191,16 +197,17 @@ public class StudentService {
     private StudentEntity ConvertToEntity(@Valid StudentDTO json) {
         Argon2Password objHash = new Argon2Password();
         StudentEntity entity = new StudentEntity();
+        entity.setStudentCard(json.getStudentCard());
         entity.setFirstName(json.getFirstName());
         entity.setLastName(json.getLastName());
         entity.setEmail(json.getEmail());
         entity.setPassword(argon2.EncryptPassword(json.getPassword()));
 
         // Asigna el año académico si se proporciona un ID de año académico
-        if (json.getLevelId() != null) {
-            LevelEntity levelEntity = levelRepository.findById(json.getLevelId())
-                    .orElseThrow(() -> new ExceptionLevelNotFound("ID del año académico del estudiante no encontrado"));
-            entity.setLevelId(levelEntity);
+        if (json.getGradeId() != null) {
+            GradeEntity gradeEntity = gradeRepository.findById(json.getGradeId())
+                    .orElseThrow(() -> new ExceptionGradeNotFound("ID del año académico del estudiante no encontrado"));
+            entity.setGradeId(gradeEntity);
         }
         return entity;
     }
