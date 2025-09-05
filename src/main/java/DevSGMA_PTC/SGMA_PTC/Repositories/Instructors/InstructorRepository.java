@@ -15,5 +15,5 @@ public interface InstructorRepository extends JpaRepository <InstructorEntity, L
     Optional<InstructorEntity> findByEmail(String email);
 
     boolean existsByFirstName(String firstName);
-    boolean existsByEmail(String Email);
+    boolean existsByEmail(String email);
 }

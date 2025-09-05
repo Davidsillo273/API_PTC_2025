@@ -1,11 +1,14 @@
 package DevSGMA_PTC.SGMA_PTC.Models.DTO.Entries;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.LocalDate;
 
 // Anotaciones de Lombok para generar getters, setters, toString, equals y hashCode automáticamente
 @Getter
@@ -22,7 +25,8 @@ public class EntryDTO {
     // Validaciones para el tiempo de entrada
     @NotBlank(message = "El tiempo de entrada es obligatorio")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
-    private Long entryDate; // Fecha/hora de la entrada
+    @PastOrPresent // La fecha/hora de la entrada no puede ser futura
+    private LocalDate entryDate; // Fecha/hora de la entrada
 
     // Validaciones para el ID de la orden de trabajo asociada
     @Positive // El ID de la orden de trabajo debe ser positivo

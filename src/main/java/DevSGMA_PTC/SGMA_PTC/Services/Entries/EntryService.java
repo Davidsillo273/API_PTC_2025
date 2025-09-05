@@ -1,12 +1,10 @@
 package DevSGMA_PTC.SGMA_PTC.Services.Entries;
 
 
-import DevSGMA_PTC.SGMA_PTC.Config.Security.Crypto.Argon2Password;
+
 import DevSGMA_PTC.SGMA_PTC.Entities.Entries.EntryEntity;
-import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotRegistred;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Entries.EntryDTO;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Students.StudentDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Entries.EntryRepository;
 import DevSGMA_PTC.SGMA_PTC.Repositories.WorkOrders.WorkOrderRepository;
 import jakarta.validation.Valid;
@@ -25,68 +23,74 @@ public class EntryService {
     private EntryRepository entryRepository;
     private WorkOrderRepository workOrderRepository;
 
+    /**
+     * Obtiene todas las entradas (Entry) paginadas y las convierte a DTO.
+     *
+     * @param page Número de página a consultar.
+     * @param size Cantidad de elementos por página.
+     * @return Página de entradas en formato EntryDTO.
+     */
     public Page<EntryDTO> getAllEntries(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<EntryEntity> pageEntity = entryRepository.findAll(pageable);
         return pageEntity.map(this::ConvertToDTO);
     }
 
+    /**
+     * Crea una nueva entrada (Entry) a partir de un DTO validado.
+     *
+     * @param json Objeto EntryDTO con los datos de la entrada.
+     * @return Objeto EntryDTO de la entrada creada.
+     * @throws IllegalArgumentException si los datos de entrada son nulos.
+     * @throws ExceptionWorkOrdernotRegistred si ocurre un error al registrar la entrada.
+     */
     public EntryDTO createEntry(@Valid EntryDTO json) {
-        if (json == null){
-            throw new IllegalArgumentException("Es obligatorio enviar los datos del ingreso de un vehículo");
+        if (json == null) {
+            throw new IllegalArgumentException("Los datos del ingreso no pueden ser nulos");
         }
-        try{
+        try {
             EntryEntity objData = ConvertToEntity(json);
             EntryEntity entrieSaved = entryRepository.save(objData);
             return ConvertToDTO(entrieSaved);
-        }catch (Exception e){
-            log.error("Error al registrar un ingreso de Vehiculo" + e.getMessage());
-            throw new ExceptionWorkOrdernotRegistred("la inserción del ingreso de un nuevo vehículo no se insertó");
+        } catch (Exception e) {
+            log.error("Error al registrar la entrada" + e.getMessage());
+            throw new ExceptionWorkOrdernotRegistred("La entrada no pudo ser registrada");
         }
     }
 
-
     // ----------- CONVERTIR A DTO --------------- ///
+
+    /**
+     * Convierte una entidad EntryEntity a un DTO EntryDTO.
+     *
+     * @param entryEntity Entidad de entrada a convertir.
+     * @return Objeto EntryDTO con los datos convertidos.
+     */
     private EntryDTO ConvertToDTO(EntryEntity entryEntity) {
         EntryDTO dto = new EntryDTO();
         dto.setEntryId(entryEntity.getEntryId());
         dto.setEntryDate(entryEntity.getEntryDate());
-        // Asigna el nombre y ID del año académico si el estudiante tiene uno asociado
-        if (entryEntity.getWorkOrderId() != null) {
-            dto.setPlateNumber(entryEntity.getWorkOrderId().get);
-            dto.setLevelId(studentEntity.getLevelId().getLevelId());
-        }
+        dto.setWorkOrderId(entryEntity.getWorkOrderId().getWorkOrderId());
         return dto;
     }
 
     // ----------- CONVERTIR A ENTITY --------------- ///
+
+    /**
+     * Convierte un objeto DTO (EntryDTO) en una entidad EntryEntity lista para persistir.
+     * Asocia la orden de trabajo correspondiente y asigna los datos básicos de la entrada.
+     *
+     * @param json Objeto EntryDTO con los datos de la entrada.
+     * @return EntryEntity con los datos preparados para guardar en la base de datos.
+     * @throws ExceptionWorkOrdernotRegistred si el ID de la orden de trabajo no existe.
+     */
     private EntryEntity ConvertToEntity(@Valid EntryDTO json) {
-        //creamo un objeto de la clase EntryEntity que se llamara Entity, el cual nos ayudara a convocar a nuestros set y get
         EntryEntity entity = new EntryEntity();
-        //Se colocan todos los datos del entity
         entity.setEntryId(json.getEntryId());
         entity.setEntryDate(json.getEntryDate());
-        entity.setWorkOrderId();json.get());
-        //Convertimos a entity
-        return entity;
-    }
-
-    private StudentEntity ConvertToEntity(@Valid StudentDTO json) {
-        Argon2Password objHash = new Argon2Password();
-        StudentEntity entity = new StudentEntity();
-        entity.setFirstName(json.getFirstName());
-        entity.setLastName(json.getLastName());
-        entity.setEmail(json.getEmail());
-        entity.setPassword(argon2.EncryptPassword(json.getPassword()));
-
-        // Asigna el año académico si se proporciona un ID de año académico
-        if (json.getLevelId() != null) {
-            LevelEntity levelEntity = levelRepository.findById(json.getLevelId())
-                    .orElseThrow(() -> new ExceptionLevelNotFound("ID del año académico del estudiante no encontrado"));
-            entity.setLevelId(levelEntity);
-        }
+        entity.setWorkOrderId(workOrderRepository.findById(json.getWorkOrderId())
+                .orElseThrow(() -> new ExceptionWorkOrdernotRegistred("ID de la orden de trabajo no encontrado")));
         return entity;
     }
 
 }
-

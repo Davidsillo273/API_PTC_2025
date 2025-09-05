@@ -8,7 +8,6 @@ import DevSGMA_PTC.SGMA_PTC.Services.Modules.ModuleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +16,29 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controlador REST que maneja las operaciones CRUD de los módulos.
+ * <p>
+ * Incluye funcionalidades para listar, registrar, actualizar y eliminar módulos.
+ */
 @RestController
 @RequestMapping("/api/modules")
 public class ModulesController {
 
     @Autowired
-    private ModuleService moduleService;
+    private ModuleService moduleService; // Servicio que contiene la lógica de negocio de los módulos
 
     //*** MÉTODO PARA OBTENER TODOS LOS MÓDULOS CON PAGINACIÓN ***\\
-    @GetMapping("/getAll")
+
+    /**
+     * Obtiene todos los módulos registrados en el sistema con soporte de paginación.
+     *
+     * @param page Número de página solicitada (valor por defecto = 0).
+     * @param size Cantidad de registros por página (valor por defecto = 10, máximo permitido = 50).
+     * @return ResponseEntity con un ApiResponse que contiene los módulos en formato paginado.
+     * @throws ExceptionModuleNotFound si no se encuentran módulos en la base de datos.
+     */
+    @GetMapping("/getAllModules")
     public ResponseEntity<ApiResponse<Page<ModuleDTO>>> getAllModules(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
@@ -36,20 +49,28 @@ public class ModulesController {
 
         Page<ModuleDTO> modules = moduleService.getAllModules(page, size);
         if (modules == null || modules.isEmpty()) {
-            throw new ExceptionModuleNotFound("No se encontraron módulos registrados");
+            throw new ExceptionModuleNotFound("No se encontraron módulos");
         }
 
         return ResponseEntity.ok(ApiResponse.success("Módulos consultados correctamente", modules));
     }
 
     //*** MÉTODO PARA INSERTAR UN NUEVO MÓDULO ***\\
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse<ModuleDTO>> insertModule(@Valid @RequestBody ModuleDTO dto) {
+
+    /**
+     * Registra un nuevo módulo en el sistema.
+     *
+     * @param dto Objeto ModuleDTO con la información del módulo a crear.
+     * @return ResponseEntity con un ApiResponse que contiene el módulo registrado.
+     * @throws ExceptionModuleDontRegister si el módulo no puede ser registrado.
+     */
+    @PostMapping("/addNewModule")
+    public ResponseEntity<ApiResponse<ModuleDTO>> createNewModule(@Valid @RequestBody ModuleDTO dto) {
         if (dto == null) {
             throw new ExceptionModuleDontRegister("Error al recibir la información del módulo");
         }
 
-        ModuleDTO savedModule = moduleService.insert(dto);
+        ModuleDTO savedModule = moduleService.insertModule(dto);
         if (savedModule == null) {
             throw new ExceptionModuleDontRegister("No se pudo registrar el módulo");
         }
@@ -58,7 +79,19 @@ public class ModulesController {
     }
 
     //*** MÉTODO PARA ACTUALIZAR UN MÓDULO EXISTENTE ***\\
-    @PutMapping("/update/{id}")
+
+    /**
+     * Actualiza los datos de un módulo existente identificado por su ID.
+     *
+     * @param id            Identificador único del módulo a actualizar.
+     * @param dto           Objeto ModuleDTO con los datos actualizados.
+     * @param bindingResult Objeto que contiene posibles errores de validación.
+     * @return ResponseEntity con un ApiResponse que contiene el módulo actualizado
+     * o un mapa de errores si la validación falla.
+     * @throws ExceptionModuleNotFound     si el módulo no existe.
+     * @throws ExceptionModuleDontRegister si ocurre un error durante la actualización.
+     */
+    @PutMapping("/updateModule/{id}")
     public ResponseEntity<?> updateModule(@Valid @PathVariable Long id, @RequestBody ModuleDTO dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -67,7 +100,7 @@ public class ModulesController {
         }
 
         try {
-            ModuleDTO updated = moduleService.update(id, dto);
+            ModuleDTO updated = moduleService.updateModule(id, dto);
             return ResponseEntity.ok(ApiResponse.success("Módulo actualizado correctamente", updated));
         } catch (ExceptionModuleNotFound e) {
             return ResponseEntity.status(404).body(Map.of(
@@ -85,10 +118,20 @@ public class ModulesController {
     }
 
     //*** MÉTODO PARA ELIMINAR UN MÓDULO POR ID ***\\
-    @DeleteMapping("/delete/{id}")
+
+    /**
+     * Elimina un módulo del sistema a partir de su ID.
+     *
+     * @param id Identificador único del módulo que se desea eliminar.
+     * @return ResponseEntity con un mapa que indica el resultado de la operación:
+     * - 200 si el módulo fue eliminado exitosamente.
+     * - 404 si el módulo no existe.
+     * - 500 si ocurre un error inesperado en el servidor.
+     */
+    @DeleteMapping("/deleteModule/{id}")
     public ResponseEntity<Map<String, Object>> deleteModule(@PathVariable Long id) {
         try {
-            boolean deleted = moduleService.delete(id);
+            boolean deleted = moduleService.deleteModule(id);
             if (!deleted) {
                 return ResponseEntity.status(404).body(Map.of(
                         "Error", "Not Found",
