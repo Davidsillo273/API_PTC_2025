@@ -49,7 +49,7 @@ public class GradesController {
     }
 
     //*** MÉTODO PARA ACTUALIZAR UN GRADO EXISTENTE ***\\
-    @PutMapping("/update/{id}")
+    @PutMapping("/updateModule/{id}")
     public ResponseEntity<?> updateGrade(@Valid @PathVariable Long id, @RequestBody GradeDTO dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -76,7 +76,7 @@ public class GradesController {
     }
 
     //*** MÉTODO PARA ELIMINAR UN GRADO POR ID ***\\
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/deleteModule/{id}")
     public ResponseEntity<Map<String, Object>> deleteGrade(@PathVariable Long id) {
         try {
             boolean deleted = gradeService.delete(id);

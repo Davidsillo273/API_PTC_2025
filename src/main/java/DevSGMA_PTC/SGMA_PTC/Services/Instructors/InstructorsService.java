@@ -48,7 +48,7 @@ public class InstructorsService {
         Pageable pageable = PageRequest.of(page, size);
         Page<InstructorEntity> instructorEntityPage = instructorRepository.findAll(pageable);
 
-        return instructorEntityPage.map(this::ConvertToDTO);
+        return instructorEntityPage.map(this::convertToDTO);
     }
 
     //*** MÉTODO PARA CREAR UN NUEVO INSTRUCTOR ***\\
@@ -64,10 +64,10 @@ public class InstructorsService {
         if (verifyInstructorExist(json.getEmail())) {
             throw new ExceptionEmailInstructorDuplicated("El correo del instructor ya está registrado en la base de datos");
         }
-        InstructorEntity objEntity = ConvertToEntity(json);
+        InstructorEntity objEntity = convertToEntity(json);
         InstructorEntity saveInstructor = instructorRepository.save(objEntity);
 
-        return ConvertToDTO(saveInstructor);
+        return convertToDTO(saveInstructor);
     }
 
     //*** MÉTODO PARA ACTUALIZAR UN INSTRUCTOR EXISTENTE ***\\
@@ -118,7 +118,7 @@ public class InstructorsService {
 
         instructorExist.setInstructorImage(json.getInstructorImage());
         InstructorEntity instructorUpdated = instructorRepository.save(instructorExist);
-        return ConvertToDTO(instructorUpdated);
+        return convertToDTO(instructorUpdated);
     }
 
     //*** MÉTODO PARA ELIMINAR UN INSTRUCTOR ***\\
@@ -179,7 +179,7 @@ public class InstructorsService {
      * @param instructorEntity Entidad del instructor a convertir.
      * @return Objeto InstructorDTO con los datos convertidos.
      */
-    private InstructorDTO ConvertToDTO(InstructorEntity instructorEntity) {
+    private InstructorDTO convertToDTO(InstructorEntity instructorEntity) {
         InstructorDTO dto = new InstructorDTO();
         dto.setInstructorId(instructorEntity.getInstructorId());
         dto.setFirstName(instructorEntity.getFirstName());
@@ -211,7 +211,7 @@ public class InstructorsService {
      * @return Objeto InstructorEntity con los datos listos para guardar en la base de datos.
      * @throws ExceptionRoleNotFound si el ID del rol no existe en la base.
      */
-    private InstructorEntity ConvertToEntity(@Valid InstructorDTO json) {
+    private InstructorEntity convertToEntity(@Valid InstructorDTO json) {
         Argon2Password objHash = new Argon2Password();
         InstructorEntity entity = new InstructorEntity();
         entity.setFirstName(json.getFirstName());

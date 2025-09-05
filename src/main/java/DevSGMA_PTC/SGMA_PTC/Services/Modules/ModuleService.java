@@ -3,7 +3,7 @@ package DevSGMA_PTC.SGMA_PTC.Services.Modules;
 import DevSGMA_PTC.SGMA_PTC.Entities.Levels.LevelEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Levels.ExceptionLevelNotFound;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Modules.ExceptionModuleDontRegister;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Modules.ExceptionModuleNameDuplicated;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Modules.ExceptionModuleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Modules.ModuleDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Levels.LevelRepository;
@@ -16,84 +16,98 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
-
 @Slf4j
 @Service
 public class ModuleService {
 
     @Autowired
-    private ModuleRepository repo;
+    private ModuleRepository moduleRepository;
 
     @Autowired
-    private LevelRepository levelRepo;
+    private LevelRepository levelRepository;
 
     // Obtener módulos paginados
     public Page<ModuleDTO> getAllModules(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ModuleEntity> pageResult = repo.findAll(pageable);
+        Page<ModuleEntity> pageResult = moduleRepository.findAll(pageable);
         return pageResult.map(this::convertToDTO);
     }
 
 
     // Insertar un módulo
-    public ModuleDTO insert(@Valid ModuleDTO dto) {
-        LevelEntity level = levelRepo.findById(dto.getLevelId())
-                .orElseThrow(() -> new ExceptionLevelNotFound("Nivel no encontrado con ID: " + dto.getLevelId()));
+    public ModuleDTO insertModule(@Valid ModuleDTO json) {
 
-        try {
-            ModuleEntity entity = convertToEntity(dto, level);
-            ModuleEntity saved = repo.save(entity);
-            return convertToDTO(saved);
-        } catch (Exception e) {
-            log.error("Error al registrar el módulo: " + e.getMessage());
-            throw new ExceptionModuleDontRegister("No se pudo registrar el módulo");
+        LevelEntity level = levelRepository.findById(json.getLevelId())
+                .orElseThrow(() -> new ExceptionLevelNotFound("Nivel no encontrado con ID: " + json.getLevelId()));
+
+        if (verifyModuleExist(json.getModuleName())) {
+            throw new ExceptionModuleNameDuplicated("El nombre del módulo ya está registrado en la base de datos");
         }
+
+        ModuleEntity entity = convertToEntity(json);
+        ModuleEntity saved = moduleRepository.save(entity);
+        return convertToDTO(saved);
+
     }
 
     // Actualizar un módulo
-    public ModuleDTO update(Long id, @Valid ModuleDTO dto) {
-        ModuleEntity module = repo.findById(id)
-                .orElseThrow(() -> new ExceptionModuleNotFound("Módulo no encontrado con ID: " + id));
+    public ModuleDTO updateModule(Long id, @Valid ModuleDTO json) {
+        //1. Verificar existencia
+        ModuleEntity moduleExist = moduleRepository.findById(id).orElseThrow(() -> new ExceptionModuleNotFound("Modulo no encontrado."));
+        //2. Actualizar campos
+        moduleExist.setModuleName(json.getModuleName());
+        LevelEntity level = levelRepository.findById(json.getLevelId())
+                .orElseThrow(() -> new ExceptionLevelNotFound("Nivel no encontrado con ID: " + json.getLevelId()));
+        moduleExist.setLevelId(level);
 
-        LevelEntity level = levelRepo.findById(dto.getLevelId())
-                .orElseThrow(() -> new ExceptionLevelNotFound("Nivel no encontrado con ID: " + dto.getLevelId()));
-
-        module.setModuleName(dto.getModuleName());
-        module.setLevel(level);
-
-        try {
-            ModuleEntity updated = repo.save(module);
-            return convertToDTO(updated);
-        } catch (Exception e) {
-            log.error("Error al actualizar el módulo: " + e.getMessage());
-            throw new ExceptionModuleDontRegister("No se pudo actualizar el módulo");
-        }
+        //3. Actualización del registro
+        ModuleEntity moduleUpdated = moduleRepository.save(moduleExist);
+        //4. Convertir a DTO
+        return convertToDTO(moduleUpdated);
     }
 
     // Eliminar un módulo
-    public boolean delete(Long id) {
-        ModuleEntity module = repo.findById(id).orElse(null);
+    public boolean deleteModule(Long id) {
+        ModuleEntity module = moduleRepository.findById(id).orElse(null);
         if (module != null) {
-            repo.deleteById(id);
+            moduleRepository.deleteById(id);
             return true;
         }
         return false;
     }
 
+
+    public boolean verifyModuleExist(String moduleName) {
+
+        return moduleRepository.existsByModuleName(moduleName);
+    }
+
+
     // Métodos privados de conversión
-    private ModuleDTO convertToDTO(ModuleEntity entity) {
+    private ModuleDTO convertToDTO(ModuleEntity moduleEntity) {
         ModuleDTO dto = new ModuleDTO();
-        dto.setId(entity.getId());
-        dto.setModuleName(entity.getModuleName());
-        dto.setLevelId(entity.getLevel().getId());
+        dto.setModuleId(moduleEntity.getModuleId());
+        dto.setModuleName(moduleEntity.getModuleName());
+
+        // Asigna el nombre y ID del año académico si el instructor tiene uno asociado
+        if (moduleEntity.getLevelId() != null) {
+            dto.setLevelName(moduleEntity.getLevelId().getLevelName());
+            dto.setLevelId(moduleEntity.getLevelId().getLevelId());
+        }
+
         return dto;
     }
 
-    private ModuleEntity convertToEntity(ModuleDTO dto, LevelEntity level) {
+    private ModuleEntity convertToEntity(@Valid ModuleDTO json) {
         ModuleEntity entity = new ModuleEntity();
-        entity.setModuleName(dto.getModuleName());
-        entity.setLevel(level);
+        entity.setModuleName(json.getModuleName());
+
+        // Asigna el año académico si se proporciona un ID de año académico
+        if (json.getLevelId() != null) {
+            LevelEntity levelEntity = levelRepository.findById(json.getLevelId())
+                    .orElseThrow(() -> new ExceptionLevelNotFound("ID del año académico del módulo no encontrado"));
+            entity.setLevelId(levelEntity);
+        }
         return entity;
     }
 }

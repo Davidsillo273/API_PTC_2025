@@ -107,7 +107,7 @@ public class WorkOrderController {
     public ResponseEntity<Map<String, Object>> DeleteWorkOrder(@PathVariable Long id) {
         try {
             // Intenta eliminar Orden de trabajo por medio del obj service
-            // Si el metodo delete devuelve false, no se ha encontrado ninguna orden de trabajo
+            // Si el metodo deleteModule devuelve false, no se ha encontrado ninguna orden de trabajo
             if (!service.delete(id)) {
                 // Retorna un error de 404 NO HA SIDO ENCONTRADO
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)

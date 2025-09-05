@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @Entity // Indica que esta clase es una entidad JPA y se mapea a una tabla en la base de datos
 @Getter // Lombok: genera automáticamente los métodos getter
 @Setter // Lombok: genera automáticamente los métodos setter
@@ -23,7 +25,7 @@ public class EntryEntity {
     private Long entryId; // Identificador único de la entrada
 
     @Column(name = "ENTRYDATE") // Mapea el campo entryDate con la columna ENTRYDATE de la tabla
-    private Long entryDate; // Fecha/hora de la entrada
+    private LocalDate entryDate; // Fecha/hora de la entrada
 
     @ManyToOne // Relación muchos a uno: varias entradas pueden estar asociadas a una misma orden de trabajo
     @JoinColumn(name = "WORKORDERID", referencedColumnName = "WORKORDERID") // Relaciona con la columna WORKORDERID de la tabla de órdenes de trabajo
