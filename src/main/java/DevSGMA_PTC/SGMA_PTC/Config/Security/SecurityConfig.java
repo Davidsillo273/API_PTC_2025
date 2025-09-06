@@ -32,7 +32,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth  // Cambia authorizeRequests por authorizeHttpRequests
                         .requestMatchers(HttpMethod.POST,
                                 "/api/auth/login",
-                                "/api/auth/logout")
+                                "/api/auth/logout",
+                                "/api/studentsAuth/studentLogin",
+                                "/api/instructorAuth/instructorLogin") // ← agrega esta línea
                         .permitAll()
                         .requestMatchers("/api/auth/me").authenticated()
                         .requestMatchers("/api/test/admin-only").hasRole("Administrador")
