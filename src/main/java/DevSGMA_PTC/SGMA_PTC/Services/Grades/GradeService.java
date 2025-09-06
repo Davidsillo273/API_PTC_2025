@@ -31,64 +31,64 @@ public class GradeService {
         return repo.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    // Insertar un grado
-    public GradeDTO insert(@Valid GradeDTO dto) {
-        LevelEntity level = levelRepo.findById(dto.getLevelId())
-                .orElseThrow(() -> new ExceptionLevelNotFound("Nivel no encontrado con ID: " + dto.getLevelId()));
-
-        try {
-            GradeEntity entity = convertToEntity(dto, level);
-            GradeEntity saved = repo.save(entity);
-            return convertToDTO(saved);
-        } catch (Exception e) {
-            log.error("Error al registrar el grado: " + e.getMessage());
-            throw new ExceptionGradeDontRegister("No se pudo registrar el grado");
-        }
-    }
-
-    // Actualizar un grado
-    public GradeDTO update(Long id, @Valid GradeDTO dto) {
-        GradeEntity grade = repo.findById(id)
-                .orElseThrow(() -> new ExceptionGradeNotFound("Grado no encontrado con ID: " + id));
-
-        LevelEntity level = levelRepo.findById(dto.getLevelId())
-                .orElseThrow(() -> new ExceptionLevelNotFound("Nivel no encontrado con ID: " + dto.getLevelId()));
-
-        grade.setGroupName(dto.getGroupName());
-        grade.setLevel(level);
-
-        try {
-            GradeEntity updated = repo.save(grade);
-            return convertToDTO(updated);
-        } catch (Exception e) {
-            log.error("Error al actualizar el grado: " + e.getMessage());
-            throw new ExceptionGradeDontRegister("No se pudo actualizar el grado");
-        }
-    }
-
-    // Eliminar un grado
-    public boolean delete(Long id) {
-        GradeEntity grade = repo.findById(id).orElse(null);
-        if (grade != null) {
-            repo.deleteById(id);
-            return true;
-        }
-        return false;
-    }
+//    // Insertar un grado
+//    public GradeDTO insert(@Valid GradeDTO dto) {
+//        LevelEntity level = levelRepo.findById(dto.getLevelId())
+//                .orElseThrow(() -> new ExceptionLevelNotFound("Nivel no encontrado con ID: " + dto.getLevelId()));
+//
+//        try {
+//            GradeEntity entity = convertToEntity(dto, level);
+//            GradeEntity saved = repo.save(entity);
+//            return convertToDTO(saved);
+//        } catch (Exception e) {
+//            log.error("Error al registrar el grado: " + e.getMessage());
+//            throw new ExceptionGradeDontRegister("No se pudo registrar el grado");
+//        }
+//    }
+//
+//    // Actualizar un grado
+//    public GradeDTO update(Long id, @Valid GradeDTO dto) {
+//        GradeEntity grade = repo.findById(id)
+//                .orElseThrow(() -> new ExceptionGradeNotFound("Grado no encontrado con ID: " + id));
+//
+//        LevelEntity level = levelRepo.findById(dto.getLevelId())
+//                .orElseThrow(() -> new ExceptionLevelNotFound("Nivel no encontrado con ID: " + dto.getLevelId()));
+//
+//        grade.setGroupName(dto.getGroupName());
+//        grade.setLevel(level);
+//
+//        try {
+//            GradeEntity updated = repo.save(grade);
+//            return convertToDTO(updated);
+//        } catch (Exception e) {
+//            log.error("Error al actualizar el grado: " + e.getMessage());
+//            throw new ExceptionGradeDontRegister("No se pudo actualizar el grado");
+//        }
+//    }
+//
+//    // Eliminar un grado
+//    public boolean delete(Long id) {
+//        GradeEntity grade = repo.findById(id).orElse(null);
+//        if (grade != null) {
+//            repo.deleteById(id);
+//            return true;
+//        }
+//        return false;
+//    }
 
     // Métodos privados de conversión
     private GradeDTO convertToDTO(GradeEntity entity) {
         GradeDTO dto = new GradeDTO();
-        dto.setId(entity.getId());
-        dto.setGroupName(entity.getGroupName());
-        dto.setLevelId(entity.getLevel().getId());
+        dto.setGradeId(entity.getGradeId());
+        dto.setGradeGroup(entity.getGradeGroup());
+        dto.setLevelId(entity.getLevelId().getLevelId());
         return dto;
     }
 
-    private GradeEntity convertToEntity(GradeDTO dto, LevelEntity level) {
-        GradeEntity entity = new GradeEntity();
-        entity.setGroupName(dto.getGroupName());
-        entity.setLevel(level);
-        return entity;
-    }
+//    private GradeEntity convertToEntity(GradeDTO dto, LevelEntity level) {
+//        GradeEntity entity = new GradeEntity();
+//        entity.setGroupName(dto.getGroupName());
+//        entity.setLevel(level);
+//        return entity;
+//    }
 }

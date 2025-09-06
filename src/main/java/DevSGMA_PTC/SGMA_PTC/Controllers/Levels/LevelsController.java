@@ -2,7 +2,8 @@ package DevSGMA_PTC.SGMA_PTC.Controllers.Levels;
 
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Levels.ExceptionLevelDontRegister;
 import DevSGMA_PTC.SGMA_PTC.Models.ApiResponse.ApiResponse;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Levels.LevelDTO;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Levels.LevelsDTO;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Levels.LevelsDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.Levels.LevelService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,75 +35,75 @@ public class LevelsController {
         }
     }
 
-    //*** CREAR UN NUEVO NIVEL ***//
-    @PostMapping("/addLevel")
-    public ResponseEntity<?> createLevel(@Valid @RequestBody LevelDTO json, BindingResult bindingResult) {
-        // Validación de campos
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error ->
-                    errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errors);
-        }
-
-        try {
-            LevelDTO levelSaved = levelService.insert(json);
-            return ResponseEntity.ok(ApiResponse.success("Nivel registrado exitosamente", levelSaved));
-        } catch (ExceptionLevelDontRegister e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "status", "Error",
-                    "message", e.getMessage()
-            ));
-        }
-    }
-
-    //*** ACTUALIZAR UN NIVEL EXISTENTE ***//
-    @PutMapping("/updateLevel/{id}")
-    public ResponseEntity<?> updateLevel(@Valid @PathVariable Long id, @RequestBody LevelDTO json, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error ->
-                    errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errors);
-        }
-
-        try {
-            LevelDTO levelUpdated = levelService.update(id, json);
-            return ResponseEntity.ok(ApiResponse.success("Nivel actualizado correctamente", levelUpdated));
-        } catch (ExceptionLevelDontRegister e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "status", "Error",
-                    "message", e.getMessage()
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "status", "Error",
-                    "message", "Error al modificar el nivel"
-            ));
-        }
-    }
-
-    //*** ELIMINAR UN NIVEL POR ID ***//
-    @DeleteMapping("/deleteLevel/{id}")
-    public ResponseEntity<?> deleteLevel(@PathVariable Long id) {
-        try {
-            boolean deleted = levelService.delete(id);
-            if (!deleted) {
-                return ResponseEntity.badRequest().body(Map.of(
-                        "status", "Error",
-                        "message", "Nivel no encontrado"
-                ));
-            }
-            return ResponseEntity.ok(Map.of(
-                    "status", "Proceso completado",
-                    "message", "Nivel eliminado exitosamente"
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "status", "Error",
-                    "message", "Error al eliminar el nivel",
-                    "detail", e.getMessage()
-            ));
-        }
-    }
+//    //*** CREAR UN NUEVO NIVEL ***//
+//    @PostMapping("/addLevel")
+//    public ResponseEntity<?> createLevel(@Valid @RequestBody LevelsDTO json, BindingResult bindingResult) {
+//        // Validación de campos
+//        if (bindingResult.hasErrors()) {
+//            Map<String, String> errors = new HashMap<>();
+//            bindingResult.getFieldErrors().forEach(error ->
+//                    errors.put(error.getField(), error.getDefaultMessage()));
+//            return ResponseEntity.badRequest().body(errors);
+//        }
+//
+//        try {
+//            LevelDTO levelSaved = levelService.insert(json);
+//            return ResponseEntity.ok(ApiResponse.success("Nivel registrado exitosamente", levelSaved));
+//        } catch (ExceptionLevelDontRegister e) {
+//            return ResponseEntity.badRequest().body(Map.of(
+//                    "status", "Error",
+//                    "message", e.getMessage()
+//            ));
+//        }
+//    }
+//
+//    //*** ACTUALIZAR UN NIVEL EXISTENTE ***//
+//    @PutMapping("/updateLevel/{id}")
+//    public ResponseEntity<?> updateLevel(@Valid @PathVariable Long id, @RequestBody LevelDTO json, BindingResult bindingResult) {
+//        if (bindingResult.hasErrors()) {
+//            Map<String, String> errors = new HashMap<>();
+//            bindingResult.getFieldErrors().forEach(error ->
+//                    errors.put(error.getField(), error.getDefaultMessage()));
+//            return ResponseEntity.badRequest().body(errors);
+//        }
+//
+//        try {
+//            LevelDTO levelUpdated = levelService.update(id, json);
+//            return ResponseEntity.ok(ApiResponse.success("Nivel actualizado correctamente", levelUpdated));
+//        } catch (ExceptionLevelDontRegister e) {
+//            return ResponseEntity.badRequest().body(Map.of(
+//                    "status", "Error",
+//                    "message", e.getMessage()
+//            ));
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(Map.of(
+//                    "status", "Error",
+//                    "message", "Error al modificar el nivel"
+//            ));
+//        }
+//    }
+//
+//    //*** ELIMINAR UN NIVEL POR ID ***//
+//    @DeleteMapping("/deleteLevel/{id}")
+//    public ResponseEntity<?> deleteLevel(@PathVariable Long id) {
+//        try {
+//            boolean deleted = levelService.delete(id);
+//            if (!deleted) {
+//                return ResponseEntity.badRequest().body(Map.of(
+//                        "status", "Error",
+//                        "message", "Nivel no encontrado"
+//                ));
+//            }
+//            return ResponseEntity.ok(Map.of(
+//                    "status", "Proceso completado",
+//                    "message", "Nivel eliminado exitosamente"
+//            ));
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(Map.of(
+//                    "status", "Error",
+//                    "message", "Error al eliminar el nivel",
+//                    "detail", e.getMessage()
+//            ));
+//        }
+//    }
 }

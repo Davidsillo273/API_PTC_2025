@@ -1,12 +1,17 @@
 package DevSGMA_PTC.SGMA_PTC.Services.WorkOrders;
 
+import DevSGMA_PTC.SGMA_PTC.Entities.Levels.LevelEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrderEntity;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Levels.ExceptionLevelNotFound;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Vehicles.ExceptionVehicleIdNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotRegistred;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotfound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders.WorkOrderDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.WorkOrders.WorkOrderRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Service
 public class WorkOrderService {
 
+    @Autowired
     private WorkOrderRepository repo;
 
     public Page<WorkOrderDTO> getAllWorkOrders(int page, int size) {
@@ -68,9 +74,13 @@ public class WorkOrderService {
     private WorkOrderDTO ConvertirADTO(WorkOrderEntity workOrderEntity) {
         WorkOrderDTO dto = new WorkOrderDTO();
         dto.setWorkOrderId(workOrderEntity.getWorkOrderId());
-        dto.setVehicleId(workOrderEntity.getVehicleId());
-        dto.setMaintenanceExpo(workOrderEntity.getMaintenanceExpo());
-        dto.setWorkOrdersImage(workOrderEntity.getWorkOrdersImage());
+
+        if (workOrderEntity.getVehicleId() != null) {
+            dto.setVehiclePlateNumber(workOrderEntity.getVehicleId().getPlateNumber());
+            dto.setVehicleId(workOrderEntity.getVehicleId().getVehicleId());
+        }
+
+        dto.setWorkOrderImage(workOrderEntity.getWorkOrdersImage());
         dto.setStatus(workOrderEntity.getStatus());
 
         return dto;
@@ -79,9 +89,14 @@ public class WorkOrderService {
     private WorkOrderEntity ConvertirAEntity(@Valid WorkOrderDTO json) {
         WorkOrderEntity entity = new WorkOrderEntity();
         entity.setWorkOrderId(json.getWorkOrderId());
-        entity.setVehicleId(json.getVehicleId());
-        entity.setMaintenanceExpo(json.getMaintenanceExpo());
-        entity.setWorkOrdersImage(json.getWorkOrdersImage());
+
+        if (json.getVehicleId() != null) {
+            VehicleEntity vehicleEntity = repo.findById(json.getVehicleId())
+                    .orElseThrow(() -> new ExceptionVehicleIdNotFound("ID del vehiculo no encontrado")).getVehicleId();
+            entity.setVehicleId(vehicleEntity);
+        }
+
+        entity.setWorkOrdersImage(json.getWorkOrderImage());
         entity.setStatus(json.getStatus());
 
         return entity;

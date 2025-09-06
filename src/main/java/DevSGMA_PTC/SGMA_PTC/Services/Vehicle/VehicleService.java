@@ -1,7 +1,11 @@
 package DevSGMA_PTC.SGMA_PTC.Services.Vehicle;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.VehiclesTypes.VehicleTypeEntity;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.VehicleType.ExceptionVehicleTypeIdNotFound;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Vehicles.ExceptionVehicleIdNotFound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Vehicles.VehiclesDTO;
+import DevSGMA_PTC.SGMA_PTC.Repositories.VehicleType.VehicleTypeRepo;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Vehicles.VehicleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,29 +20,46 @@ public class VehicleService {
     @Autowired
     private VehicleRepo vehicleRepo;
 
+    @Autowired
+    private VehicleTypeRepo vehicleRepo2;
+
 
     private VehiclesDTO convertToDTO(VehicleEntity entity) {
         VehiclesDTO dto = new VehiclesDTO();
-        dto.setId(entity.getId());
+        dto.setVehicleId(entity.getVehicleId());
         dto.setPlateNumber(entity.getPlateNumber());
         dto.setBrand(entity.getBrand());
         dto.setModel(entity.getModel());
         dto.setColor(entity.getColor());
         dto.setCirculationCardNumber(entity.getCirculationCardNumber());
         dto.setVehicleImage(entity.getVehicleImage());
+
+//        //Pidiendo el ID vehicleType asociado al vehículo
+        if (entity.getTypeId() != null) {
+            VehicleTypeEntity vehicleType = entity.getTypeId();
+            dto.setTypeId(vehicleType.getTypeId());
+            dto.setTypeName(vehicleType.getTypeName());
+        }
+
         return dto;
     }
 
 
     private VehicleEntity convertToEntity(VehiclesDTO dto) {
         VehicleEntity entity = new VehicleEntity();
-        entity.setId(dto.getId());
+        entity.setVehicleId(dto.getVehicleId());
         entity.setPlateNumber(dto.getPlateNumber());
         entity.setBrand(dto.getBrand());
         entity.setModel(dto.getModel());
         entity.setColor(dto.getColor());
         entity.setCirculationCardNumber(dto.getCirculationCardNumber());
         entity.setVehicleImage(dto.getVehicleImage());
+
+        if (dto.getTypeId() != null) {
+            VehicleTypeEntity vehicleType = vehicleRepo2.findById(dto.getTypeId())
+                    .orElseThrow(() -> new ExceptionVehicleTypeIdNotFound("Tipo de vehículo no encontrado con ID: " + dto.getTypeId()));
+            entity.setTypeId(vehicleType);
+        }
         return entity;
     }
 

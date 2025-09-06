@@ -3,7 +3,8 @@ package DevSGMA_PTC.SGMA_PTC.Services.Levels;
 import DevSGMA_PTC.SGMA_PTC.Entities.Levels.LevelEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Levels.ExceptionLevelDontRegister;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Levels.ExceptionLevelNotFound;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Levels.LevelDTO;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Levels.LevelsDTO;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Levels.LevelsDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Levels.LevelRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -21,59 +22,59 @@ public class LevelService {
     private LevelRepository repo;
 
     // Obtener todos los niveles
-    public List<LevelDTO> getAllLevels() {
+    public List<LevelsDTO> getAllLevels() {
         return repo.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    // Insertar un nivel
-    public LevelDTO insert(@Valid LevelDTO dto) {
-        try {
-            LevelEntity entity = convertToEntity(dto);
-            LevelEntity saved = repo.save(entity);
-            return convertToDTO(saved);
-        } catch (Exception e) {
-            log.error("Error al registrar el nivel: " + e.getMessage());
-            throw new ExceptionLevelDontRegister("No se pudo registrar el nivel");
-        }
-    }
-
-    // Actualizar un nivel
-    public LevelDTO update(Long id, @Valid LevelDTO dto) {
-        LevelEntity level = repo.findById(id)
-                .orElseThrow(() -> new ExceptionLevelNotFound("Nivel no encontrado con ID: " + id));
-
-        level.setLevelName(dto.getLevelName());
-
-        try {
-            LevelEntity updated = repo.save(level);
-            return convertToDTO(updated);
-        } catch (Exception e) {
-            log.error("Error al actualizar el nivel: " + e.getMessage());
-            throw new ExceptionLevelDontRegister("No se pudo actualizar el nivel");
-        }
-    }
-
-    // Eliminar un nivel
-    public boolean delete(Long id) {
-        LevelEntity level = repo.findById(id).orElse(null);
-        if (level != null) {
-            repo.deleteById(id);
-            return true;
-        }
-        return false;
-    }
+//    // Insertar un nivel
+//    public LevelsDTO insert(@Valid LevelsDTO dto) {
+//        try {
+//            LevelEntity entity = convertToEntity(dto);
+//            LevelEntity saved = repo.save(entity);
+//            return convertToDTO(saved);
+//        } catch (Exception e) {
+//            log.error("Error al registrar el nivel: " + e.getMessage());
+//            throw new ExceptionLevelDontRegister("No se pudo registrar el nivel");
+//        }
+//    }
+//
+//    // Actualizar un nivel
+//    public LevelDTO update(Long id, @Valid LevelDTO dto) {
+//        LevelEntity level = repo.findById(id)
+//                .orElseThrow(() -> new ExceptionLevelNotFound("Nivel no encontrado con ID: " + id));
+//
+//        level.setLevelName(dto.getLevelName());
+//
+//        try {
+//            LevelEntity updated = repo.save(level);
+//            return convertToDTO(updated);
+//        } catch (Exception e) {
+//            log.error("Error al actualizar el nivel: " + e.getMessage());
+//            throw new ExceptionLevelDontRegister("No se pudo actualizar el nivel");
+//        }
+//    }
+//
+//    // Eliminar un nivel
+//    public boolean delete(Long id) {
+//        LevelEntity level = repo.findById(id).orElse(null);
+//        if (level != null) {
+//            repo.deleteById(id);
+//            return true;
+//        }
+//        return false;
+//    }
 
     // Métodos privados de conversión
-    private LevelDTO convertToDTO(LevelEntity entity) {
-        LevelDTO dto = new LevelDTO();
-        dto.setId(entity.getId());
+    private LevelsDTO convertToDTO(LevelEntity entity) {
+        LevelsDTO dto = new LevelsDTO();
+        dto.setId(entity.getLevelId());
         dto.setLevelName(entity.getLevelName());
         return dto;
     }
 
-    private LevelEntity convertToEntity(LevelDTO dto) {
-        LevelEntity entity = new LevelEntity();
-        entity.setLevelName(dto.getLevelName());
-        return entity;
-    }
+//    private LevelEntity convertToEntity(LevelDTO dto) {
+//        LevelEntity entity = new LevelEntity();
+//        entity.setLevelName(dto.getLevelName());
+//        return entity;
+//    }
 }
