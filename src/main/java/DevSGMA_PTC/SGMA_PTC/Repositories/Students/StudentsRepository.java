@@ -14,7 +14,7 @@ public interface StudentsRepository extends JpaRepository<StudentEntity, Long> {
     Page<StudentEntity> findAll(Pageable pageable);
 
     //Opcionales
-    Optional<StudentEntity> findbyFirstName(String firstName);
+    Optional<StudentEntity> findByFirstName(String firstName);
     Optional<StudentEntity> findByEmail(String email);
 
     boolean existsByFirstName(String firstName);

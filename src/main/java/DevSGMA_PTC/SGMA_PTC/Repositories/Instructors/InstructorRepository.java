@@ -11,7 +11,7 @@ public interface InstructorRepository extends JpaRepository <InstructorEntity, L
     Page<InstructorEntity> findAll(Pageable pageable);
 
     //Opcionales
-    Optional<InstructorEntity> findbyFirstName(String firstName);
+    Optional<InstructorEntity> findByFirstName(String firstName);
     Optional<InstructorEntity> findByEmail(String email);
 
     boolean existsByFirstName(String firstName);

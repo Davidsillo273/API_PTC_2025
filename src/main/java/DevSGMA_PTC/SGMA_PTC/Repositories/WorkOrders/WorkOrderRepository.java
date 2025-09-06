@@ -13,5 +13,5 @@ public interface WorkOrderRepository extends JpaRepository<WorkOrderEntity, Long
     Page<WorkOrderEntity> findAll(Pageable pageable);
 
     //Opcionales
-    Optional<WorkOrderEntity> findbyPlate(String plate);
+    //Optional<WorkOrderEntity> findByPlate(String plate);
 }
