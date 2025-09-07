@@ -33,63 +33,72 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         this.jwtUtils = jwtUtils;
     }
 
+//    @Override
+//    protected void doFilterInternal(
+//            HttpServletRequest request,
+//            HttpServletResponse response,
+//            FilterChain filterChain) throws ServletException, IOException {
+//
+//        // CORREGIDO: Mejor lógica para endpoints públicos
+//        if (isPublicEndpoint(request)) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+//
+//        try {
+//            String token = extractTokenFromCookies(request);
+//
+//            if (token == null || token.isBlank()) {
+//                // Para endpoints no públicos, requerimos token
+//                if (!isPublicEndpoint(request)) {
+//                    sendError(response, "Token no encontrado", HttpServletResponse.SC_UNAUTHORIZED);
+//                    return;
+//                }
+//                filterChain.doFilter(request, response);
+//                return;
+//            }
+//
+//            Claims claims = jwtUtils.parseToken(token);
+//
+//            // EXTRAER EL ROL REAL del token
+//            String rol = jwtUtils.extractRole(token);
+//
+//            // CREAR AUTHORITIES BASADO EN EL ROL REAL
+//            Collection<? extends GrantedAuthority> authorities =
+//                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + rol));
+//
+//            // CREAR AUTENTICACIÓN CON AUTHORITIES CORRECTOS
+//            UsernamePasswordAuthenticationToken authentication =
+//                    new UsernamePasswordAuthenticationToken(
+//                            claims.getSubject(), // username
+//                            null, // credentials
+//                            authorities // ← ROLES REALES
+//                    );
+//
+//            // ESTABLECER AUTENTICACIÓN EN CONTEXTO
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//            filterChain.doFilter(request, response);
+//
+//        } catch (ExpiredJwtException e) {
+//            log.warn("Token expirado: {}", e.getMessage());
+//            sendError(response, "Token expirado", HttpServletResponse.SC_UNAUTHORIZED);
+//        } catch (MalformedJwtException e) {
+//            log.warn("Token malformado: {}", e.getMessage());
+//            sendError(response, "Token inválido", HttpServletResponse.SC_FORBIDDEN);
+//        } catch (Exception e) {
+//            log.error("Error de autenticación", e);
+//            sendError(response, "Error de autenticación", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//        }
+//    }
+    // FILTRO DESACTIVADO (solo para desarrollo, en producción se debe activar)
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-
-        // CORREGIDO: Mejor lógica para endpoints públicos
-        if (isPublicEndpoint(request)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        try {
-            String token = extractTokenFromCookies(request);
-
-            if (token == null || token.isBlank()) {
-                // Para endpoints no públicos, requerimos token
-                if (!isPublicEndpoint(request)) {
-                    sendError(response, "Token no encontrado", HttpServletResponse.SC_UNAUTHORIZED);
-                    return;
-                }
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            Claims claims = jwtUtils.parseToken(token);
-
-            // EXTRAER EL ROL REAL del token
-            String rol = jwtUtils.extractRole(token);
-
-            // CREAR AUTHORITIES BASADO EN EL ROL REAL
-            Collection<? extends GrantedAuthority> authorities =
-                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + rol));
-
-            // CREAR AUTENTICACIÓN CON AUTHORITIES CORRECTOS
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            claims.getSubject(), // username
-                            null, // credentials
-                            authorities // ← ROLES REALES
-                    );
-
-            // ESTABLECER AUTENTICACIÓN EN CONTEXTO
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            filterChain.doFilter(request, response);
-
-        } catch (ExpiredJwtException e) {
-            log.warn("Token expirado: {}", e.getMessage());
-            sendError(response, "Token expirado", HttpServletResponse.SC_UNAUTHORIZED);
-        } catch (MalformedJwtException e) {
-            log.warn("Token malformado: {}", e.getMessage());
-            sendError(response, "Token inválido", HttpServletResponse.SC_FORBIDDEN);
-        } catch (Exception e) {
-            log.error("Error de autenticación", e);
-            sendError(response, "Error de autenticación", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
+        // Permitir todas las peticiones sin validar JWT
+        filterChain.doFilter(request, response);
     }
 
     private String extractTokenFromCookies(HttpServletRequest request) {
