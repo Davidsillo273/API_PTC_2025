@@ -1,10 +1,8 @@
 package DevSGMA_PTC.SGMA_PTC.Services.WorkOrders;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.Levels.LevelEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrderEntity;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Levels.ExceptionLevelNotFound;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Vehicles.ExceptionVehicleIdNotFound;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Vehicles.ExceptionVehicleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotRegistred;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotfound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders.WorkOrderDTO;
@@ -92,7 +90,7 @@ public class WorkOrderService {
 
         if (json.getVehicleId() != null) {
             VehicleEntity vehicleEntity = repo.findById(json.getVehicleId())
-                    .orElseThrow(() -> new ExceptionVehicleIdNotFound("ID del vehiculo no encontrado")).getVehicleId();
+                    .orElseThrow(() -> new ExceptionVehicleNotFound("ID del vehiculo no encontrado")).getVehicleId();
             entity.setVehicleId(vehicleEntity);
         }
 

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VehiclesDTO {
+public class VehicleDTO {
 
     //*** ATRIBUTOS ***\\
 
@@ -28,6 +28,13 @@ public class VehiclesDTO {
     @NotNull(message = "El estado de la póliza es obligatorio")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
     private Long hasPolicy; // Indica si el vehículo tiene póliza de seguro
+
+    @NotBlank(message = "El número de póliza es obligatorio si tiene póliza")
+    // Validación para que el campo no esté vacío o solo contenga espacios en blanco
+    @Size(min = 8, message = "El número de póliza debe tener al menos 8 dígitos")
+    @Size(max = 15, message = "El número de póliza no puede exceder 15 caracteres")
+    // Validación para el tamaño máximo del número de póliza
+    private String policyNumber; // Número de póliza del vehículo, puede ser nulo si no tiene póliza
 
     @NotBlank(message = "La marca es obligatoria")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
@@ -94,7 +101,11 @@ public class VehiclesDTO {
     // Validación para que el ID del mantenimiento sea positivo
     private Long maintenanceEXPO; // ID del mantenimiento asociado al vehículo
 
+    @Positive(message = "El estado debe ser positivo")
+    private Long status; // Estado del vehículo
+
     //Campo adicional
     private String typeName;  // Campo adicional para mostrar el tipó de automóvil, campo como tal no existe en tbVehicles
     private String studentName;  // Campo adicional para mostrar el nombre del estudiante, campo como tal no existe en tbVehicles
+    private String studentLastName; // Campo adicional para mostrar el apellido del estudiante, campo como tal no existe en tbVehicles
 }

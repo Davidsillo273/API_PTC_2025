@@ -17,14 +17,8 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class VehicleTypeEntity {
-    //*** ATRIBUTOS ***\\
 
-    // ID del tipo de vehículo, clave primaria generada automáticamente
-//    @Id
-//    @Column(name = "TYPEID")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @EqualsAndHashCode.Include
-//    private VehicleEntity typeId;
+    //*** ATRIBUTOS ***\\
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_vehicle_types")
@@ -32,15 +26,12 @@ public class VehicleTypeEntity {
     @Column(name = "TYPEID")
     private Long typeId;
 
-    @OneToMany(mappedBy = "TYPEID", cascade = CascadeType.ALL) // Relación OneToMany con tbVehicles
-    @JsonIgnore
-    private List<VehicleEntity> vehicleType = new ArrayList<>();
-
     // Nombre del tipo de vehículo, obligatorio y máximo 50 caracteres
     @Column(name = "TYPENAME", length = 50, nullable = false)
     private String typeName;
-}
 
-//@OneToMany(mappedBy = "workOrderId", cascade = CascadeType.ALL) // Relación OneToMany con tbEntries
-//    @JsonIgnore
-//    private List<EntryEntity> entry = new ArrayList<>(); // Lista de entradas asociadas a la orden de trabajo
+    @OneToMany(mappedBy = "typeId", cascade = CascadeType.ALL) // Relación OneToMany con tbVehicles
+    @JsonIgnore
+    private List<VehicleEntity> vehicleType = new ArrayList<>();
+
+}

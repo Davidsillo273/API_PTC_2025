@@ -1,11 +1,18 @@
 package DevSGMA_PTC.SGMA_PTC.Controllers.Vehicle;
 
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Vehicles.VehiclesDTO;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentDontInsert;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Vehicles.ExceptionVehicleDontInsert;
+import DevSGMA_PTC.SGMA_PTC.Models.ApiResponse.ApiResponse;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Vehicles.VehicleDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.Vehicle.VehicleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -13,35 +20,52 @@ import java.util.Optional;
 public class VehicleController {
 
     @Autowired
-    private VehicleService vehiclesService;
+    private VehicleService vehicleService;
 
+    @GetMapping("/getDataVehicles")
+    public ResponseEntity<ApiResponse<Page<VehicleDTO>>> getAllStudents(
+            @RequestParam(defaultValue = "0") int page, // Página por defecto 0
+            @RequestParam(defaultValue = "10") int size // Tamaño por defecto 10
+    ) {
+        // Validación del tamaño de página: debe estar entre 1 y 50
+        if (size <= 0 || size > 50) {
+            ResponseEntity.badRequest().body(Map.of(
+                    "status", "La paginación de datos debe estar entre 1 y 50"
+            ));
+            return ResponseEntity.ok(null); // Devuelve nulo si la validación falla
+        }
 
-    @PostMapping("/newVehicle")
-    public VehiclesDTO save(@RequestBody VehiclesDTO dto) {
-        return vehiclesService.save(dto);
+        // Obtiene los estudiantes paginados desde el servicio
+        Page<VehicleDTO> vehicles = vehicleService.getAllVehicles(page, size);
+
+        // Si ocurre un error al obtener los datos
+        if (vehicles == null) {
+            ResponseEntity.badRequest().body(Map.of(
+                    "status", "Error al obtener los datos del vehículos"
+            ));
+        }
+        // Retorna respuesta exitosa con los datos
+        return ResponseEntity.ok(ApiResponse.success("Datos consultados correctamente", vehicles));
     }
 
+    @PostMapping("/addNewVehicle")
+    public ResponseEntity<ApiResponse<VehicleDTO>> createVehicle(@Valid @RequestBody VehicleDTO json
+    ) {
+        // Verifica si el JSON recibido es nulo
+        if (json == null) {
+            throw new ExceptionVehicleDontInsert("Error al recibir y procesar la información del vehículo");
+        }
 
-    @GetMapping("/getAllVehicles")
-    public List<VehiclesDTO> getAll() {
-        return vehiclesService.getAll();
+        // Intenta guardar el estudiante usando el servicio
+        VehicleDTO vehicleSaved= vehicleService.createVehicle(json);
+
+        // Si el estudiante no se guarda correctamente
+        if (vehicleSaved == null) {
+            throw new ExceptionVehicleDontInsert("El vehículo no pudo ser registrado debido a un problema en los datos");
+        }
+
+        // Retorna respuesta exitosa con el estudiante guardado
+        return ResponseEntity.ok(ApiResponse.success("Vehículo registrado exitosamente", vehicleSaved));
     }
 
-
-    @GetMapping("/getVehicleBy/{id}")
-    public Optional<VehiclesDTO> getById(@PathVariable Long id) {
-        return vehiclesService.getById(id);
-    }
-
-
-    @GetMapping("/plate/{plateNumber}")
-    public Optional<VehiclesDTO> getByPlate(@PathVariable String plateNumber) {
-        return vehiclesService.getByPlate(plateNumber);
-    }
-
-
-    @DeleteMapping("/deleteVehicle/{id}")
-    public void delete(@PathVariable Long id) {
-        vehiclesService.delete(id);
-    }
 }

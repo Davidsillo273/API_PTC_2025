@@ -23,9 +23,9 @@ public class VehicleEntity {
 
     // ID del vehículo, clave primaria generada automáticamente
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_vehicles")
+    @SequenceGenerator(name = "seq_vehicles", sequenceName = "seq_vehicles", allocationSize = 1)
     @Column(name = "VEHICLEID")
-    @EqualsAndHashCode.Include
     private Long vehicleId;
 
     // Número de placa, único y obligatorio, máximo 10 caracteres
@@ -35,6 +35,10 @@ public class VehicleEntity {
     // Indica si el vehículo tiene póliza (1 = sí, 0 = no)
     @Column(name = "HASPOLICY" , nullable = false)
     private Long hasPolicy;
+
+    // Número de póliza, puede ser nulo si no tiene póliza, máximo 15 caracteres
+    @Column(name = "POLICYNUMBER", length = 15)
+    private String policyNumber; // Número de póliza, puede ser nulo si no tiene póliza
 
     // Marca del vehículo, obligatorio, máximo 50 caracteres
     @Column(name = "BRAND", length = 50, nullable = false)
@@ -46,7 +50,7 @@ public class VehicleEntity {
 
     @ManyToOne // Muchos vehículos pueden tener el mismo tipo
     @JoinColumn(name = "TYPEID", referencedColumnName = "TYPEID") // Columna que conecta con la tabla de tipos de vehículo
-    private VehicleTypeEntity TYPEID;
+    private VehicleTypeEntity typeId;
 
     // Color del vehículo, obligatorio, máximo 30 caracteres
     @Column(name = "COLOR", length = 30, nullable = false)
@@ -79,6 +83,9 @@ public class VehicleEntity {
     // Valor de mantenimiento expo, obligatorio
     @Column(name = "MAINTENANCEEXPO", nullable = false)
     private Long maintenanceExpo;
+
+    @Column(name = "STATUS", nullable = false)
+    private Long status; // Estado del vehículo (activo/inactivo)
 
     //*** ONETOMANYS ***\\
 
