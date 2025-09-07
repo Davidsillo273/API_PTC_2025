@@ -1,6 +1,5 @@
 package DevSGMA_PTC.SGMA_PTC.Repositories.Students;
 
-import DevSGMA_PTC.SGMA_PTC.Entities.Instructors.InstructorEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +16,7 @@ public interface StudentsRepository extends JpaRepository<StudentEntity, Long> {
     Optional<StudentEntity> findByFirstName(String firstName);
     Optional<StudentEntity> findByEmail(String email);
 
-    boolean existsByFirstName(String firstName);
-    boolean existsByEmail(String Email);
+    boolean existsByEmail(String email);
+
+    boolean existsByStudentCard(String studentCard);
 }

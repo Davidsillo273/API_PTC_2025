@@ -49,7 +49,7 @@ public class StudentAuthenticationController {
      * @return ResponseEntity con el resultado del inicio de sesión
      */
     @PostMapping("/studentLogin")
-    private ResponseEntity<String> studentLogin(@Valid @RequestBody StudentDTO data, HttpServletResponse response) {
+    private ResponseEntity<String> studentLogin(@RequestBody StudentDTO data, HttpServletResponse response) {
         System.out.println("Se está intentando iniciar sesión con: " + data.getEmail());
 
         // Validación de credenciales
