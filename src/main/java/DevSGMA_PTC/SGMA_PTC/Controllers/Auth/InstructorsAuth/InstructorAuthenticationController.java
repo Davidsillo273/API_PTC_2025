@@ -6,7 +6,6 @@ import DevSGMA_PTC.SGMA_PTC.Services.Auth.InstructorsAuth.InstructorAuthenticati
 import DevSGMA_PTC.SGMA_PTC.Utils.JWT.JWTUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +28,11 @@ import java.util.stream.Collectors;
 @RequestMapping("api/instructorAuth")
 public class InstructorAuthenticationController {
 
-    /**
-     * Servicio para la autenticación de instructores.
-     */
     @Autowired
-    private InstructorAuthenticationService instructorAuthenticationService;
+    private InstructorAuthenticationService instructorAuthenticationService; // Servicio de autenticación de instructores
 
-    /**
-     * Utilidad para la generación y validación de tokens JWT.
-     */
     @Autowired
-    private JWTUtils jwtUtils;
+    private JWTUtils jwtUtils; // Utilidad para manejar tokens JWT
 
     /**
      * Endpoint para el inicio de sesión de instructores.
@@ -50,13 +43,17 @@ public class InstructorAuthenticationController {
      * @return ResponseEntity con el resultado del inicio de sesión
      */
     @PostMapping("/instructorLogin")
-    private ResponseEntity<String> instructorLogin(@Valid @RequestBody InstructorDTO data, HttpServletResponse response) {
-        System.out.println("Método controller");
+    private ResponseEntity<String> instructorLogin( @RequestBody InstructorDTO data, HttpServletResponse response) {
+        System.out.println("Se está intentando iniciar sesión con: " + data.getEmail());
+
         // Validación de credenciales
-        if (data.getEmail() == null || data.getEmail().isBlank() ||
-                data.getPassword() == null || data.getPassword().isBlank()) {
+        if (data.getEmail() == null ||
+                data.getEmail().isBlank() ||
+                data.getPassword() == null ||
+                data.getPassword().isBlank()) {
             return ResponseEntity.status(401).body("Error: Credenciales incompletas");
         }
+
         // Verificación de credenciales y generación de token
         if (instructorAuthenticationService.instructorLogin(data.getEmail(), data.getPassword())) {
             addTokenCookie(response, data.getEmail()); // ← Pasar solo el correo
@@ -72,15 +69,20 @@ public class InstructorAuthenticationController {
      * @param email Correo institucional del instructor
      */
     private void addTokenCookie(HttpServletResponse response, String email) {
-        // Obtener el usuario completo de la base de datos
+
+        // Obtener el instructor completo de la base de datos
         Optional<InstructorEntity> instructorOpt = instructorAuthenticationService.getInstructor(email);
+
         if (instructorOpt.isPresent()) {
             InstructorEntity instructor = instructorOpt.get();
             String token = jwtUtils.create(
                     String.valueOf(instructor.getInstructorId()),
                     instructor.getEmail(),
-                    instructor.getRoleId().getRoleName() // ← Usar el nombre real del tipo
+                    instructor.getRoleId().getRoleName(),
+                    instructor.getLevelId().getLevelName(),
+                    null  // ← Instructors no tienen grade, así que pasamos null
             );
+
             Cookie cookie = new Cookie("authToken", token);
             cookie.setHttpOnly(true);
             cookie.setSecure(true);
@@ -107,9 +109,11 @@ public class InstructorAuthenticationController {
                                 "message", "No autenticado"
                         ));
             }
+
             // Maneja diferentes tipos de principal (UserDetails o nombre de usuario)
             String username;
             Collection<? extends GrantedAuthority> authorities;
+
             if (authentication.getPrincipal() instanceof UserDetails) {
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
                 username = userDetails.getUsername();
@@ -118,26 +122,30 @@ public class InstructorAuthenticationController {
                 username = authentication.getName();
                 authorities = authentication.getAuthorities();
             }
+
             // Busca el instructor por su nombre de usuario (correo)
             Optional<InstructorEntity> instructorOpt = instructorAuthenticationService.getInstructor(username);
+
             if (username.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(Map.of(
                                 "authenticated", false,
-                                "message", "Usuario no encontrado"
+                                "message", "Instructor no encontrado"
                         ));
             }
+
             InstructorEntity instructor = instructorOpt.get();
+
             // Devuelve los datos del instructor autenticado
             return ResponseEntity.ok(Map.of(
                     "authenticated", true,
                     "instructor", Map.of(
                             "id", instructor.getInstructorId(),
-                            "nombre", instructor.getFirstName(),
-                            "apellido", instructor.getLastName(),
-                            "correo", instructor.getEmail(),
-                            "rol", instructor.getRoleId().getRoleName(),
-                            "nivelEducativo", instructor.getLevelId().getLevelName(),
+                            "names", instructor.getFirstName(),
+                            "lastNames", instructor.getLastName(),
+                            "email", instructor.getEmail(),
+                            "role", instructor.getRoleId().getRoleName(),
+                            "level", instructor.getLevelId().getLevelName(),
                             "authorities", authorities.stream()
                                     .map(GrantedAuthority::getAuthority)
                                     .collect(Collectors.toList())

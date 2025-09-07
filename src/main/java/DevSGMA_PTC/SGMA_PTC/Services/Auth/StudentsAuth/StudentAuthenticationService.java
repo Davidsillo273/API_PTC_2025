@@ -39,8 +39,8 @@ public class StudentAuthenticationService {
 
             // Log de información básica del estudiante encontrado
             System.out.println("Estudiante encontrado, ID: " + student.getStudentId() +
-                    ", email: " + student.getEmail() +
-                    ", Grupo de grado: " + studentGrade);
+                    ", correo: " + student.getEmail() +
+                    ", grupo de grado: " + studentGrade);
             String HashDB = student.getPassword(); // Hash de la contraseña almacenada
             boolean verify = objHash.VerifyPassword(HashDB, password); // Verifica la contraseña
             return verify;

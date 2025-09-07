@@ -11,20 +11,24 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final JwtCookieAuthFilter jwtCookieAuthFilter;
+    private final CorsConfigurationSource corsConfigurationSource; // Inyecta CorsConfigurationSource
 
-    public SecurityConfig(JwtCookieAuthFilter jwtCookieAuthFilter) {
-
+    public SecurityConfig(JwtCookieAuthFilter jwtCookieAuthFilter, CorsConfigurationSource corsConfigurationSource) {
         this.jwtCookieAuthFilter = jwtCookieAuthFilter;
+        this.corsConfigurationSource = corsConfigurationSource;
     }
 
+
     // Configuración de seguridad HTTP
-    //ENpoints públicos configurados en el filtro JwtCookieAuthFilter
+    //Endpoints públicos configurados en el filtro JwtCookieAuthFilter
+
 //    @Bean
 //    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 //        //Aqui van todos los endPoints públicos que no requieren de un JWT
