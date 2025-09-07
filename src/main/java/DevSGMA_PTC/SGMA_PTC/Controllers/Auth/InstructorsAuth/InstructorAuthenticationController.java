@@ -33,7 +33,7 @@ public class InstructorAuthenticationController {
      * Servicio para la autenticación de instructores.
      */
     @Autowired
-    private InstructorAuthenticationService studentAuthenticationService;
+    private InstructorAuthenticationService instructorAuthenticationService;
 
     /**
      * Utilidad para la generación y validación de tokens JWT.
@@ -58,7 +58,7 @@ public class InstructorAuthenticationController {
             return ResponseEntity.status(401).body("Error: Credenciales incompletas");
         }
         // Verificación de credenciales y generación de token
-        if (studentAuthenticationService.instructorLogin(data.getEmail(), data.getPassword())) {
+        if (instructorAuthenticationService.instructorLogin(data.getEmail(), data.getPassword())) {
             addTokenCookie(response, data.getEmail()); // ← Pasar solo el correo
             return ResponseEntity.ok("Inicio de sesión exitoso");
         }
@@ -73,7 +73,7 @@ public class InstructorAuthenticationController {
      */
     private void addTokenCookie(HttpServletResponse response, String email) {
         // Obtener el usuario completo de la base de datos
-        Optional<InstructorEntity> instructorOpt = studentAuthenticationService.getInstructor(email);
+        Optional<InstructorEntity> instructorOpt = instructorAuthenticationService.getInstructor(email);
         if (instructorOpt.isPresent()) {
             InstructorEntity instructor = instructorOpt.get();
             String token = jwtUtils.create(
@@ -119,7 +119,7 @@ public class InstructorAuthenticationController {
                 authorities = authentication.getAuthorities();
             }
             // Busca el instructor por su nombre de usuario (correo)
-            Optional<InstructorEntity> instructorOpt = studentAuthenticationService.getInstructor(username);
+            Optional<InstructorEntity> instructorOpt = instructorAuthenticationService.getInstructor(username);
             if (username.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(Map.of(

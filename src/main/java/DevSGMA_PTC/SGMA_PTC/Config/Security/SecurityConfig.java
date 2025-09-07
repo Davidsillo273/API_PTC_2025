@@ -37,8 +37,8 @@ public class SecurityConfig {
                                 "/api/instructorAuth/instructorLogin") // ← agrega esta línea
                         .permitAll()
                         .requestMatchers("/api/auth/me").authenticated()
-                        .requestMatchers("/api/test/admin-only").hasRole("Administrador")
-                        .requestMatchers("/api/test/cliente-only").hasRole("Cliente")
+//                        .requestMatchers("/api/test/admin-only").hasRole("Administrador")
+//                        .requestMatchers("/api/test/cliente-only").hasRole("Cliente")
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
