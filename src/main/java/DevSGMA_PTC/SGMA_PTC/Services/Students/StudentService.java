@@ -5,7 +5,7 @@ import DevSGMA_PTC.SGMA_PTC.Entities.Grades.GradeEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Grades.ExceptionGradeNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Roles.ExceptionRoleNotFound;
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionEmailStudentDuplicated;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentDuplicated;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentNotFound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Students.StudentDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Grades.GradeRepository;
@@ -55,12 +55,22 @@ public class StudentService {
      *
      * @param json Objeto StudentDTO con los datos del estudiante.
      * @return Objeto StudentDTO del estudiante creado.
-     * @throws ExceptionEmailStudentDuplicated si el correo ya existe.
+     * @throws ExceptionStudentDuplicated si el correo o el código ya existen.
      */
     public StudentDTO createStudent(@Valid StudentDTO json) {
-        if (verifyStudentExist(json.getEmail())) {
-            throw new ExceptionEmailStudentDuplicated("El correo del estudiante ya está registrado en la base de datos");
+
+        if (studentsRepository.existsByEmail(json.getEmail()) &&
+                studentsRepository.existsByStudentCard(json.getStudentCard())) {
+            throw new ExceptionStudentDuplicated("El correo del estudiante y el código ya están registrados en la base de datos");
         }
+
+        if (studentsRepository.existsByEmail(json.getEmail())) {
+            throw new ExceptionStudentDuplicated("El correo del estudiante ya está registrado en la base de datos");
+        }
+        if (studentsRepository.existsByStudentCard(json.getStudentCard())) {
+            throw new ExceptionStudentDuplicated("El código del estudiante ya está registrado en la base de datos");
+        }
+
         StudentEntity objEntity = ConvertToEntity(json);
         StudentEntity saveStudent = studentsRepository.save(objEntity);
 
@@ -75,37 +85,50 @@ public class StudentService {
      * @param id   ID del estudiante a actualizar.
      * @param json Objeto StudentDTO con los nuevos datos.
      * @return Objeto StudentDTO actualizado.
-     * @throws ExceptionStudentNotFound       si el estudiante no existe.
-     * @throws ExceptionEmailStudentDuplicated si el nuevo correo ya está registrado.
-     * @throws ExceptionRoleNotFound       si el año académico proporcionado no existe.
+     * @throws ExceptionStudentNotFound   si el estudiante no existe.
+     * @throws ExceptionStudentDuplicated si el correo o el código ya están registrados.
+     * @throws ExceptionRoleNotFound      si el año académico proporcionado no existe.
      */
     public StudentDTO updateStudent(@Valid Long id, StudentDTO json) {
-
-        //Se verifica la existencia
+        // Se verifica la existencia
         StudentEntity exist = studentsRepository.findById(id).orElseThrow(() ->
                 new ExceptionStudentNotFound("Estudiante no encontrado"));
-        if (!exist.getEmail().equals(json.getEmail())) {
-            if (verifyStudentExist(json.getEmail())) {
-                throw new ExceptionEmailStudentDuplicated("El correo del estudiante ya está registrado en la base de datos");
-            }
+
+        // Validar correo si cambia
+        if (!exist.getEmail().equals(json.getEmail()) && !exist.getStudentCard().equals(json.getStudentCard()) &&
+                studentsRepository.existsByEmail(json.getEmail())
+                && studentsRepository.existsByStudentCard(json.getStudentCard())) {
+            throw new ExceptionStudentDuplicated("El correo del estudiante y el código ya están registrados en la base de datos");
         }
-        //Actualizar valores
+
+        // Validar correo si cambia
+        if (!exist.getEmail().equals(json.getEmail()) &&
+                studentsRepository.existsByEmail(json.getEmail())) {
+            throw new ExceptionStudentDuplicated("El correo del estudiante ya está registrado en la base de datos");
+        }
+
+        // Validar código si cambia
+        if (!exist.getStudentCard().equals(json.getStudentCard()) &&
+                studentsRepository.existsByStudentCard(json.getStudentCard())) {
+            throw new ExceptionStudentDuplicated("El código del estudiante ya está registrado en la base de datos");
+        }
+
+        // Actualizar valores
         exist.setStudentCard(json.getStudentCard());
         exist.setFirstName(json.getFirstName());
         exist.setLastName(json.getLastName());
         exist.setEmail(json.getEmail());
 
-        // Solo actualiza la contraseña si se proporciona una nueva
         if (json.getPassword() != null && !json.getPassword().isEmpty()) {
             exist.setPassword(argon2.EncryptPassword(json.getPassword()));
         }
 
-        // Actualizar el año académico si se proporciona un nuevo ID del rol
         if (json.getGradeId() != null) {
             GradeEntity gradeEntity = gradeRepository.findById(json.getGradeId())
                     .orElseThrow(() -> new ExceptionGradeNotFound("ID del año académico del estudiante no encontrado"));
             exist.setGradeId(gradeEntity);
         }
+
         StudentEntity studentUpdated = studentsRepository.save(exist);
         return ConvertToDTO(studentUpdated);
     }
@@ -158,9 +181,8 @@ public class StudentService {
      * @param email Correo institucional del estudiante.
      * @return true si el correo ya existe, false si no.
      */
-    public boolean verifyStudentExist(String email) {
-
-        return studentsRepository.existsByEmail(email);
+    public boolean verifyStudentExist(String email, String studentCard) {
+        return studentsRepository.existsByEmail(email) || studentsRepository.existsByStudentCard(studentCard);
     }
 
     /**
