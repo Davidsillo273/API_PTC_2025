@@ -2,12 +2,8 @@ package DevSGMA_PTC.SGMA_PTC.Services.VehicleType;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.VehiclesTypes.VehicleTypeEntity;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.VehicleType.VehicleTypeDTO;
-import DevSGMA_PTC.SGMA_PTC.Repositories.VehicleType.VehicleTypeRepo;
-import jakarta.validation.Valid;
+import DevSGMA_PTC.SGMA_PTC.Repositories.VehicleType.VehicleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +14,7 @@ import java.util.stream.Collectors;
 public class VehicleTypeService {
 
     @Autowired
-    private VehicleTypeRepo repo;
+    private VehicleTypeRepository repo;
 
 
 //    public List<VehicleTypeDTO> getAllVehicleTypes() {
