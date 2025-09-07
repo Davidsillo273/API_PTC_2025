@@ -21,8 +21,16 @@ public class VehicleTypeService {
     private VehicleTypeRepo repo;
 
 
+//    public List<VehicleTypeDTO> getAllVehicleTypes() {
+//        List<VehicleTypeEntity> entities = repo.findAll();
+//        return entities.stream()
+//                .map(this::convertToDTO)
+//                .collect(Collectors.toList());
+//    }
+
     public List<VehicleTypeDTO> getAllVehicleTypes() {
         List<VehicleTypeEntity> entities = repo.findAll();
+        System.out.println("ENTIDADES ENCONTRADAS: " + entities.size());
         return entities.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());

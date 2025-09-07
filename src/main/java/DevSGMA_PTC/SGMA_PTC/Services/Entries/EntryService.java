@@ -9,6 +9,7 @@ import DevSGMA_PTC.SGMA_PTC.Repositories.Entries.EntryRepository;
 import DevSGMA_PTC.SGMA_PTC.Repositories.WorkOrders.WorkOrderRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Service
 public class EntryService {
 
+    @Autowired
     private EntryRepository entryRepository;
+    @Autowired
     private WorkOrderRepository workOrderRepository;
 
     /**

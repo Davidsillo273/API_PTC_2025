@@ -30,9 +30,9 @@ public class VehicleTypeEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_vehicle_types")
     @SequenceGenerator(name = "seq_vehicle_types", sequenceName = "seq_vehicle_types", allocationSize = 1)
     @Column(name = "TYPEID")
-    private Long TypeId;
+    private Long typeId;
 
-    @OneToMany(mappedBy = "typeId", cascade = CascadeType.ALL) // Relación OneToMany con tbVehicles
+    @OneToMany(mappedBy = "TYPEID", cascade = CascadeType.ALL) // Relación OneToMany con tbVehicles
     @JsonIgnore
     private List<VehicleEntity> vehicleType = new ArrayList<>();
 

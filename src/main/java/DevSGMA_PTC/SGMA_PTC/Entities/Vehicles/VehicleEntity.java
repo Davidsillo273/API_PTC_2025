@@ -13,7 +13,7 @@ import java.util.List;
 
 // Entity que representa un vehículo en la base de datos
 @Entity
-@Table(name = "tbVehicles")
+@Table(name = "TBVEHICLES")
 // Anotaciones de Lombok para generar getters, setters y equals/hashCode automáticamente
 @Getter
 @Setter
@@ -46,7 +46,7 @@ public class VehicleEntity {
 
     @ManyToOne // Muchos vehículos pueden tener el mismo tipo
     @JoinColumn(name = "TYPEID", referencedColumnName = "TYPEID") // Columna que conecta con la tabla de tipos de vehículo
-    private VehicleTypeEntity typeId;
+    private VehicleTypeEntity TYPEID;
 
     // Color del vehículo, obligatorio, máximo 30 caracteres
     @Column(name = "COLOR", length = 30, nullable = false)

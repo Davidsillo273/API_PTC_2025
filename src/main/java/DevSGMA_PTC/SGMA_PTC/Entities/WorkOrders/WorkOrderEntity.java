@@ -44,7 +44,7 @@ public class WorkOrderEntity {
     private String estimatedTime;
 
     // Imagen asociada a la orden de trabajo (puede ser URL o base64)
-    @Column(name = "WORKORDERSIMAGE")
+    @Column(name = "WORKORDERIMAGE")
     private String workOrdersImage;
 
     // Estado de la orden de trabajo (por ejemplo: pendiente, en proceso, finalizada)

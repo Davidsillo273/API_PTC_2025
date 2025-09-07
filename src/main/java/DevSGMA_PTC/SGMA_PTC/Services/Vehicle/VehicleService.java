@@ -35,8 +35,8 @@ public class VehicleService {
         dto.setVehicleImage(entity.getVehicleImage());
 
 //        //Pidiendo el ID vehicleType asociado al vehículo
-        if (entity.getTypeId() != null) {
-            VehicleTypeEntity vehicleType = entity.getTypeId();
+        if (entity.getTYPEID() != null) {
+            VehicleTypeEntity vehicleType = entity.getTYPEID();
             dto.setTypeId(vehicleType.getTypeId());
             dto.setTypeName(vehicleType.getTypeName());
         }
@@ -58,7 +58,7 @@ public class VehicleService {
         if (dto.getTypeId() != null) {
             VehicleTypeEntity vehicleType = vehicleRepo2.findById(dto.getTypeId())
                     .orElseThrow(() -> new ExceptionVehicleTypeIdNotFound("Tipo de vehículo no encontrado con ID: " + dto.getTypeId()));
-            entity.setTypeId(vehicleType);
+            entity.setTYPEID(vehicleType);
         }
         return entity;
     }

@@ -15,10 +15,13 @@ public class VehicleTypeController {
     @Autowired
     private VehicleTypeService service;
 
-    @GetMapping
-    public ResponseEntity<List<VehicleTypeDTO>> getAll() {
-        return ResponseEntity.ok(service.getAllVehicleTypes());
+    @GetMapping("/getAllTypes")
+    public List<VehicleTypeDTO> getAll() {
+        return service.getAllVehicleTypes();
     }
+//    public ResponseEntity<List<VehicleTypeDTO>> getAll() {
+//        return ResponseEntity.ok(service.getAllVehicleTypes());
+//    }
 
 //    @GetMapping("/page")
 //    public ResponseEntity<Page<VehicleTypeDTO>> getAllPaged(

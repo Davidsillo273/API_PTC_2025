@@ -16,19 +16,19 @@ public class VehicleController {
     private VehicleService vehiclesService;
 
 
-    @PostMapping
+    @PostMapping("/newVehicle")
     public VehiclesDTO save(@RequestBody VehiclesDTO dto) {
         return vehiclesService.save(dto);
     }
 
 
-    @GetMapping
+    @GetMapping("/getAllVehicles")
     public List<VehiclesDTO> getAll() {
         return vehiclesService.getAll();
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/getVehicleBy/{id}")
     public Optional<VehiclesDTO> getById(@PathVariable Long id) {
         return vehiclesService.getById(id);
     }
@@ -40,7 +40,7 @@ public class VehicleController {
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteVehicle/{id}")
     public void delete(@PathVariable Long id) {
         vehiclesService.delete(id);
     }
