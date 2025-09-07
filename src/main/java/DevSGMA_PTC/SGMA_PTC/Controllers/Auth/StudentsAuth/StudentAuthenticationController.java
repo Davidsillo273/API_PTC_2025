@@ -44,23 +44,26 @@ public class StudentAuthenticationController {
      * Endpoint para el inicio de sesión de estudiantes.
      * Valida las credenciales y genera un token JWT si son correctas.
      *
-     * @param data DTO con los datos de inicio de sesión del estudiante (email y password)
+     * @param data     DTO con los datos de inicio de sesión del estudiante (email y password)
      * @param response HttpServletResponse para agregar la cookie del token
      * @return ResponseEntity con el resultado del inicio de sesión
      */
     @PostMapping("/studentLogin")
     private ResponseEntity<String> studentLogin(@Valid @RequestBody StudentDTO data, HttpServletResponse response) {
-        System.out.println("Método controller");
+        System.out.println("Se está intentando iniciar sesión con: " + data.getEmail());
+
         // Validación de credenciales
         if (data.getEmail() == null || data.getEmail().isBlank() ||
                 data.getPassword() == null || data.getPassword().isBlank()) {
             return ResponseEntity.status(401).body("Error: Credenciales incompletas");
         }
+
         // Verificación de credenciales y generación de token
         if (studentAuthenticationService.studentLogin(data.getEmail(), data.getPassword())) {
             addTokenCookie(response, data.getEmail()); // ← Pasar solo el correo
             return ResponseEntity.ok("Inicio de sesión exitoso");
         }
+
         return ResponseEntity.status(401).body("Credenciales incorrectas");
     }
 
@@ -68,18 +71,22 @@ public class StudentAuthenticationController {
      * Genera el token JWT y lo guarda en una cookie segura.
      *
      * @param response HttpServletResponse para agregar la cookie
-     * @param email Correo institucional del estudiante
+     * @param email    Correo institucional del estudiante
      */
     private void addTokenCookie(HttpServletResponse response, String email) {
         // Obtener el usuario completo de la base de datos
         Optional<StudentEntity> studentOpt = studentAuthenticationService.getStudents(email);
+
         if (studentOpt.isPresent()) {
             StudentEntity student = studentOpt.get();
             String token = jwtUtils.create(
                     String.valueOf(student.getStudentId()),
                     student.getEmail(),
+                    null, // Rol no utilizado para estudiantes
+                    null, // Nivel no utilizado para estudiantes
                     String.valueOf(student.getGradeId().getGradeGroup()) // Grupo del estudiante
             );
+
             Cookie cookie = new Cookie("authToken", token);
             cookie.setHttpOnly(true);
             cookie.setSecure(true);
@@ -95,7 +102,7 @@ public class StudentAuthenticationController {
      * @param authentication Objeto de autenticación proporcionado por Spring Security
      * @return ResponseEntity con los datos del estudiante autenticado o mensaje de error
      */
-    @GetMapping("/me")
+    @GetMapping("/meStudent")
     public ResponseEntity<?> getCurrentStudent(Authentication authentication) {
         try {
             // Verifica si el usuario está autenticado
@@ -106,6 +113,7 @@ public class StudentAuthenticationController {
                                 "message", "No autenticado"
                         ));
             }
+
             // Maneja diferentes tipos de principal (UserDetails o nombre de usuario)
             String username;
             Collection<? extends GrantedAuthority> authorities;
@@ -117,8 +125,10 @@ public class StudentAuthenticationController {
                 username = authentication.getName();
                 authorities = authentication.getAuthorities();
             }
+
             // Busca el estudiante por su nombre de usuario (correo)
             Optional<StudentEntity> studentOpt = studentAuthenticationService.getStudents(username);
+
             if (studentOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(Map.of(
@@ -126,16 +136,19 @@ public class StudentAuthenticationController {
                                 "message", "Estudiante no encontrado"
                         ));
             }
+
             StudentEntity student = studentOpt.get();
+
             // Devuelve los datos del estudiante autenticado
             return ResponseEntity.ok(Map.of(
                     "authenticated", true,
                     "student", Map.of(
                             "id", student.getStudentId(),
-                            "nombre", student.getFirstName(),
-                            "apellido", student.getLastName(),
-                            "correo", student.getEmail(),
-                            "grupo", student.getGradeId().getGradeGroup(),
+                            "studentCard", student.getStudentCard(),
+                            "names", student.getFirstName(),
+                            "lastNames", student.getLastName(),
+                            "email", student.getEmail(),
+                            "group", student.getGradeId().getGradeGroup(),
                             "authorities", authorities.stream()
                                     .map(GrantedAuthority::getAuthority)
                                     .collect(Collectors.toList())

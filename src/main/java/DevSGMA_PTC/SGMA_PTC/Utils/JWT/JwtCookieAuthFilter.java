@@ -1,8 +1,5 @@
 package DevSGMA_PTC.SGMA_PTC.Utils.JWT;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -11,10 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -22,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
+@Component
 public class JwtCookieAuthFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtCookieAuthFilter.class);
@@ -61,18 +56,22 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
 //            Claims claims = jwtUtils.parseToken(token);
 //
 //            // EXTRAER EL ROL REAL del token
-//            String rol = jwtUtils.extractRole(token);
+//            String role = jwtUtils.extractRole(token);
+//
+//            // EXTRAER EL LEVEL REAL del token
+//            String level = jwtUtils.extractLevel(token);
 //
 //            // CREAR AUTHORITIES BASADO EN EL ROL REAL
 //            Collection<? extends GrantedAuthority> authorities =
-//                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + rol));
+//                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
+//            Collections.singletonList(new SimpleGrantedAuthority("LEVEL_" + level));
 //
 //            // CREAR AUTENTICACIÓN CON AUTHORITIES CORRECTOS
 //            UsernamePasswordAuthenticationToken authentication =
 //                    new UsernamePasswordAuthenticationToken(
 //                            claims.getSubject(), // username
 //                            null, // credentials
-//                            authorities // ← ROLES REALES
+//                            authorities // ← ROLES y LEVELS REALES
 //                    );
 //
 //            // ESTABLECER AUTENTICACIÓN EN CONTEXTO
@@ -91,12 +90,15 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
 //            sendError(response, "Error de autenticación", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 //        }
 //    }
-    // FILTRO DESACTIVADO (solo para desarrollo, en producción se debe activar)
+
+//    FILTRO DESACTIVADO(solo para desarrollo, en producción se debe activar)
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+
         // Permitir todas las peticiones sin validar JWT
         filterChain.doFilter(request, response);
     }
@@ -128,8 +130,8 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         return (path.equals("/api/auth/login") && "POST".equals(method)) ||
                 (path.equals("/api/auth/register") && "POST".equals(method)) ||
                 (path.equals("/api/public/") && "GET".equals(method)) ||
-                // Agrega esta línea en el return:
+
                 (path.equals("/api/instructorAuth/instructorLogin") && "POST".equals(method)) ||
-        (path.equals("/api/studentsAuth/studentLogin") && "POST".equals(method));
+                (path.equals("/api/studentsAuth/studentLogin") && "POST".equals(method));
     }
 }

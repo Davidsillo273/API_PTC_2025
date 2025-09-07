@@ -23,8 +23,8 @@ public class PasswordGenerator {
      * @throws IllegalArgumentException si la longitud es menor a 12
      */
     public static String generateSecurePassword(int length) {
-        if (length < 12) {
-            throw new IllegalArgumentException("La contraseña debe tener al menos 12 caracteres");
+        if (length < 8) {
+            throw new IllegalArgumentException("La contraseña debe tener al menos 8 caracteres");
         }
 
         SecureRandom random = new SecureRandom();

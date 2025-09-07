@@ -40,9 +40,8 @@ public class InstructorAuthenticationService {
             String levelName = instructor.getLevelId().getLevelName(); // Nombre del nivel del instructor
 
             // Log de información básica del usuario encontrado
-            System.out.println("Instructor encontrado, ID: " + instructor.getInstructorId() +
-                    ", email: " + instructor.getEmail() +
-                    ", rol: " + rolName);
+            System.out.println("Instructor encontrado, ID: " + instructor.getInstructorId() + ", email: " + instructor.getEmail() + ", rol: " + rolName + ", nivel: " + levelName);
+
             String HashDB = instructor.getPassword(); // Hash de la contraseña almacenada
             boolean verify = objHash.VerifyPassword(HashDB, password); // Verifica la contraseña
             return verify;

@@ -6,133 +6,105 @@ import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+@Component
 public class JWTUtils {
 
     @Value("${security.jwt.secret}")
-    private String jwtSecreto;                  // 32 caracteres por seguridad
+    private String jwtSecret;
     @Value("${security.jwt.issuer}")
-    private String issuer;                      // Firma del token
+    private String issuer;
     @Value("${security.jwt.expiration}")
-    private long expiracionMs;                  // Tiempo de expiración
+    private long msExpiration;
 
     private final Logger log = LoggerFactory.getLogger(JWTUtils.class);
 
     /**
-     * Metodo para crea JWT
+     * Metodo para crear JWT
+     *
      * @param id
      * @param email
      * @param role
-     * @return
+     * @param level
+     * @param grade puede ser null si no aplica (ej: Instructor)
+     * @return token JWT como String
      */
-    public String create(String id, String email, String role){
+    public String create(String id, String email, String role, String level, String grade) {
+
         //Decodifica el secreto Base64 y crea una clave HMAC-SHA segura
-        SecretKey signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecreto));
+        SecretKey signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
 
         //Obtiene la fecha catual y calcula la fecha de expiración
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + expiracionMs);
+        Date expiration = new Date(now.getTime() + msExpiration);
 
-        //Construye el token con sus componentes
-        return Jwts.builder()
+        JwtBuilder builder = Jwts.builder()
                 .setId(id)                                              // ID único (JWT ID)
                 .setIssuedAt(now)                                       // Fecha de emisión
                 .setSubject(email)                                     // Sujeto (usuario)
                 .claim("id", id)
-                .claim("role", role)
+                .claim("rol", role)
                 .setIssuer(issuer)                                      // Emisor del token
-                .setExpiration(expiracionMs >= 0 ? expiration : null)   // Expiración (si es >= 0)
-                .signWith(signingKey, SignatureAlgorithm.HS256)         // Firma con algoritmo HS256
-                .compact();                                             // Convierte a String compacto
+                .setExpiration(msExpiration >= 0 ? expiration : null)   // Expiración (si es >= 0)
+                .signWith(signingKey, SignatureAlgorithm.HS256);         // Firma con algoritmo HS256
+
+        if (grade != null) {
+            builder.claim("grade", grade);
+        }
+
+        return builder.compact();    // Convierte a String compacto
     }
 
-    public String extractRole(String token){
+    // Método para extraer grade del token
+    public String extractGrade(String token) {
         Claims claims = parseToken(token);
-        return claims.get("role",String.class);
+        return claims.get("grade", String.class);  // devuelve null si no existe
     }
 
-    /**
-     * Obtiene el subject (nombre) del JWT
-     * @param jwt Token JWT como String
-     * @return String con el subject del token
-     */
-    public String getValue(String jwt){
-        //Parsea los claims y devuelve el subject
-        Claims claims = parseClaims(jwt);
-        return claims.getSubject();
+    // Métodos existentes
+    public String extractRole(String token) {
+        return parseToken(token).get("role", String.class);
     }
 
-    /**
-     * Obtine el ID del JWT
-     * @param jwt
-     * @return
-     */
-    public String getKey(String jwt){
-        // Parsea los claims y devuelve el ID
-        Claims claims = parseClaims(jwt);
-        return claims.getId();
+    public String extractLevel(String token) {
+        return parseToken(token).get("level", String.class);
     }
 
-    /**
-     * Parsea y valida el token
-     * @param jwt
-     * @return
-     * @throws ExpiredJwtException
-     * @throws MalformedJwtException
-     */
-    public Claims parseToken(String jwt) throws ExpiredJwtException, MalformedJwtException {
+    public String getValue(String jwt) {
+        return parseClaims(jwt).getSubject();
+    }
+
+    public String getKey(String jwt) {
+        return parseClaims(jwt).getId();
+    }
+
+    public Claims parseToken(String jwt) {
         return parseClaims(jwt);
     }
 
-//    /**
-//     * Extraer token desde la solicitud
-//     * @param request
-//     * @return
-//     */
-//    public String extractTokenFromRequest(HttpServletRequest request){
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null){
-//            for (Cookie cookie : cookies){
-//                if ("authToken".equals(cookie.getName())){
-//                    return cookie.getValue();
-//                }
-//            }
-//        }
-//        return null;
-//    }
-
-    /**
-     * Validación del token
-     * @param token
-     * @return
-     */
-    public boolean validate(String token){
-        try{
+    public boolean validate(String token) {
+        try {
             parseClaims(token);
             return true;
-        }catch (JwtException | IllegalArgumentException e){
+        } catch (JwtException | IllegalArgumentException e) {
             log.warn("Token inválido: {}", e.getMessage());
             return false;
         }
     }
 
+
+
     //######################## METODOS COMPLEMENTARIOS ########################
 
-    /**
-     * Metodo privado para parsear los claims de un JWT
-     * @param jwt Token a parsear
-     * @return Claims del token
-     */
     private Claims parseClaims(String jwt) {
-        //Configura el parse con la clave de firma y parsea el token
         return Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecreto)))  // Clave de firma
+                .setSigningKey(Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret)))
                 .build()
                 .parseClaimsJws(jwt)
                 .getBody();
-
     }
 }

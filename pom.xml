@@ -57,13 +57,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!--Dependencia para usar anotaciones de Lombok y reducir código boilerplate-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-
         <!--Dependencia para desplegar la aplicación como WAR usando Tomcat-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
