@@ -84,7 +84,7 @@ public class VehicleEntity {
     @Column(name = "MAINTENANCEEXPO", nullable = false)
     private Long maintenanceExpo;
 
-    @Column(name = "STATUS", nullable = false)
+    @Column(name = "IDSTATUS", nullable = false)
     private Long status; // Estado del vehículo (activo/inactivo)
 
     //*** ONETOMANYS ***\\

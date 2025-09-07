@@ -113,7 +113,7 @@ public class VehicleService {
         }
 
         dto.setMaintenanceEXPO(entity.getMaintenanceExpo());
-        dto.setStatus(entity.getStatus());
+        dto.setIdStatus(entity.getStatus());
 
         return dto;
     }
@@ -148,7 +148,7 @@ public class VehicleService {
         }
 
         entity.setMaintenanceExpo(json.getMaintenanceEXPO());
-        entity.setStatus(json.getStatus());
+        entity.setStatus(json.getIdStatus());
 
         return entity;
     }

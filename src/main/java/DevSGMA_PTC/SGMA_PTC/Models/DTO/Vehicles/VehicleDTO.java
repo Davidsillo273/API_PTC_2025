@@ -102,7 +102,7 @@ public class VehicleDTO {
     private Long maintenanceEXPO; // ID del mantenimiento asociado al vehículo
 
     @Positive(message = "El estado debe ser positivo")
-    private Long status; // Estado del vehículo
+    private Long idStatus; // Estado del vehículo
 
     //Campo adicional
     private String typeName;  // Campo adicional para mostrar el tipó de automóvil, campo como tal no existe en tbVehicles
