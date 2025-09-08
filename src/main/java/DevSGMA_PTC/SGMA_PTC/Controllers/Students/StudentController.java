@@ -6,6 +6,7 @@ import java.util.Map;
 
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentDontInsert;
 import DevSGMA_PTC.SGMA_PTC.Models.ApiResponse.ApiResponse;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Instructors.InstructorDTO;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Students.StudentDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,19 @@ public class StudentController {
 
         // Retorna respuesta exitosa con los datos
         return ResponseEntity.ok(ApiResponse.success("Datos consultados correctamente", students));
+    }
+
+    @GetMapping("/getStudentById/{id}")
+    public ResponseEntity<?> getStudentById(@PathVariable Long id) {
+        StudentDTO student = studentService.getStudentById(id);
+        if (student == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of(
+                            "status", "NOT FOUND",
+                            "message", "Estudiante no encontrado"
+                    ));
+        }
+        return ResponseEntity.ok(ApiResponse.success("Estudiante encontrado", student));
     }
 
     //*** MÉTODO PARA AGREGAR UN NUEVO ESTUDIANTE ***\\

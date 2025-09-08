@@ -60,6 +60,19 @@ public class InstructorController {
         return ResponseEntity.ok(ApiResponse.success("Datos del instructor consultados correctamente", instructor));
     }
 
+    @GetMapping("/getInstructorById/{id}")
+    public ResponseEntity<?> getInstructorById(@PathVariable Long id) {
+        InstructorDTO instructor = instructorsService.getInstructorById(id);
+        if (instructor == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of(
+                            "status", "NOT FOUND",
+                            "message", "Instructor no encontrado"
+                    ));
+        }
+        return ResponseEntity.ok(ApiResponse.success("Instructor encontrado", instructor));
+    }
+
     //*** MÉTODO PARA AGREGAR UN NUEVO INSTRUCTOR ***\\
 
     /**

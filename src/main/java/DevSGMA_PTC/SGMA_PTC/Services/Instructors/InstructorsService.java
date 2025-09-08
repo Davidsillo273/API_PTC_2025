@@ -21,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 // Servicio que maneja la lógica de negocio relacionada con los instructores
 @Slf4j // Anotación de Lombok para logging
 @Service // Anotación de Spring para marcar esta clase como un servicio
@@ -49,6 +51,11 @@ public class InstructorsService {
         Page<InstructorEntity> instructorEntityPage = instructorRepository.findAll(pageable);
 
         return instructorEntityPage.map(this::convertToDTO);
+    }
+
+    public InstructorDTO getInstructorById(Long id) {
+        Optional<InstructorEntity> instructorOptional = instructorRepository.findById(id);
+        return instructorOptional.map(this::convertToDTO).orElse(null);
     }
 
     //*** MÉTODO PARA CREAR UN NUEVO INSTRUCTOR ***\\

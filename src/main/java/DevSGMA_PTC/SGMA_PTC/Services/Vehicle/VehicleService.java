@@ -74,6 +74,14 @@ public class VehicleService {
 
         return convertToDTO(saveVehicle);
     }
+    // Método para actualizar el estado de un vehículo
+    public VehicleDTO updateVehicleStatus(Long vehicleId, Long newStatus) {
+        VehicleEntity vehicle = vehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
+        vehicle.setStatus(newStatus);
+        VehicleEntity updated = vehicleRepository.save(vehicle);
+        return convertToDTO(updated);
+    }
 
 
     //*** MÉTODOS COMPLEMENTARIOS***\\

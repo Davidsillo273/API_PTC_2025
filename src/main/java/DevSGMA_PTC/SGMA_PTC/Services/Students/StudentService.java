@@ -2,11 +2,13 @@ package DevSGMA_PTC.SGMA_PTC.Services.Students;
 
 import DevSGMA_PTC.SGMA_PTC.Config.Crypto.Argon2Password;
 import DevSGMA_PTC.SGMA_PTC.Entities.Grades.GradeEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Instructors.InstructorEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Grades.ExceptionGradeNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Roles.ExceptionRoleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentDuplicated;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentNotFound;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Instructors.InstructorDTO;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Students.StudentDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Grades.GradeRepository;
 import DevSGMA_PTC.SGMA_PTC.Utils.PasswordGenerator;
@@ -19,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import DevSGMA_PTC.SGMA_PTC.Repositories.Students.StudentsRepository;
+
+import java.util.Optional;
 
 @Slf4j // Anotación de Lombok para logging
 @Service // Anotación de Spring para marcar esta clase como un servicio
@@ -46,6 +50,11 @@ public class StudentService {
         Page<StudentEntity> studentEntityPage = studentsRepository.findAll(pageable);
 
         return studentEntityPage.map(this::ConvertToDTO);
+    }
+
+    public StudentDTO getStudentById(Long id) {
+        Optional<StudentEntity> studentOptional = studentsRepository.findById(id);
+        return studentOptional.map(this::ConvertToDTO).orElse(null);
     }
 
     //*** MÉTODO PARA CREAR UN NUEVO ESTUDIANTE ***\\
