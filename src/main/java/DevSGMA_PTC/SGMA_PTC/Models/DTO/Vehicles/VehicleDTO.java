@@ -29,8 +29,8 @@ public class VehicleDTO {
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
     private Long hasPolicy; // Indica si el vehículo tiene póliza de seguro
 
-    @NotBlank(message = "El número de póliza es obligatorio si tiene póliza")
-    // Validación para que el campo no esté vacío o solo contenga espacios en blanco
+
+
     @Size(min = 8, message = "El número de póliza debe tener al menos 8 dígitos")
     @Size(max = 15, message = "El número de póliza no puede exceder 15 caracteres")
     // Validación para el tamaño máximo del número de póliza
@@ -38,7 +38,7 @@ public class VehicleDTO {
 
     @NotBlank(message = "La marca es obligatoria")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
-    @Size(min = 16, message = "La marca debe tener al menos 16 dígitos")
+    @Size(min = 3, message = "La marca debe tener al menos 16 dígitos")
     // Validación para el tamaño mínimo de la contraseña
     @Size(max = 50, message = "La marca no puede exceder 50 caracteres")
     // Validación para el tamaño máximo de la marca
@@ -46,7 +46,7 @@ public class VehicleDTO {
 
     @NotBlank(message = "El modelo es obligatorio")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
-    @Size(min = 16, message = "El modelo debe tener al menos 16 carácter")
+    @Size(min = 3, message = "El modelo debe tener al menos 16 carácter")
     @Size(max = 50, message = "El modelo no puede exceder 50 caracteres")
     // Validación para el tamaño máximo del modelo
     private String model; // Modelo del vehículo
@@ -86,7 +86,7 @@ public class VehicleDTO {
 
     @NotBlank(message = "El teléfono del propietario es obligatorio")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
-    @Size(min = 8, max = 10, message = "El teléfono debe tener entre 8 y 10 caracteres")
+    @Size(min = 7, max = 10, message = "El teléfono debe tener entre 8 y 10 caracteres")
     // Validación para que el teléfono tenga entre 8 y 10 caracteres
     private String ownerPhone; // Teléfono del propietario del vehículo
 
@@ -97,11 +97,9 @@ public class VehicleDTO {
     // Validación para que el ID del estudiante sea positivo
     private Long studentId; // ID del estudiante asociado al vehículo
 
-    @Positive(message = "El número debe ser positivo")
-    // Validación para que el ID del mantenimiento sea positivo
     private Long maintenanceEXPO; // ID del mantenimiento asociado al vehículo
 
-    @Positive(message = "El estado debe ser positivo")
+
     private Long idStatus; // Estado del vehículo
 
     //Campo adicional

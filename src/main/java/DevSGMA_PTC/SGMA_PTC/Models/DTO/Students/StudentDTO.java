@@ -27,7 +27,7 @@ public class StudentDTO {
     //Validaciones para los nombres del estudiante
     @NotBlank(message = "Los nombres del estudiante son obligatorio")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
-    @Size(min = 5, message = "El nombre del estudiante debe tener al menos 5 caracteres")
+    @Size(min = 3, message = "El nombre del estudiante debe tener al menos 5 caracteres")
     // Validación para el tamaño máximo del nombre
     @Size(max = 50, message = "El nombre del estudiante no puede exceder los 50 caracteres")
     // Validación para el tamaño mínimo del nombre
@@ -36,7 +36,7 @@ public class StudentDTO {
     //Validaciones para los apellidos del estudiante
     @NotBlank(message = "Los apellidos del estudiante son obligatorio")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
-    @Size(min = 5, message = "El apellido del estudiante debe tener al menos 5 caracteres")
+    @Size(min = 3, message = "El apellido del estudiante debe tener al menos 5 caracteres")
     // Validación para el tamaño máximo del apellido
     @Size(max = 50, message = "El apellido del estudiante no puede exceder los 50 caracteres")
     // Validación para el tamaño mínimo del apellido

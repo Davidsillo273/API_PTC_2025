@@ -47,7 +47,7 @@ public class JWTUtils {
                 .setIssuedAt(now)                                       // Fecha de emisión
                 .setSubject(email)                                     // Sujeto (usuario)
                 .claim("id", id)
-                .claim("rol", role)
+                .claim("role", role)
                 .setIssuer(issuer)                                      // Emisor del token
                 .setExpiration(msExpiration >= 0 ? expiration : null)   // Expiración (si es >= 0)
                 .signWith(signingKey, SignatureAlgorithm.HS256);         // Firma con algoritmo HS256
