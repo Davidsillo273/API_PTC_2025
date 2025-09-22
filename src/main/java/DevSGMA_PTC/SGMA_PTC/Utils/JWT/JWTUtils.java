@@ -48,6 +48,8 @@ public class JWTUtils {
                 .setSubject(email)                                     // Sujeto (usuario)
                 .claim("id", id)
                 .claim("role", role)
+                .claim("level", level)
+                .claim("grade", grade)
                 .setIssuer(issuer)                                      // Emisor del token
                 .setExpiration(msExpiration >= 0 ? expiration : null)   // Expiración (si es >= 0)
                 .signWith(signingKey, SignatureAlgorithm.HS256);         // Firma con algoritmo HS256
@@ -68,6 +70,10 @@ public class JWTUtils {
     // Métodos existentes
     public String extractRole(String token) {
         return parseToken(token).get("role", String.class);
+    }
+
+    public String extractEmail(String token){
+        return parseClaims(token).getSubject();
     }
 
     public String extractLevel(String token) {

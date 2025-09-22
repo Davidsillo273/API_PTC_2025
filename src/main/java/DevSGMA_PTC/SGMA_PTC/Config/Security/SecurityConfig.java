@@ -109,6 +109,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/grades/getAllGrades").permitAll()
                         .requestMatchers("/api/auth/me").authenticated()
 
+                        //GRADES
+                        .requestMatchers(HttpMethod.POST, "/api/grades/newGrade").hasAnyAuthority("ROLE_Administrador","ROLE_Coordinador")
 
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess
