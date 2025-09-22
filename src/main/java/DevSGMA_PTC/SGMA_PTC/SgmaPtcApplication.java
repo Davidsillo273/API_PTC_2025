@@ -1,6 +1,5 @@
 package DevSGMA_PTC.SGMA_PTC;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,7 +9,6 @@ public class SgmaPtcApplication {
     public static void main(String[] args) {
 
         loadEnvVariables();
-
         SpringApplication.run(SgmaPtcApplication.class, args);
     }
 
