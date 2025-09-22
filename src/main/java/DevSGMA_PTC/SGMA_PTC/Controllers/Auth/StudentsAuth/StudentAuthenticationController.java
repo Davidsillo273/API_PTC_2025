@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * Proporciona endpoints para el inicio de sesión y la obtención de datos del estudiante autenticado.
  */
 @RestController
-@RequestMapping("api/studentsAuth")
+@RequestMapping("/api/studentsAuth")
 public class StudentAuthenticationController {
 
     /**
