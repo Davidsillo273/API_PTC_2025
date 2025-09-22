@@ -15,14 +15,22 @@ public class SgmaPtcApplication {
     }
 
     static void loadEnvVariables() {
-        // Carga las variables de entorno desde un archivo .env usando la librería Dot
-        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
-        // Establece cada variable de entorno como una propiedad del sistema
-        dotenv.entries().forEach(entry ->
-                System.setProperty(entry.getKey(), entry.getValue())
-        );
+        // Verificar si estamos en Heroku (PORT es una variable que siempre existe en Heroku)
+        boolean isHeroku = System.getenv("PORT") != null;
 
+        if (isHeroku) {
+            System.out.println("Ejecutando en Heroku - usando variables de entorno del sistema");
+            String port = System.getenv("PORT");
+            if (port == null) {
+                port = "8080";
+            }
+            System.setProperty("server.port", port);
+        }
 
+        // Asegurar que el puerto de Heroku tenga prioridad
+        String herokuPort = System.getenv("PORT");
+        if (herokuPort != null) {
+            System.setProperty("server.port", herokuPort);
+        }
     }
-
 }
