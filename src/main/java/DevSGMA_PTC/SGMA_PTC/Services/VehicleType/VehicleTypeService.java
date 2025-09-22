@@ -17,7 +17,7 @@ public class VehicleTypeService {
     private VehicleTypeRepository repo;
 
 
-//    public List<VehicleTypeDTO> getAllVehicleTypes() {
+//    public List<VehicleTypeDTO> getAllRoles() {
 //        List<VehicleTypeEntity> entities = repo.findAll();
 //        return entities.stream()
 //                .map(this::convertToDTO)
@@ -32,7 +32,7 @@ public class VehicleTypeService {
                 .collect(Collectors.toList());
     }
 //
-//    public Page<VehicleTypeDTO> getAllVehicleTypes(int page, int size) {
+//    public Page<VehicleTypeDTO> getAllRoles(int page, int size) {
 //        Pageable pageable = PageRequest.of(page, size);
 //        Page<VehicleTypeEntity> entities = repo.findAll(pageable);
 //        return entities.map(this::convertToDTO);

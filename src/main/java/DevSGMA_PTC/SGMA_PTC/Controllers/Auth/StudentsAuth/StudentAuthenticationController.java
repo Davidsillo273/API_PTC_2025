@@ -6,7 +6,6 @@ import DevSGMA_PTC.SGMA_PTC.Services.Auth.StudentsAuth.StudentAuthenticationServ
 import DevSGMA_PTC.SGMA_PTC.Utils.JWT.JWTUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

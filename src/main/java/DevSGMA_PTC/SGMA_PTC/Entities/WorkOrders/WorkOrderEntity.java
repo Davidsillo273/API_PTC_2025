@@ -27,8 +27,8 @@ public class WorkOrderEntity {
     // ID de la orden de trabajo, clave primaria generada automáticamente
     @Id
     @Column(name = "WORKORDERID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_work_orders")
+    @SequenceGenerator(name = "seq_work_orders", sequenceName = "seq_work_orders", allocationSize = 1)
     private Long workOrderId;
 
     @ManyToOne // Muchas órdenes de trabajo pueden estar asociadas a un mismo vehículo

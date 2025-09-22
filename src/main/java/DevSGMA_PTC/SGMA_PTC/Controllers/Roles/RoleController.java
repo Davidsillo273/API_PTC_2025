@@ -2,9 +2,7 @@ package DevSGMA_PTC.SGMA_PTC.Controllers.Roles;
 
 
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Roles.RoleDTO;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.VehicleType.VehicleTypeDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.Roles.RoleService;
-import DevSGMA_PTC.SGMA_PTC.Services.VehicleType.VehicleTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +17,7 @@ public class RoleController {
     private RoleService service;
 
     @GetMapping("/getAllRoles")
-    public List<RoleDTO> getAll() {
-        return service.getAllVehicleTypes();
+    public List<RoleDTO> getAllRoles() {
+        return service.getAllRoles();
     }
 }

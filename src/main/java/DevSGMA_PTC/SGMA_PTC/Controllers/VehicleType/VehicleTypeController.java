@@ -19,8 +19,8 @@ public class VehicleTypeController {
     public List<VehicleTypeDTO> getAll() {
         return service.getAllVehicleTypes();
     }
-//    public ResponseEntity<List<VehicleTypeDTO>> getAll() {
-//        return ResponseEntity.ok(service.getAllVehicleTypes());
+//    public ResponseEntity<List<VehicleTypeDTO>> getAllRoles() {
+//        return ResponseEntity.ok(service.getAllRoles());
 //    }
 
 //    @GetMapping("/page")
@@ -28,7 +28,7 @@ public class VehicleTypeController {
 //            @RequestParam(defaultValue = "0") int page,
 //            @RequestParam(defaultValue = "10") int size
 //    ) {
-//        return ResponseEntity.ok(service.getAllVehicleTypes(page, size));
+//        return ResponseEntity.ok(service.getAllRoles(page, size));
 //    }
 //
 //

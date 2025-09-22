@@ -27,8 +27,8 @@ public class ModuleEntity {
     // ID del módulo, clave primaria generada automáticamente
     @Id
     @Column(name = "MODULEID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_modules")
+    @SequenceGenerator(name = "seq_modules", sequenceName = "seq_modules", allocationSize = 1)
     private Long moduleId;
 
     // Nombre del módulo académico, no puede ser nulo

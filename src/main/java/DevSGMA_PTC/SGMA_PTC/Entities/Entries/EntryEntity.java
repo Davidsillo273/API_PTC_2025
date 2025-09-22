@@ -20,8 +20,8 @@ public class EntryEntity {
     //*** ATRIBUTOS ***\\
     @Id
     @Column(name = "ENTRYID") // Mapea el campo entryId con la columna ENTRYID de la tabla
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_entries")
+    @SequenceGenerator(name = "seq_entries", sequenceName = "seq_entries", allocationSize = 1)
     private Long entryId; // Identificador único de la entrada
 
     @Column(name = "ENTRYDATE") // Mapea el campo entryDate con la columna ENTRYDATE de la tabla

@@ -20,8 +20,8 @@ public class GradeEntity {
     //*** ATRIBUTOS ***\\
 
     @Id // Indica que este campo es la clave primaria de la entidad
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include // Incluye este campo en los métodos equals y hashCode generados por Lombok
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_grades")
+    @SequenceGenerator(name = "seq_grades", sequenceName = "seq_grades", allocationSize = 1)
     @Column(name = "GRADEID") // Mapea el campo id con la columna GRADEID de la tabla
     private Long gradeId; // Identificador único del grado
 

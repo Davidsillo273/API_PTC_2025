@@ -28,7 +28,10 @@ public class GradeService {
 
     // Obtener todos los grados
     public List<GradeDTO> getAllGrades() {
-        return repo.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
+        return repo.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors
+                        .toList());
     }
 
 //    // Insertar un grado

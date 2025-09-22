@@ -26,8 +26,8 @@ public class LevelEntity {
 
     // ID del nivel, clave primaria generada automáticamente
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_levels")
+    @SequenceGenerator(name = "seq_levels", sequenceName = "seq_levels", allocationSize = 1)
     @Column(name = "LEVELID")
     private Long levelId;
 
