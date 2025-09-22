@@ -22,7 +22,7 @@ public class SgmaPtcApplication {
             System.out.println("Ejecutando en Heroku - usando variables de entorno del sistema");
             String port = System.getenv("PORT");
             if (port == null) {
-                port = "8080";
+                port = "8081";
             }
             System.setProperty("server.port", port);
         }
