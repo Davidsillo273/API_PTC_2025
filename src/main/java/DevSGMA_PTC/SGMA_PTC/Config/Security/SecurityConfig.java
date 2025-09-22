@@ -75,6 +75,7 @@ package DevSGMA_PTC.SGMA_PTC.Config.Security;
 import DevSGMA_PTC.SGMA_PTC.Utils.JWT.JwtCookieAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -99,18 +100,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // **LÍNEA AÑADIDA**
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // ← Configura CORS aquí
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
-                )
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ← Permite preflight requests
+                        .requestMatchers(HttpMethod.POST,"/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/logout").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/grades/getAllGrades").permitAll()
+                        .requestMatchers("/api/auth/me").authenticated()
+
+
+                        .anyRequest().authenticated())
                 .sessionManagement(sess -> sess
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .addFilterBefore(
-                        jwtCookieAuthFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                );
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtCookieAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
