@@ -22,7 +22,7 @@ public class VehicleController {
     @Autowired
     private VehicleService vehicleService;
 
-    @GetMapping("/getDataVehicles")
+    @GetMapping("/getAllVehicles")
     public ResponseEntity<ApiResponse<Page<VehicleDTO>>> getAllStudents(
             @RequestParam(defaultValue = "0") int page, // Página por defecto 0
             @RequestParam(defaultValue = "10") int size // Tamaño por defecto 10
@@ -48,7 +48,7 @@ public class VehicleController {
         return ResponseEntity.ok(ApiResponse.success("Datos consultados correctamente", vehicles));
     }
 
-    @PostMapping("/addNewVehicle")
+    @PostMapping("/newVehicle")
     public ResponseEntity<ApiResponse<VehicleDTO>> createVehicle(@Valid @RequestBody VehicleDTO json
     ) {
         // Verifica si el JSON recibido es nulo
@@ -68,7 +68,7 @@ public class VehicleController {
         return ResponseEntity.ok(ApiResponse.success("Vehículo registrado exitosamente", vehicleSaved));
     }
 
-    @PatchMapping("/updateStatus/{vehicleId}")
+    @PatchMapping("/updateStatusVehicle/{id}")
     public ResponseEntity<ApiResponse<VehicleDTO>> updateVehicleStatus(
             @PathVariable Long vehicleId,
             @RequestParam Long newStatus

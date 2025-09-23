@@ -22,6 +22,7 @@ public class CorsConfig {
         config.addAllowedOrigin("http://localhost"); // Para desarrollo
         config.addAllowedOrigin("https://localhost"); // para la movil
         config.addAllowedOrigin("https://movil-sgma.vercel.app/"); // Para producción
+        config.addAllowedOrigin("https://movil-sgma-web.netlify.app/");
 
         // Métodos permitidos
         config.addAllowedMethod("GET");
@@ -57,12 +58,11 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("http://localhost:8080");
-        configuration.addAllowedOrigin("http://localhost:4200");
         configuration.addAllowedOrigin("http://localhost");
-        configuration.addAllowedOrigin("https://movil-sgma.vercel.app/");
+        configuration.addAllowedOrigin("https://localhost");
         configuration.addAllowedOrigin("https://*.herokuapp.com");
+        configuration.addAllowedOrigin("https://movil-sgma.vercel.app/");
+        configuration.addAllowedOrigin("https://movil-sgma-web.netlify.app/");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
 

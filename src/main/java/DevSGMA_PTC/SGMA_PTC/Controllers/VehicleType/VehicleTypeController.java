@@ -1,5 +1,7 @@
 package DevSGMA_PTC.SGMA_PTC.Controllers.VehicleType;
 
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Grades.ExceptionGradeNotFound;
+import DevSGMA_PTC.SGMA_PTC.Models.ApiResponse.ApiResponse;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.VehicleType.VehicleTypeDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.VehicleType.VehicleTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +11,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/vehicle-types")
+@RequestMapping("/api/vehicleTypes")
 public class VehicleTypeController {
 
     @Autowired
-    private VehicleTypeService service;
+    private VehicleTypeService vehicleTypeService;
 
-    @GetMapping("/getAllTypes")
-    public List<VehicleTypeDTO> getAll() {
-        return service.getAllVehicleTypes();
+
+    //*** MÉTODO PARA OBTENER TODOS LOS ROLES ***\\
+    @GetMapping("/getAllVehiclesTypes")
+    public ResponseEntity<ApiResponse<List<VehicleTypeDTO>>> getAllVehiclesTypes() {
+        List<VehicleTypeDTO> vehicleTypeDTO = vehicleTypeService.getAllVehicleTypes();
+        if (vehicleTypeDTO == null || vehicleTypeDTO.isEmpty()) {
+            throw new ExceptionGradeNotFound("No se encontraron ningún tipo de auto");
+        }
+        return ResponseEntity.ok(ApiResponse.success("Tipo de auto consultados correctamente", vehicleTypeDTO));
     }
+
 //    public ResponseEntity<List<VehicleTypeDTO>> getAllRoles() {
 //        return ResponseEntity.ok(service.getAllRoles());
 //    }

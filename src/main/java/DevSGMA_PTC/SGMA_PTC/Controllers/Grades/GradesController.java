@@ -28,13 +28,13 @@ public class GradesController {
     public ResponseEntity<ApiResponse<List<GradeDTO>>> getAllGrades() {
         List<GradeDTO> grades = gradeService.getAllGrades();
         if (grades == null || grades.isEmpty()) {
-            throw new ExceptionGradeNotFound("No se encontraron grados registrados");
+            throw new ExceptionGradeNotFound("No se encontraron grados");
         }
         return ResponseEntity.ok(ApiResponse.success("Grados consultados correctamente", grades));
     }
 
 //    //*** MÉTODO PARA INSERTAR UN NUEVO GRADO ***\\
-//    @PostMapping("/add")
+//    @PostMapping("/newGrade")
 //    public ResponseEntity<ApiResponse<GradeDTO>> insertGrade(@Valid @RequestBody GradeDTO dto) {
 //        if (dto == null) {
 //            throw new ExceptionGradeDontRegister("Error al recibir la información del grado");
@@ -49,7 +49,7 @@ public class GradesController {
 //    }
 //
 //    //*** MÉTODO PARA ACTUALIZAR UN GRADO EXISTENTE ***\\
-//    @PutMapping("/updateModule/{id}")
+//    @PutMapping("/updateGrade/{id}")
 //    public ResponseEntity<?> updateGrade(@Valid @PathVariable Long id, @RequestBody GradeDTO dto, BindingResult bindingResult) {
 //        if (bindingResult.hasErrors()) {
 //            Map<String, String> errors = new HashMap<>();
@@ -76,7 +76,7 @@ public class GradesController {
 //    }
 //
 //    //*** MÉTODO PARA ELIMINAR UN GRADO POR ID ***\\
-//    @DeleteMapping("/deleteModule/{id}")
+//    @DeleteMapping("/deleteGrade/{id}")
 //    public ResponseEntity<Map<String, Object>> deleteGrade(@PathVariable Long id) {
 //        try {
 //            boolean deleted = gradeService.delete(id);

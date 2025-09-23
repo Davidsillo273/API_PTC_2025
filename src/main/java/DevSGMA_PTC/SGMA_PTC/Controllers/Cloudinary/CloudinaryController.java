@@ -11,10 +11,12 @@ import java.util.Map;
 
 // Indica que esta clase es un controlador REST y manejará solicitudes HTTP
 @RestController
+
 // Define la ruta base para todos los endpoints en este controlador: "/api/image"
-@RequestMapping("/api/image")
+@RequestMapping("/api/images")
 @CrossOrigin
 public class CloudinaryController {
+
     // Inyección del servicio Cloudinary (maneja la lógica de subida de imágenes)
     @Autowired
     private final CloudinaryService cloudinaryService;
@@ -25,7 +27,7 @@ public class CloudinaryController {
     }
 
     // Endpoint POST para subir una imagen a Cloudinary (sin carpeta específica)
-    @PostMapping("/upload")
+    @PostMapping("/uploadImages")
     public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file) {
         try {
             // Llama al servicio para subir la imagen y obtener su URL

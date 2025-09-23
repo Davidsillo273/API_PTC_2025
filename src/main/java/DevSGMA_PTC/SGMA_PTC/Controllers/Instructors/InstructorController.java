@@ -18,6 +18,7 @@ import java.util.Map;
 
 // Indica que esta clase es un controlador REST
 @RestController
+
 // Ruta base para todos los endpoints de esta clase
 @RequestMapping("/api/instructors")
 public class InstructorController {
@@ -37,7 +38,7 @@ public class InstructorController {
      * Retorna error si los parámetros son inválidos o si ocurre un problema en el servicio.
      */
 
-    @GetMapping("/getDataInstructors")
+    @GetMapping("/getAllInstructors")
     public ResponseEntity<ApiResponse<Page<InstructorDTO>>> getAllInstructors(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
@@ -83,7 +84,7 @@ public class InstructorController {
      * Lanza excepción si el JSON es nulo o si falla el guardado.
      */
 
-    @PostMapping("/addNewInstructor")
+    @PostMapping("/newInstructor")
     public ResponseEntity<ApiResponse<InstructorDTO>> createInstructor(@Valid @RequestBody InstructorDTO json) {
         if (json == null) {
             throw new ExceptionInstructorDontInsert("Error al recibir y procesar la información del instructor");

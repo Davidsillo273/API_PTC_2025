@@ -22,7 +22,7 @@ public class LevelsController {
     private LevelService levelService;
 
     //*** OBTENER TODOS LOS NIVELES ***//
-    @GetMapping("/getDataLevels")
+    @GetMapping("/getAllLevels")
     public ResponseEntity<?> getAllLevels() {
         try {
             return ResponseEntity.ok(ApiResponse.success("Datos consultados correctamente", levelService.getAllLevels()));
@@ -36,7 +36,7 @@ public class LevelsController {
     }
 
 //    //*** CREAR UN NUEVO NIVEL ***//
-//    @PostMapping("/addLevel")
+//    @PostMapping("/newLevel")
 //    public ResponseEntity<?> createLevel(@Valid @RequestBody LevelsDTO json, BindingResult bindingResult) {
 //        // Validación de campos
 //        if (bindingResult.hasErrors()) {

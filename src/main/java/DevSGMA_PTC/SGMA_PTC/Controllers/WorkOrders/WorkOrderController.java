@@ -17,12 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/WorkOrders")
+@RequestMapping("/api/workOrders")
 @CrossOrigin
 public class WorkOrderController {
 
     @Autowired
-    private WorkOrderService service;
+    private WorkOrderService workOrderService;
 
     /***
      *
@@ -31,7 +31,7 @@ public class WorkOrderController {
      * @return en la parte del FrontEnd devolvera la vista en forma de paginación
      */
     @GetMapping("/getAllWorkOrders")
-    private ResponseEntity<Page<WorkOrderDTO>> getDataWorkOrders(
+    private ResponseEntity<Page<WorkOrderDTO>> getAllWorkOrders(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ){
@@ -41,7 +41,7 @@ public class WorkOrderController {
             ));
             return ResponseEntity.ok(null);
         }
-        Page<WorkOrderDTO> WorkOrders = service.getAllWorkOrders(page, size);
+        Page<WorkOrderDTO> WorkOrders = workOrderService.getAllWorkOrders(page, size);
         if (WorkOrders == null){
             ResponseEntity.badRequest().body(Map.of(
                     "status", "No hay Ordenes de trabajo registradas"
@@ -58,10 +58,10 @@ public class WorkOrderController {
      * el segundo caso es que exitosamente pudo crearse
      * y finalmente como tercer caso, un error que no pudo crearse la orden de trabajo
      */
-    @PostMapping("/newWorkOrders")
+    @PostMapping("/newWorkOrder")
     private ResponseEntity<Map<String, Object>> insertWorkOrder(@Valid @RequestBody WorkOrderDTO json, HttpServletRequest request){
         try{
-            WorkOrderDTO response =service.insert(json);
+            WorkOrderDTO response = workOrderService.insert(json);
             if (response == null){
                 return ResponseEntity.badRequest().body(Map.of(
                         "Error", "Inserción incorrecta",
@@ -96,7 +96,7 @@ public class WorkOrderController {
         }
 
         try{
-            WorkOrderDTO workOrderUpdated = service.update(id, WorkOrders);
+            WorkOrderDTO workOrderUpdated = workOrderService.update(id, WorkOrders);
             return ResponseEntity.ok(workOrderUpdated);
         }
         catch (ExceptionWorkOrdernotfound e){
@@ -106,9 +106,9 @@ public class WorkOrderController {
     @DeleteMapping("/deleteWorkOrder/{id}")
     public ResponseEntity<Map<String, Object>> DeleteWorkOrder(@PathVariable Long id) {
         try {
-            // Intenta eliminar Orden de trabajo por medio del obj service
+            // Intenta eliminar Orden de trabajo por medio del obj workOrderService
             // Si el metodo deleteModule devuelve false, no se ha encontrado ninguna orden de trabajo
-            if (!service.delete(id)) {
+            if (!workOrderService.delete(id)) {
                 // Retorna un error de 404 NO HA SIDO ENCONTRADO
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         // Agrega un header personalizado

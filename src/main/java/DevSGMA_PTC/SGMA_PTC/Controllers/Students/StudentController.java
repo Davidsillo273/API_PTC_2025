@@ -35,7 +35,7 @@ public class StudentController {
      * Retorna error si los parámetros son inválidos o si ocurre un problema en el servicio.
      */
 
-    @GetMapping("/getDataStudents")
+    @GetMapping("/getAllStudents")
     public ResponseEntity<ApiResponse<Page<StudentDTO>>> getAllStudents(
             @RequestParam(defaultValue = "0") int page, // Página por defecto 0
             @RequestParam(defaultValue = "10") int size // Tamaño por defecto 10
@@ -85,7 +85,7 @@ public class StudentController {
      * Lanza excepción si el JSON es nulo o si falla el guardado.
      */
 
-    @PostMapping("/addNewStudent")
+    @PostMapping("/newStudent")
     public ResponseEntity<ApiResponse<StudentDTO>> createStudent(@Valid @RequestBody StudentDTO json
     ) {
         // Verifica si el JSON recibido es nulo

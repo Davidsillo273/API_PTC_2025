@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/Entries")
+@RequestMapping("/api/entries")
 @CrossOrigin
 public class EntryController {
 
     @Autowired
-    private EntryService service;
+    private EntryService entryService;
 
     /**
      * Obtiene todas las entradas (Entry) del sistema con paginación.
@@ -38,7 +38,7 @@ public class EntryController {
             ));
             return ResponseEntity.ok(null);
         }
-        Page<EntryDTO> entries = service.getAllEntries(page, size);
+        Page<EntryDTO> entries = entryService.getAllEntries(page, size);
         if (entries == null) {
             ResponseEntity.badRequest().body(Map.of(
                     "status", "No hay entradas registradas"
@@ -58,7 +58,7 @@ public class EntryController {
     @PostMapping("/newEntry")
     private ResponseEntity<Map<String, Object>> createEntry(@Valid @RequestBody EntryDTO json, HttpServletRequest request) {
         try {
-            EntryDTO response = service.createEntry(json);
+            EntryDTO response = entryService.createEntry(json);
             if (response == null) {
                 return ResponseEntity.badRequest().body(Map.of(
                         "Error", "Inserción incorrecta",

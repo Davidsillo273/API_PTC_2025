@@ -5,6 +5,7 @@ import DevSGMA_PTC.SGMA_PTC.Models.DTO.Students.StudentDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.Auth.StudentsAuth.StudentAuthenticationService;
 import DevSGMA_PTC.SGMA_PTC.Utils.JWT.JWTUtils;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -161,5 +162,23 @@ public class StudentAuthenticationController {
                             "message", "Error obteniendo datos del estudiante"
                     ));
         }
+    }
+
+    @PostMapping("/logoutStudent")
+    public ResponseEntity<String> logoutStudent(HttpServletRequest request, HttpServletResponse response) {
+        // Crear cookie de expiración con SameSite=None
+        String cookieValue = "authToken=; Path=/; HttpOnly; Secure; SameSite=None; MaxAge=0; Domain=sgma-66ec41075156.herokuapp.com";
+
+        response.addHeader("Set-Cookie", cookieValue);
+        response.addHeader("Access-Control-Expose-Headers", "Set-Cookie");
+
+        // También agregar headers CORS para la respuesta
+        String origin = request.getHeader("Origin");
+        if (origin != null &&
+                (origin.contains("localhost") || origin.contains("herokuapp.com"))) {
+            response.setHeader("Access-Control-Allow-Origin", origin);
+        }
+        return ResponseEntity.ok()
+                .body("Logout exitoso");
     }
 }

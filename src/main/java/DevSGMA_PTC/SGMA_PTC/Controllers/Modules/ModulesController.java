@@ -64,7 +64,7 @@ public class ModulesController {
      * @return ResponseEntity con un ApiResponse que contiene el módulo registrado.
      * @throws ExceptionModuleDontRegister si el módulo no puede ser registrado.
      */
-    @PostMapping("/addNewModule")
+    @PostMapping("/newModule")
     public ResponseEntity<ApiResponse<ModuleDTO>> createNewModule(@Valid @RequestBody ModuleDTO dto) {
         if (dto == null) {
             throw new ExceptionModuleDontRegister("Error al recibir la información del módulo");
