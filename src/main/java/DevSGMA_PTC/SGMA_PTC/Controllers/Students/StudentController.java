@@ -6,7 +6,6 @@ import java.util.Map;
 
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentDontInsert;
 import DevSGMA_PTC.SGMA_PTC.Models.ApiResponse.ApiResponse;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Instructors.InstructorDTO;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Students.StudentDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +61,37 @@ public class StudentController {
         return ResponseEntity.ok(ApiResponse.success("Datos consultados correctamente", students));
     }
 
+    //*** MÉTODO PARA OBTENER UN ESTUDIANTE POR ID ***\\
+    /**
+     * Obtiene un estudiante por su ID.
+     *
+     * @param id ID del estudiante a buscar.
+     * @return ResponseEntity con un ApiResponse que contiene el estudiante (StudentDTO) si se encuentra.
+     * Retorna error 404 si no se encuentra el estudiante.
+     */
     @GetMapping("/getStudentById/{id}")
     public ResponseEntity<?> getStudentById(@PathVariable Long id) {
         StudentDTO student = studentService.getStudentById(id);
+        if (student == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of(
+                            "status", "NOT FOUND",
+                            "message", "Estudiante no encontrado"
+                    ));
+        }
+        return ResponseEntity.ok(ApiResponse.success("Estudiante encontrado", student));
+    }
+
+    //*** MÉTODO PARA OBTENER UN ESTUDIANTE POR CARNET ***\\
+    /**
+     * Obtiene un estudiante por su carnet.
+     * @param studentCard Carnet del estudiante a buscar.
+     * @return ResponseEntity con un ApiResponse que contiene el estudiante encontrado (StudentDTO).
+     * Si no se encuentra el estudiante, retorna un mensaje de error con estado 404.
+     */
+    @GetMapping("/getStudentByStudenCard/{studentCard}")
+    public ResponseEntity<?> getStudentByStudentCard(@PathVariable String studentCard) {
+        StudentDTO student = studentService.getStudentByStudentCard(studentCard);
         if (student == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of(

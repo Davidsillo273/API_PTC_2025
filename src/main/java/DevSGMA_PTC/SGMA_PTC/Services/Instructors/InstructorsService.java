@@ -53,8 +53,26 @@ public class InstructorsService {
         return instructorEntityPage.map(this::convertToDTO);
     }
 
+    //*** MÉTODO PARA OBTENER UN INSTRUCTOR POR ID O CORREO ***\\
+    /**
+     * Obtiene un instructor por su ID y lo convierte a DTO.
+     *
+     * @param id ID del instructor a buscar.
+     * @return Objeto InstructorDTO si se encuentra, null si no existe.
+     */
     public InstructorDTO getInstructorById(Long id) {
         Optional<InstructorEntity> instructorOptional = instructorRepository.findById(id);
+        return instructorOptional.map(this::convertToDTO).orElse(null);
+    }
+
+    /**
+     * Obtiene un instructor por su correo electrónico y lo convierte a DTO.
+     *
+     * @param email Correo electrónico del instructor a buscar.
+     * @return Objeto InstructorDTO si se encuentra, null si no existe.
+     */
+    public InstructorDTO getInstructorByEmail(String email) {
+        Optional<InstructorEntity> instructorOptional = instructorRepository.findByEmail(email);
         return instructorOptional.map(this::convertToDTO).orElse(null);
     }
 

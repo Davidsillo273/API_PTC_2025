@@ -17,7 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VehicleService {
@@ -42,25 +42,25 @@ public class VehicleService {
     }
 
     // Métodos para obtener vehículos por diferentes criterios
-    public List<VehicleDTO> getByPlateNumber(String plateNumber) {
-        return vehicleRepository.findByPlateNumber(plateNumber)
-                .map(this::convertToDTO) // convierte si existe
-                .map(List::of)           // lo mete en una lista con un solo elemento
-                .orElseGet(List::of);    // si no existe, devuelve lista vacía
+    public VehicleDTO getByPlateNumber(String plateNumber) {
+        Optional<VehicleEntity> vehicleOptional = vehicleRepository.findByPlateNumber(plateNumber);
+        return vehicleOptional
+                .map(this::convertToDTO)
+                .orElse(null);
     }
 
-    public List<VehicleDTO> getByCirculationCardNumber(String circulationCardNumber) {
-        return vehicleRepository.findByPlateNumber(circulationCardNumber)
-                .map(this::convertToDTO) // convierte si existe
-                .map(List::of)           // lo mete en una lista con un solo elemento
-                .orElseGet(List::of);    // si no existe, devuelve lista vacía
+    public VehicleDTO getByCirculationCardNumber(String circulationCardNumber) {
+        Optional<VehicleEntity> vehicleOptional = vehicleRepository.findByCirculationCardNumber(circulationCardNumber);
+        return vehicleOptional
+                .map(this::convertToDTO)
+                .orElse(null);
     }
 
-    public List<VehicleDTO>  getByOwnerPhone(String ownerPhone) {
-        return vehicleRepository.findByPlateNumber(ownerPhone)
-                .map(this::convertToDTO) // convierte si existe
-                .map(List::of)           // lo mete en una lista con un solo elemento
-                .orElseGet(List::of);    // si no existe, devuelve lista vacía
+    public VehicleDTO getByOwnerPhone(String ownerPhone) {
+        Optional<VehicleEntity> vehicleOptional = vehicleRepository.findByOwnerPhone(ownerPhone);
+        return vehicleOptional
+                .map(this::convertToDTO)
+                .orElse(null);
     }
 
     // Método para crear un nuevo vehículo

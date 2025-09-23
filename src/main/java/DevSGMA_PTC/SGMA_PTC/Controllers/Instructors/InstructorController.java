@@ -61,9 +61,37 @@ public class InstructorController {
         return ResponseEntity.ok(ApiResponse.success("Datos del instructor consultados correctamente", instructor));
     }
 
+    //*** MÉTODO PARA OBTENER UN INSTRUCTOR POR ID ***\\
+    /**
+     * Obtiene un instructor por su ID.
+     *
+     * @param id ID del instructor a buscar.
+     * @return ResponseEntity con un ApiResponse que contiene el instructor encontrado (InstructorDTO).
+     * Si no se encuentra el instructor, retorna un mensaje de error con estado 404.
+     */
     @GetMapping("/getInstructorById/{id}")
     public ResponseEntity<?> getInstructorById(@PathVariable Long id) {
         InstructorDTO instructor = instructorsService.getInstructorById(id);
+        if (instructor == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of(
+                            "status", "NOT FOUND",
+                            "message", "Instructor no encontrado"
+                    ));
+        }
+        return ResponseEntity.ok(ApiResponse.success("Instructor encontrado", instructor));
+    }
+
+    //*** MÉTODO PARA OBTENER UN INSTRUCTOR POR EMAIL ***\\
+    /**
+     * Obtiene un instructor por su email.
+     * @param email Email del instructor a buscar.
+     * @return ResponseEntity con un ApiResponse que contiene el instructor encontrado (InstructorDTO).
+     * Si no se encuentra el instructor, retorna un mensaje de error con estado 404.
+     */
+    @GetMapping("/getInstructorByEmail/{email}")
+    public ResponseEntity<?> getInstructorByEmail(@PathVariable String email) {
+        InstructorDTO instructor = instructorsService.getInstructorByEmail(email);
         if (instructor == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of(

@@ -7,6 +7,7 @@ import DevSGMA_PTC.SGMA_PTC.Services.Vehicle.VehicleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +45,46 @@ public class VehicleController {
         // Retorna respuesta exitosa con los datos
         return ResponseEntity.ok(ApiResponse.success("Datos consultados correctamente", vehicles));
     }
+
+    @GetMapping("/getVehicleByPlateNumber/{plateNumber}")
+    public ResponseEntity<?> getVehicleByPlateNumber(@PathVariable String plateNumber) {
+        VehicleDTO vehicleDTO = vehicleService.getByPlateNumber(plateNumber);
+        if (vehicleDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of(
+                            "status", "NOT FOUND",
+                            "message", "Vehículo no encontrado"
+                    ));
+        }
+        return ResponseEntity.ok(ApiResponse.success("Vehículo encontrado", vehicleDTO));
+    }
+
+    @GetMapping("/getVehicleByCirculationCardNumber/{CirculationCardNumber}")
+    public ResponseEntity<?> getVehicleCirculationCardNumber(@PathVariable String CirculationCardNumber) {
+        VehicleDTO vehicleDTO = vehicleService.getByPlateNumber(CirculationCardNumber);
+        if (vehicleDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of(
+                            "status", "NOT FOUND",
+                            "message", "Vehículo no encontrado"
+                    ));
+        }
+        return ResponseEntity.ok(ApiResponse.success("Vehículo encontrado", vehicleDTO));
+    }
+
+    @GetMapping("/getVehicleByOwnerPhone/{ownerPhone}")
+    public ResponseEntity<?> getByOwnerPhone(@PathVariable String ownerPhone) {
+        VehicleDTO vehicleDTO = vehicleService.getByPlateNumber(ownerPhone);
+        if (vehicleDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of(
+                            "status", "NOT FOUND",
+                            "message", "Vehículo no encontrado"
+                    ));
+        }
+        return ResponseEntity.ok(ApiResponse.success("Vehículo encontrado", vehicleDTO));
+    }
+
 
     @PostMapping("/newVehicle")
     public ResponseEntity<ApiResponse<VehicleDTO>> createVehicle(@Valid @RequestBody VehicleDTO json

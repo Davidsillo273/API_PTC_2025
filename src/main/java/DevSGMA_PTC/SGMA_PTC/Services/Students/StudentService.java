@@ -2,13 +2,11 @@ package DevSGMA_PTC.SGMA_PTC.Services.Students;
 
 import DevSGMA_PTC.SGMA_PTC.Config.Crypto.Argon2Password;
 import DevSGMA_PTC.SGMA_PTC.Entities.Grades.GradeEntity;
-import DevSGMA_PTC.SGMA_PTC.Entities.Instructors.InstructorEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Grades.ExceptionGradeNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Roles.ExceptionRoleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentDuplicated;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentNotFound;
-import DevSGMA_PTC.SGMA_PTC.Models.DTO.Instructors.InstructorDTO;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Students.StudentDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Grades.GradeRepository;
 import DevSGMA_PTC.SGMA_PTC.Utils.PasswordGenerator;
@@ -52,9 +50,31 @@ public class StudentService {
         return studentEntityPage.map(this::ConvertToDTO);
     }
 
+    //*** MÉTODO PARA OBTENER UN ESTUDIANTE POR SU ID ***\\
+    /**
+     * Obtiene un estudiante por su ID y lo convierte a DTO.
+     *
+     * @param id ID del estudiante a buscar.
+     * @return Objeto StudentDTO si se encuentra, null si no existe.
+     */
     public StudentDTO getStudentById(Long id) {
         Optional<StudentEntity> studentOptional = studentsRepository.findById(id);
-        return studentOptional.map(this::ConvertToDTO).orElse(null);
+        return studentOptional
+                .map(this::ConvertToDTO)
+                .orElse(null);
+    }
+
+    //*** MÉTODO PARA OBTENER UN ESTUDIANTE POR SU CÓDIGO ***\\
+    /**
+     * Obtiene un estudiante por su código y lo convierte a DTO.
+     * @param studentCard Código del estudiante a buscar.
+     * @return Objeto StudentDTO si se encuentra, null si no existe.
+     */
+    public StudentDTO getStudentByStudentCard(String studentCard) {
+        Optional<StudentEntity> studentOptional = studentsRepository.findByStudentCard(studentCard);
+        return studentOptional
+                .map(this::ConvertToDTO)
+                .orElse(null);
     }
 
     //*** MÉTODO PARA CREAR UN NUEVO ESTUDIANTE ***\\
