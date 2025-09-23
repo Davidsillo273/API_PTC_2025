@@ -18,7 +18,7 @@ public class VehicleTypeController {
     private VehicleTypeService vehicleTypeService;
 
 
-    //*** MÉTODO PARA OBTENER TODOS LOS ROLES ***\\
+    //*** MÉTODO PARA OBTENER TODOS LOS TIPOS DE VEHÍCULOS ***\\
     @GetMapping("/getAllVehiclesTypes")
     public ResponseEntity<ApiResponse<List<VehicleTypeDTO>>> getAllVehiclesTypes() {
         List<VehicleTypeDTO> vehicleTypeDTO = vehicleTypeService.getAllVehicleTypes();

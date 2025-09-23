@@ -1,6 +1,5 @@
 package DevSGMA_PTC.SGMA_PTC.Controllers.Vehicle;
 
-import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentDontInsert;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Vehicles.ExceptionVehicleDontInsert;
 import DevSGMA_PTC.SGMA_PTC.Models.ApiResponse.ApiResponse;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Vehicles.VehicleDTO;
@@ -11,9 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/vehicles")
