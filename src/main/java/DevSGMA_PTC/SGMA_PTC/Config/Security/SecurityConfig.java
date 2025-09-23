@@ -101,7 +101,6 @@ public class SecurityConfig {
 
                         //WORKORDERS
                         .requestMatchers(HttpMethod.GET, "/api/workOrders/getAllWorkOrders").hasAuthority("ROLE_admin")
-                        .requestMatchers(HttpMethod.GET, "/api/workOrders/getWorkOrderById/{id}").hasAuthority("ROLE_admin")
 
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess
