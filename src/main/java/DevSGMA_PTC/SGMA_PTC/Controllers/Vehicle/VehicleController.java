@@ -115,4 +115,10 @@ public class VehicleController {
         return ResponseEntity.ok(ApiResponse.success("Estado actualizado correctamente", updated));
     }
 
+    @GetMapping("/getVehiclesByStudentId/{studentId}")
+    public ResponseEntity<?> getVehiclesByStudentId(@PathVariable Long studentId) {
+        Map<String, Object> result = vehicleService.getVehiclesByStudentId(studentId);
+        return ResponseEntity.ok(ApiResponse.success("Vehículos consultados correctamente", result));
+    }
+
 }

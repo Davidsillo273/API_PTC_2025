@@ -17,7 +17,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class VehicleService {
@@ -159,6 +162,18 @@ public class VehicleService {
         entity.setStatus(json.getIdStatus());
 
         return entity;
+    }
+
+    // Método para obtener vehículos por el ID del estudiante
+    public Map<String, Object> getVehiclesByStudentId(Long studentId) {
+        List<VehicleEntity> vehicles = vehicleRepository.findByStudentId_StudentId(studentId);
+        List<VehicleDTO> vehicleDTOs = vehicles.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return Map.of(
+                "vehiculos", vehicleDTOs,
+                "cantidad", vehicleDTOs.size()
+        );
     }
 
 }

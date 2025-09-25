@@ -137,5 +137,19 @@ public class WorkOrderController {
         }
     }
 
+    // Endpoint para estado 2 (En progreso)
+    @GetMapping("/getWorkOrdersByStudentIdAndStatus2/{studentId}")
+    public ResponseEntity<?> getWorkOrdersByStudentIdAndStatus2(@PathVariable Long studentId) {
+        Map<String, Object> result = workOrderService.getWorkOrdersByStudentIdAndStatus(studentId, 2L);
+        return ResponseEntity.ok(result);
+    }
+
+    // Endpoint para estado 3 (Completado)
+    @GetMapping("/getWorkOrdersByStudentIdAndStatus3/{studentId}")
+    public ResponseEntity<?> getWorkOrdersByStudentIdAndStatus3(@PathVariable Long studentId) {
+        Map<String, Object> result = workOrderService.getWorkOrdersByStudentIdAndStatus(studentId, 3L);
+        return ResponseEntity.ok(result);
+    }
+
 
 }

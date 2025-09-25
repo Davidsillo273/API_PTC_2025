@@ -16,6 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Slf4j
 @CrossOrigin
 @Service
@@ -67,6 +71,16 @@ public class WorkOrderService {
         WorkOrderEntity WorkOrderUpdated = repo.save(workOrderExist);
         //4. Convertir a DTO
         return ConvertirADTO(WorkOrderUpdated);
+    }
+
+    // Obtener órdenes por estudiante y estado
+    public Map<String, Object> getWorkOrdersByStudentIdAndStatus(Long studentId, Long status) {
+        List<WorkOrderEntity> orders = repo.findByVehicleId_StudentId_StudentIdAndStatus(studentId, status);
+        List<WorkOrderDTO> dtos = orders.stream().map(this::ConvertirADTO).collect(Collectors.toList());
+        return Map.of(
+            "workOrders", dtos,
+            "cantidad", dtos.size()
+        );
     }
 
     private WorkOrderDTO ConvertirADTO(WorkOrderEntity workOrderEntity) {
