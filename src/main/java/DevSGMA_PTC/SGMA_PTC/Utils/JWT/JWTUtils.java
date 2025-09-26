@@ -114,3 +114,29 @@ public class JWTUtils {
                 .getBody();
     }
 }
+
+
+//Actualizado del repo del profesor:
+//public String create(String id, String email, String role, String level, String grade) {
+//
+//    //Decodifica el secreto Base64 y crea una clave HMAC-SHA segura
+//    SecretKey signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+//
+//    //Obtiene la fecha catual y calcula la fecha de expiración
+//    Date now = new Date();
+//    Date expiration = new Date(now.getTime() + msExpiration);
+//
+//    return Jwts.builder()
+//            .setId(id)                                              // ID único (JWT ID)
+//            .setIssuedAt(now)                                       // Fecha de emisión
+//            .setSubject(email)                                     // Sujeto (usuario)
+//            .claim("id", id)
+//            .claim("role", role)
+//            .claim("level", level)
+//            .claim("grade", grade)
+//            .setIssuer(issuer)                                      // Emisor del token
+//            .setExpiration(msExpiration >= 0 ? expiration : null)   // Expiración (si es >= 0)
+//            .signWith(signingKey, SignatureAlgorithm.HS256);         // Firma con algoritmo HS256
+//                .compact();                                            // Convierte a String compacto
+//
+//}

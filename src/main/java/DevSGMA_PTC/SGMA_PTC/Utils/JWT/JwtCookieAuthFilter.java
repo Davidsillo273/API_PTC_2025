@@ -1,5 +1,8 @@
 package DevSGMA_PTC.SGMA_PTC.Utils.JWT;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -8,6 +11,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -28,79 +35,67 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         this.jwtUtils = jwtUtils;
     }
 
-//    @Override
-//    protected void doFilterInternal(
-//            HttpServletRequest request,
-//            HttpServletResponse response,
-//            FilterChain filterChain) throws ServletException, IOException {
-//
-//        // CORREGIDO: Mejor lógica para endpoints públicos
-//        if (isPublicEndpoint(request)) {
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
-//
-//        try {
-//            String token = extractTokenFromCookies(request);
-//
-//            if (token == null || token.isBlank()) {
-//                // Para endpoints no públicos, requerimos token
-//                if (!isPublicEndpoint(request)) {
-//                    sendError(response, "Token no encontrado", HttpServletResponse.SC_UNAUTHORIZED);
-//                    return;
-//                }
-//                filterChain.doFilter(request, response);
-//                return;
-//            }
-//
-//            Claims claims = jwtUtils.parseToken(token);
-//
-//            // EXTRAER EL ROL REAL del token
-//            String role = jwtUtils.extractRole(token);
-//
-//            // EXTRAER EL LEVEL REAL del token
-//            String level = jwtUtils.extractLevel(token);
-//
-//            // CREAR AUTHORITIES BASADO EN EL ROL REAL
-//            Collection<? extends GrantedAuthority> authorities =
-//                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
-//            Collections.singletonList(new SimpleGrantedAuthority("LEVEL_" + level));
-//
-//            // CREAR AUTENTICACIÓN CON AUTHORITIES CORRECTOS
-//            UsernamePasswordAuthenticationToken authentication =
-//                    new UsernamePasswordAuthenticationToken(
-//                            claims.getSubject(), // username
-//                            null, // credentials
-//                            authorities // ← ROLES y LEVELS REALES
-//                    );
-//
-//            // ESTABLECER AUTENTICACIÓN EN CONTEXTO
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//            filterChain.doFilter(request, response);
-//
-//        } catch (ExpiredJwtException e) {
-//            log.warn("Token expirado: {}", e.getMessage());
-//            sendError(response, "Token expirado", HttpServletResponse.SC_UNAUTHORIZED);
-//        } catch (MalformedJwtException e) {
-//            log.warn("Token malformado: {}", e.getMessage());
-//            sendError(response, "Token inválido", HttpServletResponse.SC_FORBIDDEN);
-//        } catch (Exception e) {
-//            log.error("Error de autenticación", e);
-//            sendError(response, "Error de autenticación", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
-//    FILTRO DESACTIVADO(solo para desarrollo, en producción se debe activar)
-
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
-        // Permitir todas las peticiones sin validar JWT
-        filterChain.doFilter(request, response);
+        // CORREGIDO: Mejor lógica para endpoints públicos
+        if (isPublicEndpoint(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        try {
+            String token = extractTokenFromCookies(request);
+
+            if (token == null || token.isBlank()) {
+                // Para endpoints no públicos, requerimos token
+                if (!isPublicEndpoint(request)) {
+                    sendError(response, "Token no encontrado", HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            Claims claims = jwtUtils.parseToken(token);
+
+            // EXTRAER EL ROL REAL del token
+            String role = jwtUtils.extractRole(token);
+
+            // EXTRAER EL LEVEL REAL del token
+            String level = jwtUtils.extractLevel(token);
+
+            // CREAR AUTHORITIES BASADO EN EL ROL REAL
+            Collection<? extends GrantedAuthority> authorities =
+                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
+            Collections.singletonList(new SimpleGrantedAuthority("LEVEL_" + level));
+
+            // CREAR AUTENTICACIÓN CON AUTHORITIES CORRECTOS
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            claims.getSubject(), // username
+                            null, // credentials
+                            authorities // ← ROLES y LEVELS REALES
+                    );
+
+            // ESTABLECER AUTENTICACIÓN EN CONTEXTO
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            filterChain.doFilter(request, response);
+
+        } catch (ExpiredJwtException e) {
+            log.warn("Token expirado: {}", e.getMessage());
+            sendError(response, "Token expirado", HttpServletResponse.SC_UNAUTHORIZED);
+        } catch (MalformedJwtException e) {
+            log.warn("Token malformado: {}", e.getMessage());
+            sendError(response, "Token inválido", HttpServletResponse.SC_FORBIDDEN);
+        } catch (Exception e) {
+            log.error("Error de autenticación", e);
+            sendError(response, "Error de autenticación", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     private String extractTokenFromCookies(HttpServletRequest request) {
