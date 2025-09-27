@@ -34,7 +34,6 @@ public class JWTUtils {
      * @return token JWT como String
      */
     public String create(String id, String email, String role, String level, String grade) {
-
         //Decodifica el secreto Base64 y crea una clave HMAC-SHA segura
         SecretKey signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
 
