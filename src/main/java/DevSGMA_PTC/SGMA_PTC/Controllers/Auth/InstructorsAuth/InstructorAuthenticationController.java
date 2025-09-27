@@ -161,7 +161,7 @@ public class InstructorAuthenticationController {
         }
     }
 
-    @PostMapping("/logoutStudent")
+    @PostMapping("/logoutInstructor")
     public ResponseEntity<String> logoutInstructor(HttpServletRequest request, HttpServletResponse response) {
         // Crear cookie de expiración con SameSite=None
         String cookieValue = "authToken=; Path=/; HttpOnly; Secure; SameSite=None; MaxAge=0; Domain=sgma-66ec41075156.herokuapp.com";
