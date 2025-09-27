@@ -122,14 +122,13 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         String method = request.getMethod();
 
         // Endpoints públicos
-        return (path.equals("/api/auth/login") && "POST".equals(method)) ||
-                (path.equals("/api/auth/register") && "POST".equals(method)) ||
-                (path.equals("/api/public/") && "GET".equals(method)) ||
+        return (path.equals("/api/vehicleTypes/") && "GET".equals(method)) ||
 
-                (path.equals("/api/vehicleTypes/") && "GET".equals(method)) ||
+                (path.equals("/api/instructorsAuth/instructorLogin") && "POST".equals(method)) ||
+                (path.equals("/api/studentsAuth/studentLogin") && "POST".equals(method)) ||
+                (path.equals("/api/instructorsAuth/logoutInstructor") && "POST".equals(method)) ||
+                (path.equals("/api/studentsAuth/logoutStudent") && "POST".equals(method)) ||
 
-
-                (path.equals("/api/instructorAuth/instructorLogin") && "POST".equals(method)) ||
-                (path.equals("/api/studentsAuth/studentLogin") && "POST".equals(method));
+                ("OPTIONS".equals(method)); // Permitir siempre preflight
     }
 }
