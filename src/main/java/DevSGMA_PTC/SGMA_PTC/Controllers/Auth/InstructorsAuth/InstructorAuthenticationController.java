@@ -7,6 +7,8 @@ import DevSGMA_PTC.SGMA_PTC.Utils.JWT.JWTUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/instructorsAuth")
 public class InstructorAuthenticationController {
+
+    private static final Logger log = LoggerFactory.getLogger(InstructorAuthenticationController.class);
 
     @Autowired
     private InstructorAuthenticationService instructorAuthenticationService; // Servicio de autenticación de instructores
@@ -164,19 +168,31 @@ public class InstructorAuthenticationController {
 
     @PostMapping("/logoutInstructor")
     public ResponseEntity<String> logoutInstructor(HttpServletRequest request, HttpServletResponse response) {
-        // Crear cookie de expiración con SameSite=None
-        String cookieValue = "authToken=; Path=/; HttpOnly; Secure; SameSite=None; MaxAge=0; Domain=sgma-66ec41075156.herokuapp.com";
+        try {
+            // Crear cookie de expiración con SameSite=None
+            String cookieValue = "authToken=; Path=/; HttpOnly; Secure; SameSite=None; MaxAge=0; Domain=sistemaweb-sgma.vercel.app";
 
-        response.addHeader("Set-Cookie", cookieValue);
-        response.addHeader("Access-Control-Expose-Headers", "Set-Cookie");
+            response.addHeader("Set-Cookie", cookieValue);
+            response.addHeader("Access-Control-Expose-Headers", "Set-Cookie");
 
-        // También agregar headers CORS para la respuesta
-        String origin = request.getHeader("Origin");
-        if (origin != null &&
-                (origin.contains("localhost") || origin.contains("herokuapp.com"))) {
-            response.setHeader("Access-Control-Allow-Origin", origin);
+            // Headers CORS para la respuesta
+            String origin = request.getHeader("Origin");
+            if (origin != null && isValidOrigin(origin)) {
+                response.setHeader("Access-Control-Allow-Origin", origin);
+            }
+
+            return ResponseEntity.ok("Logout exitoso");
+
+        } catch (Exception e) {
+            log.error("Error durante logout: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error durante logout");
         }
-        return ResponseEntity.ok()
-                .body("Logout exitoso");
+    }
+
+    private boolean isValidOrigin(String origin) {
+        return origin.contains("localhost") ||
+                origin.contains("herokuapp.com") ||
+                origin.contains("vercel.app");
     }
 }

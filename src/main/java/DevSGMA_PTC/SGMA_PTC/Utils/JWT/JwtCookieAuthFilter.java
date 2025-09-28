@@ -68,17 +68,16 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
             // EXTRAER EL LEVEL REAL del token
             String level = jwtUtils.extractLevel(token);
 
-            // CREAR AUTHORITIES BASADO EN EL ROL REAL
+            // ✅ CORREGIDO - Crear authorities correctamente
             Collection<? extends GrantedAuthority> authorities =
                     Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
-            Collections.singletonList(new SimpleGrantedAuthority("LEVEL_" + level));
 
             // CREAR AUTENTICACIÓN CON AUTHORITIES CORRECTOS
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
                             claims.getSubject(), // username
                             null, // credentials
-                            authorities // ← ROLES y LEVELS REALES
+                            authorities // ← ROLES REALES
                     );
 
             // ESTABLECER AUTENTICACIÓN EN CONTEXTO
@@ -116,25 +115,61 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
                 "{\"error\": \"%s\", \"status\": %d}", message, status));
     }
 
-    // MEJORADA: Lógica para endpoints públicos
+    // ✅ ACTUALIZADO - TODOS los endpoints públicos de SecurityConfig
     private boolean isPublicEndpoint(HttpServletRequest request) {
         String path = request.getRequestURI();
         String method = request.getMethod();
 
-        // Endpoints públicos
-        return (path.equals("/api/vehicleTypes/getAllVehiclesTypes") && "GET".equals(method)) ||
-                (path.equals("/api/students/getAllStudents") && "GET".equals(method)) ||
+        // Permite OPTIONS (preflight) siempre
+        if ("OPTIONS".equals(method)) {
+            return true;
+        }
 
+        // AUTH - STUDENTS
+        if (path.equals("/api/studentsAuth/studentLogin") && "POST".equals(method)) return true;
+        if (path.equals("/api/studentsAuth/logoutStudent") && "POST".equals(method)) return true;
 
-                (path.equals("/api/studentsAuth/studentLogin") && "POST".equals(method)) ||
-                (path.equals("/api/studentsAuth/logoutStudent") && "POST".equals(method)) ||
-                (path.equals("/api/studentsAuth/meStudent") && "POST".equals(method)) ||
+        // AUTH - INSTRUCTORS
+        if (path.equals("/api/instructorsAuth/instructorLogin") && "POST".equals(method)) return true;
+        if (path.equals("/api/instructorsAuth/logoutInstructor") && "POST".equals(method)) return true;
 
-                (path.equals("/api/instructorsAuth/instructorLogin") && "POST".equals(method)) ||
-                (path.equals("/api/instructorsAuth/logoutInstructor") && "POST".equals(method)) ||
-                (path.equals("/api/instructorsAuth/meInstructor") && "POST".equals(method)) ||
+        // ENTRIES
+        if (path.equals("/api/entries/newEntry") && "POST".equals(method)) return true;
+        if (path.equals("/api/entries/getAllEntries") && "GET".equals(method)) return true;
 
+        // GRADES
+        if (path.equals("/api/grades/getAllGrades") && "GET".equals(method)) return true;
 
-                ("OPTIONS".equals(method)); // Permitir siempre preflight
+        // LEVELS
+        if (path.equals("/api/levels/getAllLevels") && "GET".equals(method)) return true;
+
+        // MODULES
+        if (path.equals("/api/modules/getAllModules") && "GET".equals(method)) return true;
+        if (path.equals("/api/modules/newModules") && "POST".equals(method)) return true;
+        if (path.startsWith("/api/modules/updateModules/") && "PUT".equals(method)) return true;
+        if (path.startsWith("/api/modules/deleteModules/") && "DELETE".equals(method)) return true;
+
+        // ROLES
+        if (path.equals("/api/roles/getAllRoles") && "GET".equals(method)) return true;
+
+        // STUDENTS
+        if (path.equals("/api/students/getAllStudents") && "GET".equals(method)) return true;
+        if (path.equals("/api/students/newStudent") && "POST".equals(method)) return true;
+        if (path.startsWith("/api/students/updateStudent/") && "PUT".equals(method)) return true;
+        if (path.startsWith("/api/students/deleteStudent/") && "DELETE".equals(method)) return true;
+        if (path.startsWith("/api/students/getStudentById/") && "GET".equals(method)) return true;
+
+        // VEHICLES
+        if (path.equals("/api/vehicles/newVehicle") && "POST".equals(method)) return true;
+
+        // VEHICLE TYPES
+        if (path.equals("/api/vehicleTypes/getAllVehicleTypes") && "GET".equals(method)) return true;
+
+        // WORKORDERS
+        if (path.equals("/api/workOrders/newWorkOrder") && "POST".equals(method)) return true;
+        if (path.startsWith("/api/workOrders/updateWorkOrder/") && "PUT".equals(method)) return true;
+        if (path.startsWith("/api/workOrders/deleteWorkOrder/") && "DELETE".equals(method)) return true;
+
+        return false;
     }
 }

@@ -29,7 +29,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // ← Configura CORS aquí
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // ← Configura CORS aquí
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ← Permite preflight requests
 
@@ -41,7 +42,7 @@ public class SecurityConfig {
 
                         //AUTH - INSTRUCTORS
                         .requestMatchers(HttpMethod.POST,"/api/instructorsAuth/instructorLogin").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/instructorAuth/logoutInstructor").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/instructorsAuth/logoutInstructor").permitAll()
 
                         //ENTRIES
                         .requestMatchers(HttpMethod.POST, "/api/entries/newEntry").permitAll()
@@ -83,10 +84,10 @@ public class SecurityConfig {
                         //ENDPOINTS CON AUTENTIFICACIÓN
 
                         //AUTH - STUDENTS
-                        .requestMatchers("/api/studentAuth/meStudent").authenticated()
+                        .requestMatchers("/api/studentsAuth/meStudent").authenticated()
 
                         //AUTH - INSTRUCTORS
-                        .requestMatchers("/api/instructorAuth/meInstructor").authenticated()
+                        .requestMatchers("/api/instructorsAuth/meInstructor").authenticated()
 
                         //INSTRUCTORS
                         .requestMatchers(HttpMethod.GET, "/api/instructors/getAllInstructors").hasAuthority("ROLE_admin")
