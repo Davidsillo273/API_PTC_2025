@@ -83,12 +83,13 @@ public class InstructorAuthenticationController {
                     null  // ← Instructors no tienen grade, así que pasamos null
             );
 
-            Cookie cookie = new Cookie("authToken", token);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(true);
-            cookie.setPath("/");
-            cookie.setMaxAge(86400);
-            response.addCookie(cookie);
+            String cookieValue = String.format(
+                    "authToken=%s; Path=/; HttpOnly; Secure; SameSite=None; MaxAge=86400; Domain=sistemaweb-sgma.vercel.app",
+                    token
+            );
+
+            response.addHeader("Set-Cookie", cookieValue);
+            response.addHeader("Access-Control-Expose-Headers", "Set-Cookie");
         }
     }
 
