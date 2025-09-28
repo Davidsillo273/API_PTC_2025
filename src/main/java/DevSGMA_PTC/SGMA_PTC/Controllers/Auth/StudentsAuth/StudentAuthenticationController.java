@@ -92,6 +92,7 @@ public class StudentAuthenticationController {
                             "HttpOnly; " +
                             "Secure; " +
                             "SameSite=None; " + // ✅ Esencial para Cross-Site
+                            "Domain=sgma-66ec41075156.herokuapp.com",
                             "MaxAge=86400",
                     token
             );
