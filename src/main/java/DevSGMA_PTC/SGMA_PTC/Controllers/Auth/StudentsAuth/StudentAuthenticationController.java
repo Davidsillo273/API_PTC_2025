@@ -98,6 +98,8 @@ public class StudentAuthenticationController {
             );
 
             response.addHeader("Set-Cookie", cookieValue);
+            response.addHeader("Access-Control-Expose-Headers", "Set-Cookie");
+
 
 //            String cookieValue = String.format(
 //                    "authToken=%s; " +
