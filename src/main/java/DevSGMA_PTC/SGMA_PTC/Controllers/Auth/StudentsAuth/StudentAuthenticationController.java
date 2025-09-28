@@ -86,20 +86,6 @@ public class StudentAuthenticationController {
                     null, // Nivel no utilizado para estudiantes
                     String.valueOf(student.getGradeId().getGradeGroup()) // Grupo del estudiante
             );
-            String cookieValue = String.format(
-                    "authToken=%s; " +
-                            "Path=/; " +
-                            "HttpOnly; " +
-                            "Secure; " +
-                            "SameSite=None; " + // ✅ Esencial para Cross-Site
-                            "Domain=sgma-66ec41075156.herokuapp.com",
-                            "MaxAge=86400",
-                    token
-            );
-
-            response.addHeader("Set-Cookie", cookieValue);
-            response.addHeader("Access-Control-Expose-Headers", "Set-Cookie");
-
 
 //            String cookieValue = String.format(
 //                    "authToken=%s; " +
@@ -116,12 +102,12 @@ public class StudentAuthenticationController {
 //            //response.addHeader("Access-Control-Allow-Credentials", "true"); <-- ESTO NO DEBEN AGREGARLO
 //            response.addHeader("Access-Control-Expose-Headers", "Set-Cookie");
 
-//            Cookie cookie = new Cookie("authToken", token);
-//            cookie.setHttpOnly(true);
-//            cookie.setSecure(true);
-//            cookie.setPath("/");
-//            cookie.setMaxAge(86400);
-//            response.addCookie(cookie);
+            Cookie cookie = new Cookie("authToken", token);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(86400);
+            response.addCookie(cookie);
         }
     }
 
