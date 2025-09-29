@@ -97,6 +97,7 @@ public class InstructorAuthenticationController {
                     token
             );
 
+            System.out.println("Cookie creada"+ cookieValue);
             response.addHeader("Set-Cookie", cookieValue);
             response.addHeader("Access-Control-Expose-Headers", "Set-Cookie");
         }
