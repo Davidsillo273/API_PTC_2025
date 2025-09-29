@@ -88,7 +88,12 @@ public class InstructorAuthenticationController {
             );
 
             String cookieValue = String.format(
-                    "authToken=%s; Path=/; HttpOnly; Secure; SameSite=None; MaxAge=86400; Domain=sistemaweb-sgma.vercel.app",
+                    "authToken=%s; " +
+                            "Path=/; " +
+                            "HttpOnly; " +
+                            "Secure=false; " +
+                            "SameSite=None; " +
+                            "MaxAge=86400; " ,
                     token
             );
 
