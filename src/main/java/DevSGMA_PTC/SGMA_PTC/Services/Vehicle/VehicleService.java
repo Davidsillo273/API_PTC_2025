@@ -40,7 +40,6 @@ public class VehicleService {
     public Page<VehicleDTO> getAllVehicles(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<VehicleEntity> vehicleEntityPage = vehicleRepository.findAll(pageable);
-
         return vehicleEntityPage.map(this::convertToDTO);
     }
 
