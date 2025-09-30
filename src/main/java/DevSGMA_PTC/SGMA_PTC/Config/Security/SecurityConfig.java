@@ -90,28 +90,28 @@ public class SecurityConfig {
 
                         //AUTH POR ROL ADMIN
 
-                        //Modules
+                        //MODULES
                         .requestMatchers(HttpMethod.POST, "/api/modules/newModules").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.PUT, "/api/modules/updateModules/{id}").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.DELETE, "/api/modules/deleteModules/{id}").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
-// INSTRUCTORS          //Instructors
+                        //INSTRUCTORS
                         .requestMatchers(HttpMethod.GET, "/api/instructors/getAllInstructors").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.POST, "/api/instructors/newInstructor").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.PUT, "/api/instructors/updateInstructor/{id}").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.DELETE, "/api/instructors/deleteInstructor/{id}").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.GET, "/api/instructors/getInstructorById/{id}").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
-// STUDENTS             //Students
+                        //STUDENTS
                         .requestMatchers(HttpMethod.POST, "/api/students/newStudent").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.DELETE, "/api/students/deleteStudent/{id}").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.GET, "/api/students/getStudentById/{id}").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
-// VEHICLES             //Vehicles
+                        //VEHICLES
                         .requestMatchers(HttpMethod.GET, "/api/vehicles/getAllVehicles").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.PATCH, "/api/vehicles/updateStatusVehicle/{id}").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
-// WORKORDERS            //WorkOrders
+                        //WORKORDERS
                         .requestMatchers(HttpMethod.GET, "/api/workOrders/getAllWorkOrders").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
 
