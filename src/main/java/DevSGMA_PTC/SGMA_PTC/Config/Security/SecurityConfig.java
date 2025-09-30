@@ -72,6 +72,7 @@ public class SecurityConfig {
 
                         //VEHICLES
                         .requestMatchers(HttpMethod.POST, "/api/vehicles/newVehicle").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/vehicles/getAllVehiclesByStudent/{id}").permitAll()
 
                         //VEHICLE TYPES
                         .requestMatchers(HttpMethod.GET, "/api/vehicleTypes/getAllVehicleTypes").permitAll()

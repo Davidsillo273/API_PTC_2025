@@ -161,6 +161,7 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
 
         // VEHICLES
         if (path.equals("/api/vehicles/newVehicle") && "POST".equals(method)) return true;
+        if (path.equals("/api/vehicles/getVehiclesByStudent/") && "GET".equals(method)) return true;
 
         // VEHICLE TYPES
         if (path.equals("/api/vehicleTypes/getAllVehicleTypes") && "GET".equals(method)) return true;
