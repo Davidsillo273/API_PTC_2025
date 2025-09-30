@@ -48,7 +48,7 @@ public class VehicleEntity {
     @Column(name = "MODEL", length = 50 , nullable = false)
     private String model;
 
-    @ManyToOne // Muchos vehículos pueden tener el mismo tipo
+    @ManyToOne(fetch = FetchType.LAZY)// Muchos vehículos pueden tener el mismo tipo
     @JoinColumn(name = "TYPEID", referencedColumnName = "TYPEID") // Columna que conecta con la tabla de tipos de vehículo
     private VehicleTypeEntity typeId;
 
@@ -92,4 +92,24 @@ public class VehicleEntity {
     @OneToMany(mappedBy = "vehicleId", cascade = CascadeType.ALL) // Relación OneToMany con tbWorkOrders
     @JsonIgnore
     private List<WorkOrderEntity> workOrder = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al vehículo
+
+    @Override
+    public String toString() {
+        return "VehicleEntity{" +
+                "vehicleId=" + vehicleId +
+                ", plateNumber='" + plateNumber + '\'' +
+                ", hasPolicy=" + hasPolicy +
+                ", policyNumber='" + policyNumber + '\'' +
+                ", brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", color='" + color + '\'' +
+                ", circulationCardNumber='" + circulationCardNumber + '\'' +
+                ", ownerName='" + ownerName + '\'' +
+                ", ownerDui='" + ownerDui + '\'' +
+                ", ownerPhone='" + ownerPhone + '\'' +
+                ", vehicleImage='" + vehicleImage + '\'' +
+                ", maintenanceExpo=" + maintenanceExpo +
+                ", status=" + status +
+                '}';
+    }
 }
