@@ -115,7 +115,7 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
                 "{\"error\": \"%s\", \"status\": %d}", message, status));
     }
 
-    // ✅ ACTUALIZADO - TODOS los endpoints públicos de SecurityConfig
+    //  TODOS los endpoints públicos de SecurityConfig
     private boolean isPublicEndpoint(HttpServletRequest request) {
         String path = request.getRequestURI();
         String method = request.getMethod();
@@ -128,10 +128,12 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         // AUTH - STUDENTS
         if (path.equals("/api/studentsAuth/studentLogin") && "POST".equals(method)) return true;
         if (path.equals("/api/studentsAuth/logoutStudent") && "POST".equals(method)) return true;
+        if (path.equals("/api/studentsAuth/meStudent") && "GET".equals(method)) return true;
 
         // AUTH - INSTRUCTORS
         if (path.equals("/api/instructorsAuth/instructorLogin") && "POST".equals(method)) return true;
         if (path.equals("/api/instructorsAuth/logoutInstructor") && "POST".equals(method)) return true;
+        if (path.equals("/api/studentsAuth/meInstructor") && "GET".equals(method)) return true;
 
         // ENTRIES
         if (path.equals("/api/entries/newEntry") && "POST".equals(method)) return true;
@@ -139,6 +141,14 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
 
         // GRADES
         if (path.equals("/api/grades/getAllGrades") && "GET".equals(method)) return true;
+
+        // INSTRUCTORS
+        if (path.equals("/api/instructors/getAllInstructors") && "GET".equals(method)) return true;
+        if (path.equals("/api/instructors/newInstructor") && "POST".equals(method)) return true;
+        if (path.startsWith("/api/instructors/updateInstructor/{id}") && "PUT".equals(method)) return true;
+        if (path.startsWith("/api/instructor/deleteInstructor/{id}") && "DELETE".equals(method)) return true;
+        if (path.startsWith("/api/instructor/getInstructorById/{id}") && "GET".equals(method)) return true;
+        if (path.startsWith("/api/instructor/update/{id}/password") && "PUT".equals(method)) return true;
 
         // LEVELS
         if (path.equals("/api/levels/getAllLevels") && "GET".equals(method)) return true;
@@ -155,18 +165,24 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         // STUDENTS
         if (path.equals("/api/students/getAllStudents") && "GET".equals(method)) return true;
         if (path.equals("/api/students/newStudent") && "POST".equals(method)) return true;
-        if (path.startsWith("/api/students/updateStudent/") && "PUT".equals(method)) return true;
-        if (path.startsWith("/api/students/deleteStudent/") && "DELETE".equals(method)) return true;
-        if (path.startsWith("/api/students/getStudentById/") && "GET".equals(method)) return true;
+        if (path.startsWith("/api/students/updateStudent/{id}") && "PUT".equals(method)) return true;
+        if (path.startsWith("/api/students/deleteStudent/{id}") && "DELETE".equals(method)) return true;
+        if (path.startsWith("/api/students/getStudentById/{id}") && "GET".equals(method)) return true;
+        if (path.startsWith("/api/students/update/{id}/password") && "PUT".equals(method)) return true;
 
         // VEHICLES
         if (path.equals("/api/vehicles/newVehicle") && "POST".equals(method)) return true;
-        if (path.equals("/api/vehicles/getVehiclesByStudent/") && "GET".equals(method)) return true;
+        if (path.equals("/api/vehicles/getAllVehicles") && "GET".equals(method)) return true;
+        if (path.equals("/api/vehicles/getVehicleByPlateNumber/{plateNumber}") && "GET".equals(method)) return true;
+        if (path.equals("/api/vehicles/getVehicleByCirculationCardNumber/{CirculationCardNumber}") && "GET".equals(method)) return true;
+        if (path.equals("/api/vehicles/getVehicleByOwnerPhone/{ownerPhone}") && "GET".equals(method)) return true;
+        if (path.equals("/api/vehicles/updateStatusVehicle/{id}") && "GET".equals(method)) return true;
 
         // VEHICLE TYPES
         if (path.equals("/api/vehicleTypes/getAllVehicleTypes") && "GET".equals(method)) return true;
 
         // WORKORDERS
+        if (path.equals("/api/workOrders/getAllWorkOrders") && "GET".equals(method)) return true;
         if (path.equals("/api/workOrders/newWorkOrder") && "POST".equals(method)) return true;
         if (path.startsWith("/api/workOrders/updateWorkOrder/") && "PUT".equals(method)) return true;
         if (path.startsWith("/api/workOrders/deleteWorkOrder/") && "DELETE".equals(method)) return true;

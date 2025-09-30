@@ -29,7 +29,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // ← Configura CORS aquí
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ← Permite preflight requests
@@ -86,7 +85,7 @@ public class SecurityConfig {
 
 
                         //AUTH POR ROL INSTRUCTOR
-                        .requestMatchers(HttpMethod.GET, "/api/students/getAllStudents").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora","ROLE_Docente" )
+                        .requestMatchers(HttpMethod.GET, "/api/students/getAllVehicles").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora","ROLE_Docente" )
 
                         //AUTH POR ROL ADMIN
 
@@ -103,6 +102,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/instructors/getInstructorById/{id}").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
                         //STUDENTS
+
                         .requestMatchers(HttpMethod.POST, "/api/students/newStudent").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.DELETE, "/api/students/deleteStudent/{id}").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.GET, "/api/students/getStudentById/{id}").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")

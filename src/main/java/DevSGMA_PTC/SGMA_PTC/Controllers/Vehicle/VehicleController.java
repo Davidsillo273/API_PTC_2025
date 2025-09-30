@@ -21,7 +21,7 @@ public class VehicleController {
     private VehicleService vehicleService;
 
     @GetMapping("/getAllVehicles")
-    public ResponseEntity<ApiResponse<Page<VehicleDTO>>> getAllStudents(
+    public ResponseEntity<ApiResponse<Page<VehicleDTO>>> getAllVehicles(
             @RequestParam(defaultValue = "0") int page, // Página por defecto 0
             @RequestParam(defaultValue = "10") int size // Tamaño por defecto 10
     ) {
