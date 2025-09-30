@@ -91,23 +91,15 @@ public class StudentAuthenticationController {
                     "authToken=%s; " +
                             "Path=/; " +
                             "HttpOnly; " +
-                            "Secure; " +
+                            "Secure=false; " +
                             "SameSite=None; " +
-                            "MaxAge=86400; " +
-                            "Domain=sgma-66ec41075156.herokuapp.com",
+                            "MaxAge=86400; " ,
                     token
             );
 
+            System.out.println("Cookie creada"+ cookieValue);
             response.addHeader("Set-Cookie", cookieValue);
-            //response.addHeader("Access-Control-Allow-Credentials", "true"); <-- ESTO NO DEBEN AGREGARLO
             response.addHeader("Access-Control-Expose-Headers", "Set-Cookie");
-
-//            Cookie cookie = new Cookie("authToken", token);
-//            cookie.setHttpOnly(true);
-//            cookie.setSecure(true);
-//            cookie.setPath("/");
-//            cookie.setMaxAge(86400);
-//            response.addCookie(cookie);
         }
     }
 
