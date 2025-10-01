@@ -51,6 +51,7 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
             String token = extractTokenFromCookies(request);
 
             if (token == null || token.isBlank()) {
+
                 // Para endpoints no públicos, requerimos token
                 if (!isPublicEndpoint(request)) {
                     sendError(response, "Token no encontrado", HttpServletResponse.SC_UNAUTHORIZED);
@@ -68,7 +69,7 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
             // EXTRAER EL LEVEL REAL del token
             String level = jwtUtils.extractLevel(token);
 
-            // ✅ CORREGIDO - Crear authorities correctamente
+            // CORREGIDO - Crear authorities correctamente
             Collection<? extends GrantedAuthority> authorities =
                     Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
 
@@ -174,9 +175,10 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         if (path.equals("/api/vehicles/newVehicle") && "POST".equals(method)) return true;
         if (path.equals("/api/vehicles/getAllVehicles") && "GET".equals(method)) return true;
         if (path.equals("/api/vehicles/getVehicleByPlateNumber/{plateNumber}") && "GET".equals(method)) return true;
-        if (path.equals("/api/vehicles/getVehicleByCirculationCardNumber/{CirculationCardNumber}") && "GET".equals(method)) return true;
+        if (path.equals("/api/vehicles/getVehicleByCirculationCardNumber/{CirculationCardNumber}") && "GET".equals(method))
+            return true;
         if (path.equals("/api/vehicles/getVehicleByOwnerPhone/{ownerPhone}") && "GET".equals(method)) return true;
-        if (path.equals("/api/vehicles/updateStatusVehicle/{id}") && "GET".equals(method)) return true;
+        if (path.equals("/api/vehicles/updateStatusVehicle/{id}") && "PUT".equals(method)) return true;
 
         // VEHICLE TYPES
         if (path.equals("/api/vehicleTypes/getAllVehicleTypes") && "GET".equals(method)) return true;
@@ -184,8 +186,12 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         // WORKORDERS
         if (path.equals("/api/workOrders/getAllWorkOrders") && "GET".equals(method)) return true;
         if (path.equals("/api/workOrders/newWorkOrder") && "POST".equals(method)) return true;
-        if (path.startsWith("/api/workOrders/updateWorkOrder/") && "PUT".equals(method)) return true;
-        if (path.startsWith("/api/workOrders/deleteWorkOrder/") && "DELETE".equals(method)) return true;
+        if (path.startsWith("/api/workOrders/updateWorkOrder/{id}") && "PUT".equals(method)) return true;
+        if (path.startsWith("/api/workOrders/deleteWorkOrder/{id}") && "DELETE".equals(method)) return true;
+        if (path.startsWith("/api/workOrders/getWorkOrdersByStudentIdAndStatus2/{studentId}") && "GET".equals(method))
+            return true;
+        if (path.startsWith("/api/workOrders/getWorkOrdersByInstructorIdAndStatus3/{studentId}") && "GET".equals(method))
+            return true;
 
         return false;
     }
