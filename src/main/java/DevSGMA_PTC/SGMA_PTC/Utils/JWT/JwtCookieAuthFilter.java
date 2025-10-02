@@ -121,79 +121,71 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         String method = request.getMethod();
 
-        
-        // Permite OPTIONS (preflight) siempre
-        if ("OPTIONS".equals(method)) {
-            return true;
-        }
+// Endpoints públicos
+        return
+                // AUTH - STUDENTS
+                (path.equals("/api/studentsAuth/studentLogin") && "POST".equals(method)) ||
+                        (path.equals("/api/studentsAuth/logoutStudent") && "POST".equals(method)) ||
+                        (path.equals("/api/studentsAuth/meStudent") && "GET".equals(method)) ||
 
-        // AUTH - STUDENTS
-        if (path.equals("/api/studentsAuth/studentLogin") && "POST".equals(method)) return true;
-        if (path.equals("/api/studentsAuth/logoutStudent") && "POST".equals(method)) return true;
-        if (path.equals("/api/studentsAuth/meStudent") && "GET".equals(method)) return true;
+                        // AUTH - INSTRUCTORS
+                        (path.equals("/api/instructorsAuth/instructorLogin") && "POST".equals(method)) ||
+                        (path.equals("/api/instructorsAuth/logoutInstructor") && "POST".equals(method)) ||
+                        (path.equals("/api/studentsAuth/meInstructor") && "GET".equals(method)) ||
 
-        // AUTH - INSTRUCTORS
-        if (path.equals("/api/instructorsAuth/instructorLogin") && "POST".equals(method)) return true;
-        if (path.equals("/api/instructorsAuth/logoutInstructor") && "POST".equals(method)) return true;
-        if (path.equals("/api/studentsAuth/meInstructor") && "GET".equals(method)) return true;
+                        // ENTRIES
+                        (path.equals("/api/entries/newEntry") && "POST".equals(method)) ||
+                        (path.equals("/api/entries/getAllEntries") && "GET".equals(method)) ||
 
-        // ENTRIES
-        if (path.equals("/api/entries/newEntry") && "POST".equals(method)) return true;
-        if (path.equals("/api/entries/getAllEntries") && "GET".equals(method)) return true;
+                        // GRADES
+                        (path.equals("/api/grades/getAllGrades") && "GET".equals(method)) ||
 
-        // GRADES
-        if (path.equals("/api/grades/getAllGrades") && "GET".equals(method)) return true;
+                        // INSTRUCTORS
+                        (path.equals("/api/instructors/getAllInstructors") && "GET".equals(method)) ||
+                        (path.equals("/api/instructors/newInstructor") && "POST".equals(method)) ||
+                        (path.startsWith("/api/instructors/updateInstructor/") && "PUT".equals(method)) ||
+                        (path.startsWith("/api/instructor/deleteInstructor/") && "DELETE".equals(method)) ||
+                        (path.startsWith("/api/instructor/getInstructorById/") && "GET".equals(method)) ||
+                        (path.startsWith("/api/instructor/update/") && path.endsWith("/password") && "PUT".equals(method)) ||
 
-        // INSTRUCTORS
-        if (path.equals("/api/instructors/getAllInstructors") && "GET".equals(method)) return true;
-        if (path.equals("/api/instructors/newInstructor") && "POST".equals(method)) return true;
-        if (path.startsWith("/api/instructors/updateInstructor/{id}") && "PUT".equals(method)) return true;
-        if (path.startsWith("/api/instructor/deleteInstructor/{id}") && "DELETE".equals(method)) return true;
-        if (path.startsWith("/api/instructor/getInstructorById/{id}") && "GET".equals(method)) return true;
-        if (path.startsWith("/api/instructor/update/{id}/password") && "PUT".equals(method)) return true;
+                        // LEVELS
+                        (path.equals("/api/levels/getAllLevels") && "GET".equals(method)) ||
 
-        // LEVELS
-        if (path.equals("/api/levels/getAllLevels") && "GET".equals(method)) return true;
+                        // MODULES
+                        (path.equals("/api/modules/getAllModules") && "GET".equals(method)) ||
+                        (path.equals("/api/modules/newModules") && "POST".equals(method)) ||
+                        (path.startsWith("/api/modules/updateModules/") && "PUT".equals(method)) ||
+                        (path.startsWith("/api/modules/deleteModules/") && "DELETE".equals(method)) ||
 
-        // MODULES
-        if (path.equals("/api/modules/getAllModules") && "GET".equals(method)) return true;
-        if (path.equals("/api/modules/newModules") && "POST".equals(method)) return true;
-        if (path.startsWith("/api/modules/updateModules/") && "PUT".equals(method)) return true;
-        if (path.startsWith("/api/modules/deleteModules/") && "DELETE".equals(method)) return true;
+                        // ROLES
+                        (path.equals("/api/roles/getAllRoles") && "GET".equals(method)) ||
 
-        // ROLES
-        if (path.equals("/api/roles/getAllRoles") && "GET".equals(method)) return true;
+                        // STUDENTS
+                        (path.equals("/api/students/getAllStudents") && "GET".equals(method)) ||
+                        (path.equals("/api/students/newStudent") && "POST".equals(method)) ||
+                        (path.startsWith("/api/students/updateStudent/") && "PUT".equals(method)) ||
+                        (path.startsWith("/api/students/deleteStudent/") && "DELETE".equals(method)) ||
+                        (path.startsWith("/api/students/getStudentById/") && "GET".equals(method)) ||
+                        (path.startsWith("/api/students/update/") && path.endsWith("/password") && "PUT".equals(method)) ||
 
-        // STUDENTS
-        if (path.equals("/api/students/getAllStudents") && "GET".equals(method)) return true;
-        if (path.equals("/api/students/newStudent") && "POST".equals(method)) return true;
-        if (path.startsWith("/api/students/updateStudent/{id}") && "PUT".equals(method)) return true;
-        if (path.startsWith("/api/students/deleteStudent/{id}") && "DELETE".equals(method)) return true;
-        if (path.startsWith("/api/students/getStudentById/{id}") && "GET".equals(method)) return true;
-        if (path.startsWith("/api/students/update/{id}/password") && "PUT".equals(method)) return true;
+                        // VEHICLES
+                        (path.equals("/api/vehicles/newVehicle") && "POST".equals(method)) ||
+                        (path.equals("/api/vehicles/getAllVehicles") && "GET".equals(method)) ||
+                        (path.startsWith("/api/vehicles/getVehicleByPlateNumber/") && "GET".equals(method)) ||
+                        (path.startsWith("/api/vehicles/getVehicleByCirculationCardNumber/") && "GET".equals(method)) ||
+                        (path.startsWith("/api/vehicles/getVehicleByOwnerPhone/") && "GET".equals(method)) ||
+                        (path.startsWith("/api/vehicles/updateStatusVehicle/") && "PUT".equals(method)) ||
 
-        // VEHICLES
-        if (path.equals("/api/vehicles/newVehicle") && "POST".equals(method)) return true;
-        if (path.equals("/api/vehicles/getAllVehicles") && "GET".equals(method)) return true;
-        if (path.equals("/api/vehicles/getVehicleByPlateNumber/{plateNumber}") && "GET".equals(method)) return true;
-        if (path.equals("/api/vehicles/getVehicleByCirculationCardNumber/{CirculationCardNumber}") && "GET".equals(method))
-            return true;
-        if (path.equals("/api/vehicles/getVehicleByOwnerPhone/{ownerPhone}") && "GET".equals(method)) return true;
-        if (path.equals("/api/vehicles/updateStatusVehicle/{id}") && "PUT".equals(method)) return true;
+                        // VEHICLE TYPES
+                        (path.equals("/api/vehicleTypes/getAllVehicleTypes") && "GET".equals(method)) ||
 
-        // VEHICLE TYPES
-        if (path.equals("/api/vehicleTypes/getAllVehicleTypes") && "GET".equals(method)) return true;
+                        // WORKORDERS
+                        (path.equals("/api/workOrders/getAllWorkOrders") && "GET".equals(method)) ||
+                        (path.equals("/api/workOrders/newWorkOrder") && "POST".equals(method)) ||
+                        (path.startsWith("/api/workOrders/updateWorkOrder/") && "PUT".equals(method)) ||
+                        (path.startsWith("/api/workOrders/deleteWorkOrder/") && "DELETE".equals(method)) ||
+                        (path.startsWith("/api/workOrders/getWorkOrdersByStudentIdAndStatus2/") && "GET".equals(method)) ||
+                        (path.startsWith("/api/workOrders/getWorkOrdersByInstructorIdAndStatus3/") && "GET".equals(method));
 
-        // WORKORDERS
-        if (path.equals("/api/workOrders/getAllWorkOrders") && "GET".equals(method)) return true;
-        if (path.equals("/api/workOrders/newWorkOrder") && "POST".equals(method)) return true;
-        if (path.startsWith("/api/workOrders/updateWorkOrder/{id}") && "PUT".equals(method)) return true;
-        if (path.startsWith("/api/workOrders/deleteWorkOrder/{id}") && "DELETE".equals(method)) return true;
-        if (path.startsWith("/api/workOrders/getWorkOrdersByStudentIdAndStatus2/{studentId}") && "GET".equals(method))
-            return true;
-        if (path.startsWith("/api/workOrders/getWorkOrdersByInstructorIdAndStatus3/{studentId}") && "GET".equals(method))
-            return true;
-
-        return false;
     }
 }
