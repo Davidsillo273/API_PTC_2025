@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import DevSGMA_PTC.SGMA_PTC.Services.Students.StudentService;
 
+@CrossOrigin
 @RestController // Indica que esta clase es un controlador REST
 @RequestMapping("/api/students") // Ruta base para todos los endpoints de esta clase
 public class StudentController {
