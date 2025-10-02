@@ -76,7 +76,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, workOrders + "/updateWorkOrder/*").authenticated()
                         .requestMatchers(HttpMethod.DELETE, workOrders + "/deleteWorkOrder/*").authenticated()
 
-                        // AUTH POR ROL INSTRUCTOR
+                        // AUTH POR ROL COORDINADORA
                         .requestMatchers(HttpMethod.GET, students + "/getAllVehicles")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora", "ROLE_Docente")
 
@@ -101,6 +101,8 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.GET, roles + "/getAllRoles").hasAuthority("ROLE_Animador")
 
+                        .requestMatchers(HttpMethod.GET, students + "/getAllStudents")
+                        .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.POST, students + "/newStudent")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.DELETE, students + "/deleteStudent/*")
@@ -123,7 +125,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
