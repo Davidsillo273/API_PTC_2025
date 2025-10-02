@@ -102,7 +102,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, roles + "/getAllRoles").hasAuthority("ROLE_Animador")
 
                         .requestMatchers(HttpMethod.GET, students + "/getAllStudents")
-                        .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .authenticated()
                         .requestMatchers(HttpMethod.POST, students + "/newStudent")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.DELETE, students + "/deleteStudent/*")
