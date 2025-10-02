@@ -28,7 +28,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        //Variales de los endpoints
+        // Variables de los endpoints
         String instructorAuth = "/api/instructorsAuth";
         String studentAuth = "/api/studentsAuth";
         String grades = "/api/grades";
@@ -49,99 +49,72 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ← Permite preflight requests
 
                         // ENDPOINTS SIN AUTENTIFICACIÓN
-
-                        // AUTH - STUDENTS
-                        .requestMatchers(HttpMethod.POST, "/api/studentsAuth/studentLogin").permitAll()
-
-                        // AUTH - INSTRUCTORS
-                        .requestMatchers(HttpMethod.POST, "/api/instructorsAuth/instructorLogin").permitAll()
-
-                        // GRADES
-                        .requestMatchers(HttpMethod.GET, "/api/grades/getAllGrades").permitAll()
+                        .requestMatchers(HttpMethod.POST, studentAuth + "/studentLogin").permitAll()
+                        .requestMatchers(HttpMethod.POST, instructorAuth + "/instructorLogin").permitAll()
+                        .requestMatchers(HttpMethod.GET, grades + "/getAllGrades").permitAll()
 
                         // ENDPOINTS CON AUTENTIFICACIÓN
+                        .requestMatchers(studentAuth + "/meStudent").authenticated()
+                        .requestMatchers(HttpMethod.POST, studentAuth + "/logoutStudent").authenticated()
 
-                        // AUTH - STUDENTS
-                        .requestMatchers("/api/studentsAuth/meStudent").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/studentsAuth/logoutStudent").authenticated()
+                        .requestMatchers(instructorAuth + "/meInstructor").authenticated()
+                        .requestMatchers(HttpMethod.POST, instructorAuth + "/logoutInstructor").permitAll()
 
-                        // AUTH - INSTRUCTORS
-                        .requestMatchers("/api/instructorsAuth/meInstructor").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/instructorsAuth/logoutInstructor").permitAll()
+                        .requestMatchers(HttpMethod.PUT, students + "/updateStudent/*").authenticated()
 
-                        // STUDENTS
-                        .requestMatchers(HttpMethod.PUT, "/api/students/updateStudent/*").authenticated()
+                        .requestMatchers(HttpMethod.POST, entries + "/newEntry").authenticated()
+                        .requestMatchers(HttpMethod.GET, entries + "/getAllEntries").authenticated()
 
-                        // ENTRIES
-                        .requestMatchers(HttpMethod.POST, "/api/entries/newEntry").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/entries/getAllEntries").authenticated()
+                        .requestMatchers(HttpMethod.POST, vehicles + "/newVehicle").authenticated()
+                        .requestMatchers(HttpMethod.POST, vehicles + "/getAllVehiclesByStudent/*").authenticated()
 
-                        // VEHICLES
-                        .requestMatchers(HttpMethod.POST, "/api/vehicles/newVehicle").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/vehicles/getAllVehiclesByStudent/*").authenticated()
+                        .requestMatchers(HttpMethod.GET, modules + "/getAllModules").authenticated()
+                        .requestMatchers(HttpMethod.GET, vehicleTypes + "/getAllVehicleTypes").authenticated()
+                        .requestMatchers(HttpMethod.GET, levels + "/getAllLevels").authenticated()
 
-                        // MODULES
-                        .requestMatchers(HttpMethod.GET, "/api/modules/getAllModules").authenticated()
-
-                        // VEHICLE TYPES
-                        .requestMatchers(HttpMethod.GET, "/api/vehicleTypes/getAllVehicleTypes").authenticated()
-
-                        // LEVELS
-                        .requestMatchers(HttpMethod.GET, "/api/levels/getAllLevels").authenticated()
-
-                        // WORKORDERS
-                        .requestMatchers(HttpMethod.POST, "/api/workOrders/newWorkOrder").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/workOrders/updateWorkOrder/*").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/workOrders/deleteWorkOrder/*").authenticated()
-
+                        .requestMatchers(HttpMethod.POST, workOrders + "/newWorkOrder").authenticated()
+                        .requestMatchers(HttpMethod.PUT, workOrders + "/updateWorkOrder/*").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, workOrders + "/deleteWorkOrder/*").authenticated()
 
                         // AUTH POR ROL INSTRUCTOR
-                        .requestMatchers(HttpMethod.GET, "/api/students/getAllVehicles")
+                        .requestMatchers(HttpMethod.GET, students + "/getAllVehicles")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora", "ROLE_Docente")
 
                         // AUTH POR ROL ANIMADOR
-
-                        // MODULES
-                        .requestMatchers(HttpMethod.POST, "/api/modules/newModules")
+                        .requestMatchers(HttpMethod.POST, modules + "/newModules")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.PUT, "/api/modules/updateModules/*")
+                        .requestMatchers(HttpMethod.PUT, modules + "/updateModules/*")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.DELETE, "/api/modules/deleteModules/*")
+                        .requestMatchers(HttpMethod.DELETE, modules + "/deleteModules/*")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
-                        // INSTRUCTORS
-                        .requestMatchers(HttpMethod.GET, "/api/instructors/getAllInstructors")
+                        .requestMatchers(HttpMethod.GET, instructors + "/getAllInstructors")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.POST, "/api/instructors/newInstructor")
+                        .requestMatchers(HttpMethod.POST, instructors + "/newInstructor")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.PUT, "/api/instructors/updateInstructor/*")
+                        .requestMatchers(HttpMethod.PUT, instructors + "/updateInstructor/*")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.DELETE, "/api/instructors/deleteInstructor/*")
+                        .requestMatchers(HttpMethod.DELETE, instructors + "/deleteInstructor/*")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.GET, "/api/instructors/getInstructorById/*")
-                        .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-
-                        // ROLES
-                        .requestMatchers(HttpMethod.GET, "/api/roles/getAllRoles").hasAuthority("ROLE_Animador")
-
-                        // STUDENTS
-                        .requestMatchers(HttpMethod.POST, "/api/students/newStudent")
-                        .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.DELETE, "/api/students/deleteStudent/*")
-                        .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.GET, "/api/students/getStudentById/*")
+                        .requestMatchers(HttpMethod.GET, instructors + "/getInstructorById/*")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
-                        // VEHICLES
-                        .requestMatchers(HttpMethod.GET, "/api/vehicles/getAllVehicles")
+                        .requestMatchers(HttpMethod.GET, roles + "/getAllRoles").hasAuthority("ROLE_Animador")
+
+                        .requestMatchers(HttpMethod.POST, students + "/newStudent")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.PATCH, "/api/vehicles/updateStatusVehicle/*")
+                        .requestMatchers(HttpMethod.DELETE, students + "/deleteStudent/*")
+                        .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.GET, students + "/getStudentById/*")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
-                        // WORKORDERS
-                        .requestMatchers(HttpMethod.GET, "/api/workOrders/getAllWorkOrders")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getAllVehicles")
+                        .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.PATCH, vehicles + "/updateStatusVehicle/*")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
+                        .requestMatchers(HttpMethod.GET, workOrders + "/getAllWorkOrders")
+                        .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess
