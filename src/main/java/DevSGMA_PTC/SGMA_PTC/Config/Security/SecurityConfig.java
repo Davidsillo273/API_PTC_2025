@@ -36,10 +36,10 @@ public class SecurityConfig {
                         //ENDPOINTS SIN AUTENTIFICACIÓN
 
                         //AUTH - STUDENTS
-                        .requestMatchers(HttpMethod.POST, "/api/studentsAuth/studentLogin").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/studentsAuth/studentLogin").permitAll()
 
                         //AUTH - INSTRUCTORS
-                        .requestMatchers(HttpMethod.POST, "/api/instructorsAuth/instructorLogin").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/instructorsAuth/instructorLogin").permitAll()
 
                         //GRADES
                         .requestMatchers(HttpMethod.GET, "/api/grades/getAllGrades").permitAll()
@@ -85,7 +85,7 @@ public class SecurityConfig {
 
 
                         //AUTH POR ROL INSTRUCTOR
-                        .requestMatchers(HttpMethod.GET, "/api/students/getAllVehicles").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora", "ROLE_Docente")
+                        .requestMatchers(HttpMethod.GET, "/api/students/getAllVehicles").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora","ROLE_Docente" )
 
                         //AUTH POR ROL ADMIN
 
@@ -114,7 +114,8 @@ public class SecurityConfig {
                         //WORKORDERS
                         .requestMatchers(HttpMethod.GET, "/api/workOrders/getAllWorkOrders").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
-                )
+
+                        .anyRequest().authenticated())
                 .sessionManagement(sess -> sess
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtCookieAuthFilter, UsernamePasswordAuthenticationFilter.class);
