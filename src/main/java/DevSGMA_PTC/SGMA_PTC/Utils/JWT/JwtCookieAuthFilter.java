@@ -121,71 +121,23 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         String method = request.getMethod();
 
-// Endpoints públicos
+        // Variables de los endpoints
+        String instructorAuth = "/api/instructorsAuth";
+        String studentAuth = "/api/studentsAuth";
+        String grades = "/api/grades";
+
         return
-                // AUTH - STUDENTS
-                (path.equals("/api/studentsAuth/studentLogin") && "POST".equals(method)) ||
-                        (path.equals("/api/studentsAuth/logoutStudent") && "POST".equals(method)) ||
-                        (path.equals("/api/studentsAuth/meStudent") && "GET".equals(method)) ||
+                // Preflight requests (CORS)
+                ("OPTIONS".equals(method)) ||
 
                         // AUTH - INSTRUCTORS
-                        (path.equals("/api/instructorsAuth/instructorLogin") && "POST".equals(method)) ||
-                        (path.equals("/api/instructorsAuth/logoutInstructor") && "POST".equals(method)) ||
-                        (path.equals("/api/studentsAuth/meInstructor") && "GET".equals(method)) ||
+                        (path.equals(instructorAuth + "/instructorLogin") && "POST".equals(method)) ||
 
-                        // ENTRIES
-                        (path.equals("/api/entries/newEntry") && "POST".equals(method)) ||
-                        (path.equals("/api/entries/getAllEntries") && "GET".equals(method)) ||
+                        // AUTH - STUDENTS
+                        (path.equals(studentAuth + "/studentLogin") && "POST".equals(method)) ||
 
                         // GRADES
-                        (path.equals("/api/grades/getAllGrades") && "GET".equals(method)) ||
-
-                        // INSTRUCTORS
-                        (path.equals("/api/instructors/getAllInstructors") && "GET".equals(method)) ||
-                        (path.equals("/api/instructors/newInstructor") && "POST".equals(method)) ||
-                        (path.startsWith("/api/instructors/updateInstructor/") && "PUT".equals(method)) ||
-                        (path.startsWith("/api/instructor/deleteInstructor/") && "DELETE".equals(method)) ||
-                        (path.startsWith("/api/instructor/getInstructorById/") && "GET".equals(method)) ||
-                        (path.startsWith("/api/instructor/update/") && path.endsWith("/password") && "PUT".equals(method)) ||
-
-                        // LEVELS
-                        (path.equals("/api/levels/getAllLevels") && "GET".equals(method)) ||
-
-                        // MODULES
-                        (path.equals("/api/modules/getAllModules") && "GET".equals(method)) ||
-                        (path.equals("/api/modules/newModules") && "POST".equals(method)) ||
-                        (path.startsWith("/api/modules/updateModules/") && "PUT".equals(method)) ||
-                        (path.startsWith("/api/modules/deleteModules/") && "DELETE".equals(method)) ||
-
-                        // ROLES
-                        (path.equals("/api/roles/getAllRoles") && "GET".equals(method)) ||
-
-                        // STUDENTS
-                        (path.equals("/api/students/getAllStudents") && "GET".equals(method)) ||
-                        (path.equals("/api/students/newStudent") && "POST".equals(method)) ||
-                        (path.startsWith("/api/students/updateStudent/") && "PUT".equals(method)) ||
-                        (path.startsWith("/api/students/deleteStudent/") && "DELETE".equals(method)) ||
-                        (path.startsWith("/api/students/getStudentById/") && "GET".equals(method)) ||
-                        (path.startsWith("/api/students/update/") && path.endsWith("/password") && "PUT".equals(method)) ||
-
-                        // VEHICLES
-                        (path.equals("/api/vehicles/newVehicle") && "POST".equals(method)) ||
-                        (path.equals("/api/vehicles/getAllVehicles") && "GET".equals(method)) ||
-                        (path.startsWith("/api/vehicles/getVehicleByPlateNumber/") && "GET".equals(method)) ||
-                        (path.startsWith("/api/vehicles/getVehicleByCirculationCardNumber/") && "GET".equals(method)) ||
-                        (path.startsWith("/api/vehicles/getVehicleByOwnerPhone/") && "GET".equals(method)) ||
-                        (path.startsWith("/api/vehicles/updateStatusVehicle/") && "PUT".equals(method)) ||
-
-                        // VEHICLE TYPES
-                        (path.equals("/api/vehicleTypes/getAllVehicleTypes") && "GET".equals(method)) ||
-
-                        // WORKORDERS
-                        (path.equals("/api/workOrders/getAllWorkOrders") && "GET".equals(method)) ||
-                        (path.equals("/api/workOrders/newWorkOrder") && "POST".equals(method)) ||
-                        (path.startsWith("/api/workOrders/updateWorkOrder/") && "PUT".equals(method)) ||
-                        (path.startsWith("/api/workOrders/deleteWorkOrder/") && "DELETE".equals(method)) ||
-                        (path.startsWith("/api/workOrders/getWorkOrdersByStudentIdAndStatus2/") && "GET".equals(method)) ||
-                        (path.startsWith("/api/workOrders/getWorkOrdersByInstructorIdAndStatus3/") && "GET".equals(method));
-
+                        (path.equals(grades + "/getAllGrades") && "GET".equals(method));
     }
+
 }

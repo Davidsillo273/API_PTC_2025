@@ -27,6 +27,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        //Variales de los endpoints
+        String instructorAuth = "/api/instructorsAuth";
+        String studentAuth = "/api/studentsAuth";
+        String grades = "/api/grades";
+        String students = "/api/students";
+        String entries = "/api/entries";
+        String vehicles = "/api/vehicles";
+        String modules = "/api/modules";
+        String vehicleTypes = "/api/vehicleTypes";
+        String levels = "/api/levels";
+        String workOrders = "/api/workOrders";
+        String instructors = "/api/instructors";
+        String roles = "/api/roles";
+
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
@@ -43,10 +58,6 @@ public class SecurityConfig {
 
                         // GRADES
                         .requestMatchers(HttpMethod.GET, "/api/grades/getAllGrades").permitAll()
-
-                        // ROLES
-                        .requestMatchers(HttpMethod.GET, "/api/roles/getAllRoles").permitAll()
-
 
                         // ENDPOINTS CON AUTENTIFICACIÓN
 
@@ -88,7 +99,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/students/getAllVehicles")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora", "ROLE_Docente")
 
-                        // AUTH POR ROL ADMIN
+                        // AUTH POR ROL ANIMADOR
 
                         // MODULES
                         .requestMatchers(HttpMethod.POST, "/api/modules/newModules")
@@ -109,6 +120,9 @@ public class SecurityConfig {
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.GET, "/api/instructors/getInstructorById/*")
                         .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+
+                        // ROLES
+                        .requestMatchers(HttpMethod.GET, "/api/roles/getAllRoles").hasAuthority("ROLE_Animador")
 
                         // STUDENTS
                         .requestMatchers(HttpMethod.POST, "/api/students/newStudent")
