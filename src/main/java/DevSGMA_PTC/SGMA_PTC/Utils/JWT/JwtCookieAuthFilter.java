@@ -141,7 +141,8 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
                         (path.equals(grades + "/getAllGrades") && "GET".equals(method)) ||
 
                         // STUDENTS
-                        (path.equals(students + "/newStudent") && "POST".equals(method));
+                        (path.equals(students + "/newStudent") && "POST".equals(method)) ||
+                        (path.equals(students + "/getAllStudents") && "GET".equals(method));
     }
 
 }
