@@ -34,7 +34,7 @@ public class StudentController {
      * Retorna error si los parámetros son inválidos o si ocurre un problema en el servicio.
      */
 
-    @GetMapping("/getAllVehicles")
+    @GetMapping("/getAllStudents")
     public ResponseEntity<ApiResponse<Page<StudentDTO>>> getAllStudents(
             @RequestParam(defaultValue = "0") int page, // Página por defecto 0
             @RequestParam(defaultValue = "10") int size // Tamaño por defecto 10
