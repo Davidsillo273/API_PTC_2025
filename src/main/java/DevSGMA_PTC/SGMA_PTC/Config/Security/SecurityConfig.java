@@ -60,7 +60,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, grades + "/getAllGrades").permitAll()
 
                         // Students
-                        .requestMatchers(HttpMethod.GET, students + "/getAllStudents").permitAll()
                         .requestMatchers(HttpMethod.POST, students + "/newStudent").permitAll()
 
                         // ENDPOINTS CON AUTENTIFICACIÓN
@@ -119,7 +118,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, roles + "/getAllRoles").hasAuthority("ROLE_Animador")
 
                         // Students
-//                        .requestMatchers(HttpMethod.GET, students + "/getAllStudents").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.GET, students + "/getAllStudents").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.DELETE, students + "/deleteStudent/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.GET, students + "/getStudentById/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
