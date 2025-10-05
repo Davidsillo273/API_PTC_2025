@@ -34,4 +34,24 @@ public class ModuleDTO {
 
     //Campo adicional
     private String levelName;  // Campo adicional para mostrar el nombre del año académico, campo como tal no existe en tbModules
+
+    // Nuevo campo: Código corto del módulo
+    @Size(max = 20, message = "El código del módulo no puede exceder los 20 caracteres")
+    private String moduleCode;
+
+    // Para POST: id del instructor
+    private Long instructorId;
+
+    // Para GET: detalles del instructor
+    private InstructorInfoDTO instructor;
+
+    // DTO auxiliar para mostrar datos clave del instructor
+    @Getter
+    @Setter
+    @ToString
+    @EqualsAndHashCode
+    public static class InstructorInfoDTO {
+        private Long instructorId;
+        private String instructorName;
+    }
 }

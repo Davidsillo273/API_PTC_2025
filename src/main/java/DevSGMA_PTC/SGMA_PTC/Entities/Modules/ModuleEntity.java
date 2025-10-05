@@ -2,6 +2,7 @@ package DevSGMA_PTC.SGMA_PTC.Entities.Modules;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Levels.LevelEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrderEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Instructors.InstructorEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -35,11 +36,20 @@ public class ModuleEntity {
     @Column(name = "MODULENAME", nullable = false)
     private String moduleName;
 
+    // Nuevo campo: Código corto del módulo
+    @Column(name = "MODULECODE", length = 20)
+    private String moduleCode;
+
     //*** MANYTOONEs ***\\
 
     @ManyToOne // Muchos módulos pueden estar asociados a un mismo nivel académico
     @JoinColumn(name = "LEVELID", referencedColumnName = "LEVELID") // Columna que conecta con la tabla de tbLevels
     private LevelEntity levelId; // Referencia al nivel académico asociado al módulo
+
+    // Relación con Instructor (clave foránea)
+    @ManyToOne
+    @JoinColumn(name = "INSTRUCTORID", referencedColumnName = "INSTRUCTORID")
+    private InstructorEntity instructor;
 
     //*** ONETOMANYS ***\\
 

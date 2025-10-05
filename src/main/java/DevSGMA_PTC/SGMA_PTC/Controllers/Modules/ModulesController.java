@@ -48,6 +48,7 @@ public class ModulesController {
         }
 
         Page<ModuleDTO> modules = moduleService.getAllModules(page, size);
+        // El DTO ya incluye moduleCode e instructor
         if (modules == null || modules.isEmpty()) {
             throw new ExceptionModuleNotFound("No se encontraron módulos");
         }
@@ -69,12 +70,11 @@ public class ModulesController {
         if (dto == null) {
             throw new ExceptionModuleDontRegister("Error al recibir la información del módulo");
         }
-
+        // El DTO debe incluir moduleCode e instructorId
         ModuleDTO savedModule = moduleService.insertModule(dto);
         if (savedModule == null) {
             throw new ExceptionModuleDontRegister("No se pudo registrar el módulo");
         }
-
         return ResponseEntity.ok(ApiResponse.success("Módulo registrado exitosamente", savedModule));
     }
 
@@ -100,6 +100,7 @@ public class ModulesController {
         }
 
         try {
+            // El DTO debe incluir moduleCode e instructorId
             ModuleDTO updated = moduleService.updateModule(id, dto);
             return ResponseEntity.ok(ApiResponse.success("Módulo actualizado correctamente", updated));
         } catch (ExceptionModuleNotFound e) {
