@@ -7,6 +7,7 @@ import DevSGMA_PTC.SGMA_PTC.Exceptions.Instructors.ExceptionInstructorNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Levels.ExceptionLevelNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Modules.ExceptionModuleNameDuplicated;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Modules.ExceptionModuleNotFound;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.Instructors.InstructorInfoDTO;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Modules.ModuleDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Instructors.InstructorRepository;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Levels.LevelRepository;
@@ -50,11 +51,8 @@ public class ModuleService {
             throw new ExceptionModuleNameDuplicated("El nombre del módulo ya está registrado en la base de datos");
         }
 
-        InstructorEntity instructor = null;
-        if (json.getInstructorId() != null) {
-            instructor = instructorRepository.findById(json.getInstructorId())
+        InstructorEntity instructor = instructorRepository.findById(json.getInstructorId())
                 .orElseThrow(() -> new ExceptionInstructorNotFound("Instructor no encontrado con ID: " + json.getInstructorId()));
-        }
 
         ModuleEntity entity = convertToEntity(json, instructor);
         ModuleEntity saved = moduleRepository.save(entity);
@@ -64,34 +62,21 @@ public class ModuleService {
 
     // Actualizar un módulo
     public ModuleDTO updateModule(Long id, @Valid ModuleDTO json) {
-        //1. Verificar existencia
         ModuleEntity moduleExist = moduleRepository.findById(id)
-                .orElseThrow(() -> new ExceptionModuleNotFound("Modulo no encontrado."));
+            .orElseThrow(() -> new ExceptionModuleNotFound("Modulo no encontrado."));
 
-        //2. Verificar nombre duplicado solo si cambió
-        if (!moduleExist.getModuleName().equals(json.getModuleName())) {
-            if (verifyModuleExist(json.getModuleName())) {
-                throw new ExceptionModuleNameDuplicated("El nombre del módulo ya está registrado en la base de datos");
-            }
-        }
-
-        //3. Actualizar campos
         moduleExist.setModuleName(json.getModuleName());
         moduleExist.setModuleCode(json.getModuleCode());
 
         LevelEntity level = levelRepository.findById(json.getLevelId())
                 .orElseThrow(() -> new ExceptionLevelNotFound("Nivel no encontrado con ID: " + json.getLevelId()));
-        moduleExist.setLevel(level);
+        moduleExist.setLevelId(level);
 
-        if (json.getInstructorId() != null) {
-            InstructorEntity instructor = instructorRepository.findById(json.getInstructorId())
-                    .orElseThrow(() -> new ExceptionInstructorNotFound("Instructor no encontrado con ID: " + json.getInstructorId()));
-            moduleExist.setInstructor(instructor);
-        }
+        InstructorEntity instructor = instructorRepository.findById(json.getInstructorId())
+                .orElseThrow(() -> new ExceptionInstructorNotFound("Instructor no encontrado con ID: " + json.getInstructorId()));
+        moduleExist.setInstructor(instructor);
 
-        //4. Actualización del registro
         ModuleEntity moduleUpdated = moduleRepository.save(moduleExist);
-        //5. Convertir a DTO
         return convertToDTO(moduleUpdated);
     }
 
@@ -119,25 +104,17 @@ public class ModuleService {
         dto.setModuleName(moduleEntity.getModuleName());
         dto.setModuleCode(moduleEntity.getModuleCode());
 
-        // Asigna el nombre y ID del año académico si existe
-        if (moduleEntity.getLevel() != null) { // ✅ Cambiar getLevelId() por getLevel()
-            dto.setLevelName(moduleEntity.getLevel().getLevelName());
-            dto.setLevelId(moduleEntity.getLevel().getLevelId());
+        if (moduleEntity.getLevelId() != null) {
+            dto.setLevelName(moduleEntity.getLevelId().getLevelName());
+            dto.setLevelId(moduleEntity.getLevelId().getLevelId());
         }
 
         // Instructor info para GET
         if (moduleEntity.getInstructor() != null) {
-            // ✅ Agregar instructorId al DTO principal
-            dto.setInstructorId(moduleEntity.getInstructor().getInstructorId());
-
-            ModuleDTO.InstructorInfoDTO instructorDTO = new ModuleDTO.InstructorInfoDTO();
-            instructorDTO.setInstructorId(moduleEntity.getInstructor().getInstructorId());
-            // ✅ Corregir: incluir firstName + lastName
-            instructorDTO.setInstructorName(
-                    moduleEntity.getInstructor().getFirstName() + " " +
-                            moduleEntity.getInstructor().getLastName()
-            );
-            dto.setInstructor(instructorDTO);
+            InstructorInfoDTO instructorInfo = new InstructorInfoDTO();
+            instructorInfo.setInstructorId(moduleEntity.getInstructor().getInstructorId());
+            instructorInfo.setInstructorName(moduleEntity.getInstructor().getFirstName());
+            dto.setInstructor(instructorInfo);
         }
 
         return dto;
@@ -149,15 +126,11 @@ public class ModuleService {
         entity.setModuleName(json.getModuleName());
         entity.setModuleCode(json.getModuleCode());
 
-        // Asigna el año académico si se proporciona un ID de año académico
-        if (json.getLevelId() != null) {
-            LevelEntity levelEntity = levelRepository.findById(json.getLevelId())
-                    .orElseThrow(() -> new ExceptionLevelNotFound("ID del año académico del módulo no encontrado"));
-            entity.setLevel(levelEntity); // ✅ Cambiar setLevelId() por setLevel()
-        }
-        if (instructor != null) {
-            entity.setInstructor(instructor);
-        }
+        LevelEntity levelEntity = levelRepository.findById(json.getLevelId())
+                .orElseThrow(() -> new ExceptionLevelNotFound("ID del año académico del módulo no encontrado"));
+        entity.setLevelId(levelEntity);
+
+        entity.setInstructor(instructor);
         return entity;
     }
 }

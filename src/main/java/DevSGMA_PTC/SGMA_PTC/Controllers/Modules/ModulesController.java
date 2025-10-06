@@ -92,15 +92,13 @@ public class ModulesController {
      * @throws ExceptionModuleDontRegister si ocurre un error durante la actualización.
      */
     @PutMapping("/updateModule/{id}")
-    public ResponseEntity<?> updateModule(@Valid @PathVariable Long id, @RequestBody ModuleDTO dto, BindingResult bindingResult) {
+    public ResponseEntity<?> updateModule(@PathVariable Long id, @Valid @RequestBody ModuleDTO dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
-
         try {
-            // El DTO debe incluir moduleCode e instructorId
             ModuleDTO updated = moduleService.updateModule(id, dto);
             return ResponseEntity.ok(ApiResponse.success("Módulo actualizado correctamente", updated));
         } catch (ExceptionModuleNotFound e) {
@@ -109,7 +107,7 @@ public class ModulesController {
                     "Message", e.getMessage(),
                     "Timestamp", Instant.now().toString()
             ));
-        } catch (ExceptionModuleDontRegister e) {
+        } catch (ExceptionModuleDontRegister | IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of(
                     "Error", "No se pudo actualizar",
                     "Message", e.getMessage(),
