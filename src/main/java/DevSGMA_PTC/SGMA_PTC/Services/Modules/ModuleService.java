@@ -65,24 +65,33 @@ public class ModuleService {
     // Actualizar un módulo
     public ModuleDTO updateModule(Long id, @Valid ModuleDTO json) {
         //1. Verificar existencia
-        ModuleEntity moduleExist = moduleRepository.findById(id).orElseThrow(() -> new ExceptionModuleNotFound("Modulo no encontrado."));
-        //2. Actualizar campos
+        ModuleEntity moduleExist = moduleRepository.findById(id)
+                .orElseThrow(() -> new ExceptionModuleNotFound("Modulo no encontrado."));
+
+        //2. Verificar nombre duplicado solo si cambió
+        if (!moduleExist.getModuleName().equals(json.getModuleName())) {
+            if (verifyModuleExist(json.getModuleName())) {
+                throw new ExceptionModuleNameDuplicated("El nombre del módulo ya está registrado en la base de datos");
+            }
+        }
+
+        //3. Actualizar campos
         moduleExist.setModuleName(json.getModuleName());
         moduleExist.setModuleCode(json.getModuleCode());
 
         LevelEntity level = levelRepository.findById(json.getLevelId())
                 .orElseThrow(() -> new ExceptionLevelNotFound("Nivel no encontrado con ID: " + json.getLevelId()));
-        moduleExist.setLevelId(level);
+        moduleExist.setLevel(level);
 
         if (json.getInstructorId() != null) {
             InstructorEntity instructor = instructorRepository.findById(json.getInstructorId())
-                .orElseThrow(() -> new ExceptionInstructorNotFound("Instructor no encontrado con ID: " + json.getInstructorId()));
+                    .orElseThrow(() -> new ExceptionInstructorNotFound("Instructor no encontrado con ID: " + json.getInstructorId()));
             moduleExist.setInstructor(instructor);
         }
 
-        //3. Actualización del registro
+        //4. Actualización del registro
         ModuleEntity moduleUpdated = moduleRepository.save(moduleExist);
-        //4. Convertir a DTO
+        //5. Convertir a DTO
         return convertToDTO(moduleUpdated);
     }
 
@@ -110,17 +119,24 @@ public class ModuleService {
         dto.setModuleName(moduleEntity.getModuleName());
         dto.setModuleCode(moduleEntity.getModuleCode());
 
-        // Asigna el nombre y ID del año académico si el instructor tiene uno asociado
-        if (moduleEntity.getLevelId() != null) {
-            dto.setLevelName(moduleEntity.getLevelId().getLevelName());
-            dto.setLevelId(moduleEntity.getLevelId().getLevelId());
+        // Asigna el nombre y ID del año académico si existe
+        if (moduleEntity.getLevel() != null) { // ✅ Cambiar getLevelId() por getLevel()
+            dto.setLevelName(moduleEntity.getLevel().getLevelName());
+            dto.setLevelId(moduleEntity.getLevel().getLevelId());
         }
 
         // Instructor info para GET
         if (moduleEntity.getInstructor() != null) {
+            // ✅ Agregar instructorId al DTO principal
+            dto.setInstructorId(moduleEntity.getInstructor().getInstructorId());
+
             ModuleDTO.InstructorInfoDTO instructorDTO = new ModuleDTO.InstructorInfoDTO();
             instructorDTO.setInstructorId(moduleEntity.getInstructor().getInstructorId());
-            instructorDTO.setInstructorName(moduleEntity.getInstructor().getFirstName());
+            // ✅ Corregir: incluir firstName + lastName
+            instructorDTO.setInstructorName(
+                    moduleEntity.getInstructor().getFirstName() + " " +
+                            moduleEntity.getInstructor().getLastName()
+            );
             dto.setInstructor(instructorDTO);
         }
 
@@ -137,7 +153,7 @@ public class ModuleService {
         if (json.getLevelId() != null) {
             LevelEntity levelEntity = levelRepository.findById(json.getLevelId())
                     .orElseThrow(() -> new ExceptionLevelNotFound("ID del año académico del módulo no encontrado"));
-            entity.setLevelId(levelEntity);
+            entity.setLevel(levelEntity); // ✅ Cambiar setLevelId() por setLevel()
         }
         if (instructor != null) {
             entity.setInstructor(instructor);
