@@ -111,6 +111,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, instructors + "/getAllInstructors").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.POST, instructors + "/newInstructor").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.PUT, instructors + "/updateInstructor/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.PUT, instructors + "/update/{id}/password").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora","ROLE_Docente")
                         .requestMatchers(HttpMethod.DELETE, instructors + "/deleteInstructor/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.GET, instructors + "/getInstructorById/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
