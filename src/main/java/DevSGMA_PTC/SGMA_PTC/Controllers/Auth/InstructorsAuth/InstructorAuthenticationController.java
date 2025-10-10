@@ -93,7 +93,8 @@ public class InstructorAuthenticationController {
                             "HttpOnly; " +
                             "Secure=false; " +
                             "SameSite=None; " +
-                            "MaxAge=86400; " ,
+                            "MaxAge=86400; " +
+                            "Domain=sgma-66ec41075156.herokuapp.com",
                     token
             );
 

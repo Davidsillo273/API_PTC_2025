@@ -18,7 +18,6 @@ import java.util.Map;
 
 // Indica que esta clase es un controlador REST
 @RestController
-
 // Ruta base para todos los endpoints de esta clase
 @RequestMapping("/api/instructors")
 public class InstructorController {
