@@ -9,13 +9,11 @@ import lombok.EqualsAndHashCode;
 import java.util.ArrayList;
 import java.util.List;
 
-// Entity que representa un tipo de vehículo en la base de datos
-@Entity
-@Table(name = "TBVEHICLETYPES")
-// Anotaciones de Lombok para generar getters, setters y equals/hashCode automáticamente
-@Getter
-@Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity // Indica que esta clase es una entidad JPA y se mapea a una tabla en la base de datos
+@Getter // Lombok: genera automáticamente los métodos getter
+@Setter // Lombok: genera automáticamente los métodos setter
+@EqualsAndHashCode // Lombok: genera automáticamente equals y hashCode
+@Table(name = "TBVECHILESTYPES") // Especifica el nombre de la tabla en la base de datos
 public class VehicleTypeEntity {
 
     //*** ATRIBUTOS ***\\
@@ -30,8 +28,16 @@ public class VehicleTypeEntity {
     @Column(name = "TYPENAME", length = 50, nullable = false)
     private String typeName;
 
-    @OneToMany(mappedBy = "typeId", cascade = CascadeType.ALL) // Relación OneToMany con tbVehicles
+    @OneToMany(mappedBy = "typeId", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Relación OneToMany con tbVehicles
     @JsonIgnore
     private List<VehicleEntity> vehicleType = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "VehicleTypeEntity{" +
+                "typeId=" + typeId +
+                ", typeName='" + typeName + '\'' +
+                ", vehicleType=" + vehicleType +
+                '}';
+    }
 }

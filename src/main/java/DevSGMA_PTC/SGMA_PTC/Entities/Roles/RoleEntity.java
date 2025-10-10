@@ -8,12 +8,11 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity  // Entity que representa a un rol en la base de datos
-@Table(name = "TBROLES")  // Nombre de la tabla en la base de datos
-
-// Anotaciones de Lombok para generar getters, setters, toString, equals y hashCode automáticamente
-@Getter
-@Setter
+@Entity // Indica que esta clase es una entidad JPA y se mapea a una tabla en la base de datos
+@Getter // Lombok: genera automáticamente los métodos getter
+@Setter // Lombok: genera automáticamente los métodos setter
+@EqualsAndHashCode // Lombok: genera automáticamente equals y hashCode
+@Table(name = "TBROLES") // Especifica el nombre de la tabla en la base de datos
 public class RoleEntity {
 
     //*** ATRIBUTOS ***\\
@@ -29,8 +28,16 @@ public class RoleEntity {
     @Column(name = "ROLENAME", length = 50, nullable = false)
     private String roleName;
 
-    @OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL) // Relación OneToMany con tbInstructor
+    @OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Relación OneToMany con tbInstructor
     @JsonIgnore // Ignorar en la serialización JSON para evitar referencias circulares
     private List<InstructorEntity> instructor = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al Instructor
 
+    @Override
+    public String toString() {
+        return "RoleEntity{" +
+                "roleId=" + roleId +
+                ", roleName='" + roleName + '\'' +
+                ", instructor=" + instructor +
+                '}';
+    }
 }

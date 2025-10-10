@@ -8,18 +8,14 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-// Entity que representa una orden de trabajo en la base de datos
-@Entity
-@Table(name = "TBWORKORDERS")
-// Anotaciones de Lombok para generar getters, setters, toString y equals/hashCode automáticamente
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity // Indica que esta clase es una entidad JPA y se mapea a una tabla en la base de datos
+@Getter // Lombok: genera automáticamente los métodos getter
+@Setter // Lombok: genera automáticamente los métodos setter
+@EqualsAndHashCode // Lombok: genera automáticamente equals y hashCode
+@Table(name = "TBWORKORDERS") // Especifica el nombre de la tabla en la base de datos
 public class WorkOrderEntity {
 
     //*** ATRIBUTOS ***\\
@@ -53,7 +49,20 @@ public class WorkOrderEntity {
 
     //*** ONETOMANYS ***\\
 
-    @OneToMany(mappedBy = "workOrderId", cascade = CascadeType.ALL) // Relación OneToMany con tbEntries
+    @OneToMany(mappedBy = "workOrderId", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Relación OneToMany con tbEntries
     @JsonIgnore
     private List<EntryEntity> entry = new ArrayList<>(); // Lista de entradas asociadas a la orden de trabajo
+
+    @Override
+    public String toString() {
+        return "WorkOrderEntity{" +
+                "workOrderId=" + workOrderId +
+                ", vehicleId=" + vehicleId +
+                ", moduleId=" + moduleId +
+                ", estimatedTime='" + estimatedTime + '\'' +
+                ", workOrdersImage='" + workOrdersImage + '\'' +
+                ", status=" + status +
+                ", entry=" + entry +
+                '}';
+    }
 }

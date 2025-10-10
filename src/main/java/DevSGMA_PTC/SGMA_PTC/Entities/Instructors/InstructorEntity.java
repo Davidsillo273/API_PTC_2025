@@ -4,16 +4,15 @@ import DevSGMA_PTC.SGMA_PTC.Entities.Levels.LevelEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Roles.RoleEntity;
 import jakarta.persistence.*;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-// Entity que representa a un instructor en la base de datos
-@Entity
-@Table(name = "TBINSTRUCTORS")
-
-// Anotaciones de Lombok para generar getters, setters, toString, equals y hashCode automáticamente
-@Getter
-@Setter
+@Entity // Indica que esta clase es una entidad JPA y se mapea a una tabla en la base de datos
+@Getter // Lombok: genera automáticamente los métodos getter
+@Setter // Lombok: genera automáticamente los métodos setter
+@EqualsAndHashCode // Lombok: genera automáticamente equals y hashCode
+@Table(name = "TBINSTRUCTORS") // Especifica el nombre de la tabla en la base de datos
 public class InstructorEntity {
 
     //*** ATRIBUTOS ***\\
@@ -46,12 +45,25 @@ public class InstructorEntity {
 
     //*** MANYTOONEs ***\\
 
-    @ManyToOne // Muchos instructores pueden tener un mismo año académico
+    @ManyToOne(fetch = FetchType.LAZY) // Muchos instructores pueden tener un mismo año académico
     @JoinColumn(name = "LEVELID", referencedColumnName = "LEVELID") // Columna que conecta con la tabla de tbLevels
     private LevelEntity levelId;
 
-    @ManyToOne // Muchos instructores pueden tener un mismo rol
+    @ManyToOne(fetch = FetchType.LAZY)// Muchos instructores pueden tener un mismo rol
     @JoinColumn(name = "ROLEID", referencedColumnName = "ROLEID") // Columna que conecta con la tabla de tbRoles
     private RoleEntity roleId;
 
+    @Override
+    public String toString() {
+        return "InstructorEntity{" +
+                "instructorId=" + instructorId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", instructorImage='" + instructorImage + '\'' +
+                ", levelId=" + levelId +
+                ", roleId=" + roleId +
+                '}';
+    }
 }

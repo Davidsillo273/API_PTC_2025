@@ -11,13 +11,11 @@ import lombok.EqualsAndHashCode;
 import java.util.ArrayList;
 import java.util.List;
 
-// Entity que representa un vehículo en la base de datos
-@Entity
-@Table(name = "TBVEHICLES")
-// Anotaciones de Lombok para generar getters, setters y equals/hashCode automáticamente
-@Getter
-@Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity // Indica que esta clase es una entidad JPA y se mapea a una tabla en la base de datos
+@Getter // Lombok: genera automáticamente los métodos getter
+@Setter // Lombok: genera automáticamente los métodos setter
+@EqualsAndHashCode // Lombok: genera automáticamente equals y hashCode
+@Table(name = "TBVEHICLES") // Especifica el nombre de la tabla en la base de datos
 public class VehicleEntity {
     //*** ATRIBUTOS ***\\
 
@@ -89,7 +87,7 @@ public class VehicleEntity {
 
     //*** ONETOMANYS ***\\
 
-    @OneToMany(mappedBy = "vehicleId", cascade = CascadeType.ALL) // Relación OneToMany con tbWorkOrders
+    @OneToMany(mappedBy = "vehicleId", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Relación OneToMany con tbWorkOrders
     @JsonIgnore
     private List<WorkOrderEntity> workOrder = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al vehículo
 
@@ -102,14 +100,17 @@ public class VehicleEntity {
                 ", policyNumber='" + policyNumber + '\'' +
                 ", brand='" + brand + '\'' +
                 ", model='" + model + '\'' +
+                ", typeId=" + typeId +
                 ", color='" + color + '\'' +
                 ", circulationCardNumber='" + circulationCardNumber + '\'' +
                 ", ownerName='" + ownerName + '\'' +
                 ", ownerDui='" + ownerDui + '\'' +
                 ", ownerPhone='" + ownerPhone + '\'' +
                 ", vehicleImage='" + vehicleImage + '\'' +
+                ", studentId=" + studentId +
                 ", maintenanceExpo=" + maintenanceExpo +
                 ", status=" + status +
+                ", workOrder=" + workOrder +
                 '}';
     }
 }

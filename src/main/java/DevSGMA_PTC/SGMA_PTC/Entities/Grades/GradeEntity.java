@@ -12,7 +12,6 @@ import java.util.List;
 @Entity // Indica que esta clase es una entidad JPA y se mapea a una tabla en la base de datos
 @Getter // Lombok: genera automáticamente los métodos getter
 @Setter // Lombok: genera automáticamente los métodos setter
-@ToString // Lombok: genera automáticamente el método toString
 @EqualsAndHashCode // Lombok: genera automáticamente equals y hashCode
 @Table(name = "TBGRADES") // Especifica el nombre de la tabla en la base de datos
 public class GradeEntity {
@@ -34,8 +33,17 @@ public class GradeEntity {
 
     //*** ONETOMANYS ***\\
 
-    @OneToMany(mappedBy = "gradeId", cascade = CascadeType.ALL) // Relación OneToMany con tbStudents
+    @OneToMany(mappedBy = "gradeId", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Relación OneToMany con tbStudents
     @JsonIgnore
     private List<StudentEntity> student = new ArrayList<>(); // Grado asociado al estudiante
 
+    @Override
+    public String toString() {
+        return "GradeEntity{" +
+                "gradeId=" + gradeId +
+                ", levelId=" + levelId +
+                ", gradeGroup=" + gradeGroup +
+                ", student=" + student +
+                '}';
+    }
 }

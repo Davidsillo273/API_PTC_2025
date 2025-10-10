@@ -8,19 +8,15 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// Entity que representa un módulo académico en la base de datos
-@Entity
-@Table(name = "TBMODULES")
-// Anotaciones de Lombok para generar getters, setters, toString y equals/hashCode automáticamente
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity // Indica que esta clase es una entidad JPA y se mapea a una tabla en la base de datos
+@Getter // Lombok: genera automáticamente los métodos getter
+@Setter // Lombok: genera automáticamente los métodos setter
+@EqualsAndHashCode // Lombok: genera automáticamente equals y hashCode
+@Table(name = "TBMODULES") // Especifica el nombre de la tabla en la base de datos
 public class ModuleEntity {
 
     //*** ATRIBUTOS ***\\
@@ -42,18 +38,30 @@ public class ModuleEntity {
 
     //*** MANYTOONEs ***\\
 
-    @ManyToOne(optional = false) // NOT NULL
-    @JoinColumn(name = "LEVELID", referencedColumnName = "LEVELID", nullable = false) // Columna que conecta con la tabla de tbLevels
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LEVELID", referencedColumnName = "LEVELID") // Columna que conecta con la tabla de tbLevels
     private LevelEntity levelId; // Referencia al nivel académico asociado al módulo
 
     // Relación con Instructor (clave foránea)
-    @ManyToOne(optional = false) // NOT NULL
-    @JoinColumn(name = "INSTRUCTORID", referencedColumnName = "INSTRUCTORID", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INSTRUCTORID", referencedColumnName = "INSTRUCTORID")
     private InstructorEntity instructor;
 
     //*** ONETOMANYS ***\\
 
-    @OneToMany(mappedBy = "moduleId", cascade = CascadeType.ALL) // Relación OneToMany con tbWorkOrders
+    @OneToMany(mappedBy = "moduleId", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Relación OneToMany con tbWorkOrders
     @JsonIgnore
     private List<WorkOrderEntity> workOrder = new ArrayList<>(); // Lista de órdenes de trabajo asociadas al módulo
+
+    @Override
+    public String toString() {
+        return "ModuleEntity{" +
+                "moduleId=" + moduleId +
+                ", moduleName='" + moduleName + '\'' +
+                ", moduleCode='" + moduleCode + '\'' +
+                ", levelId=" + levelId +
+                ", instructor=" + instructor +
+                ", workOrder=" + workOrder +
+                '}';
+    }
 }

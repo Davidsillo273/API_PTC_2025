@@ -7,19 +7,15 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// Entity que representa un nivel académico en la base de datos
-@Entity
-@Table(name = "TBLEVELS")
-// Anotaciones de Lombok para generar getters, setters, toString y equals/hashCode automáticamente
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Entity // Indica que esta clase es una entidad JPA y se mapea a una tabla en la base de datos
+@Getter // Lombok: genera automáticamente los métodos getter
+@Setter // Lombok: genera automáticamente los métodos setter
+@EqualsAndHashCode // Lombok: genera automáticamente equals y hashCode
+@Table(name = "TBLEVELS") // Especifica el nombre de la tabla en la base de datos
 public class LevelEntity {
 
     //*** ATRIBUTOS ***\\
@@ -37,13 +33,23 @@ public class LevelEntity {
 
     //*** ONETOMANYS ***\\
 
-    @OneToMany(mappedBy = "levelId", cascade = CascadeType.ALL) // Relación OneToMany con tbGrades
+    @OneToMany(mappedBy = "levelId", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Relación OneToMany con tbGrades
     private List<GradeEntity> grade = new ArrayList<>(); // Lista de grados asociados al nivel
 
-    @OneToMany(mappedBy = "levelId", cascade = CascadeType.ALL) // Relación OneToMany con tbInstructors
+    @OneToMany(mappedBy = "levelId", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Relación OneToMany con tbInstructors
     private List<InstructorEntity> instructor = new ArrayList<>(); // Lista de instructores asociados al nivel
 
-    @OneToMany(mappedBy = "levelId", cascade = CascadeType.ALL) // Relación OneToMany con tbModules
+    @OneToMany(mappedBy = "levelId", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Relación OneToMany con tbModules
     private List<ModuleEntity> module = new ArrayList<>(); // Lista de módulos asociados al nivel
 
+    @Override
+    public String toString() {
+        return "LevelEntity{" +
+                "levelId=" + levelId +
+                ", levelName='" + levelName + '\'' +
+                ", grade=" + grade +
+                ", instructor=" + instructor +
+                ", module=" + module +
+                '}';
+    }
 }

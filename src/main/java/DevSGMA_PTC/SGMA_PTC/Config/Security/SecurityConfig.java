@@ -123,13 +123,18 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, students + "/deleteStudent/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
                         .requestMatchers(HttpMethod.GET, students + "/getStudentById/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
-                        .requestMatchers(HttpMethod.GET, vehicles + "/getAllVehicles")
-                        .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.PATCH, vehicles + "/updateStatusVehicle/*")
-                        .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        //Vehicles
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getAllVehicles").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByPlateNumber/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByCirculationCardNumber/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByOwnerPhone/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehiclesByStudentId/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.PATCH, vehicles + "/updateStatusVehicle/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
-                        .requestMatchers(HttpMethod.GET, workOrders + "/getAllWorkOrders")
-                        .hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        // WorkOrders
+                        .requestMatchers(HttpMethod.GET, workOrders + "/getAllWorkOrders").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentIdAndStatus2/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentIdAndStatus2/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
 
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess

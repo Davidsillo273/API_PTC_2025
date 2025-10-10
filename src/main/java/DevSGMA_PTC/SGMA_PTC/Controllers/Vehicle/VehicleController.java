@@ -85,6 +85,12 @@ public class VehicleController {
         return ResponseEntity.ok(ApiResponse.success("Vehículo encontrado", vehicleDTO));
     }
 
+    @GetMapping("/getVehiclesByStudentId/{studentId}")
+    public ResponseEntity<?> getVehiclesByStudentId(@PathVariable Long studentId) {
+        Map<String, Object> result = vehicleService.getVehiclesByStudentId(studentId);
+        return ResponseEntity.ok(ApiResponse.success("Vehículos consultados correctamente", result));
+    }
+
 
     @PostMapping("/newVehicle")
     public ResponseEntity<ApiResponse<VehicleDTO>> createVehicle(@Valid @RequestBody VehicleDTO json
@@ -114,11 +120,4 @@ public class VehicleController {
         VehicleDTO updated = vehicleService.updateVehicleStatus(vehicleId, newStatus);
         return ResponseEntity.ok(ApiResponse.success("Estado actualizado correctamente", updated));
     }
-
-    @GetMapping("/getVehiclesByStudentId/{studentId}")
-    public ResponseEntity<?> getVehiclesByStudentId(@PathVariable Long studentId) {
-        Map<String, Object> result = vehicleService.getVehiclesByStudentId(studentId);
-        return ResponseEntity.ok(ApiResponse.success("Vehículos consultados correctamente", result));
-    }
-
 }

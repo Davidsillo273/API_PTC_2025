@@ -9,12 +9,11 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity // Entity que representa a un estudiante en la base de datos
-@Table(name = "TBSTUDENTS") // Nombre de la tabla en la base de datos
-
-// Anotaciones de Lombok para generar getters, setters, toString, equals y hashCode automáticamente
-@Getter
-@Setter
+@Entity // Indica que esta clase es una entidad JPA y se mapea a una tabla en la base de datos
+@Getter // Lombok: genera automáticamente los métodos getter
+@Setter // Lombok: genera automáticamente los métodos setter
+@EqualsAndHashCode // Lombok: genera automáticamente equals y hashCode
+@Table(name = "TBSTUDENTS") // Especifica el nombre de la tabla en la base de datos
 public class StudentEntity {
 
 //    *** ATRIBUTOS ***\\
@@ -48,14 +47,27 @@ public class StudentEntity {
 
 //*** MANYTOONEs ***\\
 
-    @ManyToOne // Muchos estudiantes pueden tener un mismo año académico
+    @ManyToOne(fetch = FetchType.LAZY) // Muchos estudiantes pueden tener un mismo año académico
     @JoinColumn(name = "GRADEID", referencedColumnName = "GRADEID") // Columna que conecta con la tabla de tbGrades
     private GradeEntity gradeId; // Año académico del estudiante
 
 //    *** ONETOMANYS ***\\
 
-    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL) // Relación OneToMany con tbVehicles
+    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Relación OneToMany con tbVehicles
     @JsonIgnore // Ignorar en la serialización JSON para evitar referencias circulares
     private List<VehicleEntity> vehicle = new ArrayList<>(); // Lista de vehículo asociadas al estudiante
 
+    @Override
+    public String toString() {
+        return "StudentEntity{" +
+                "studentId=" + studentId +
+                ", studentCard='" + studentCard + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", gradeId=" + gradeId +
+                ", vehicle=" + vehicle +
+                '}';
+    }
 }
