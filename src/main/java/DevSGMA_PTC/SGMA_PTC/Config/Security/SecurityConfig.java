@@ -97,9 +97,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, workOrders + "/updateWorkOrder/*").authenticated()
                         .requestMatchers(HttpMethod.DELETE, workOrders + "/deleteWorkOrder/*").authenticated()
 
-                        // AUTH POR ROL ANIMADOR, COORDINADORA, DOCENTE
-                        .requestMatchers(HttpMethod.GET, vehicles + "/getAllVehicles").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora", "ROLE_Docente")
-
                         // AUTH POR ROL ANIMADOR Y COORDINADORA
 
                         // Modules
