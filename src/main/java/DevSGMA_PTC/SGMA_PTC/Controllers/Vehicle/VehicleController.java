@@ -112,7 +112,7 @@ public class VehicleController {
         return ResponseEntity.ok(ApiResponse.success("Vehículo registrado exitosamente", vehicleSaved));
     }
 
-    @PatchMapping("/updateStatusVehicle/{id}")
+    @PutMapping("/updateStatusVehicle/{id}")
     public ResponseEntity<ApiResponse<VehicleDTO>> updateVehicleStatus(
             @PathVariable Long vehicleId,
             @RequestParam Long newStatus
