@@ -13,7 +13,7 @@ import java.util.List;
 @Getter // Lombok: genera automáticamente los métodos getter
 @Setter // Lombok: genera automáticamente los métodos setter
 @EqualsAndHashCode // Lombok: genera automáticamente equals y hashCode
-@Table(name = "TBVECHILESTYPES") // Especifica el nombre de la tabla en la base de datos
+@Table(name = "TBVEHICLESTYPES") // Especifica el nombre de la tabla en la base de datos
 public class VehicleTypeEntity {
 
     //*** ATRIBUTOS ***\\
