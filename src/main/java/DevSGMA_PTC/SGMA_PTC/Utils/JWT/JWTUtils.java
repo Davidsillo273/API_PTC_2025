@@ -104,7 +104,7 @@ public class JWTUtils {
     //######################## METODOS COMPLEMENTARIOS ########################
 
     private Claims parseClaims(String jwt) {
-        return Jwts.parserBuilder()
+        return Jwts.parser()
                 .setSigningKey(Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret)))
                 .build()
                 .parseClaimsJws(jwt)
