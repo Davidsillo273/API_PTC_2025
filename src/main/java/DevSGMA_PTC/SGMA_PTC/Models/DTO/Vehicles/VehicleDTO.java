@@ -25,16 +25,6 @@ public class VehicleDTO {
     ) // Validación para el formato de la placa
     private String plateNumber; // Número de placa del vehículo
 
-    @NotNull(message = "El estado de la póliza es obligatorio")
-    // Validación para que el campo no esté vacío o solo contenga espacios en blanco
-    private Long hasPolicy; // Indica si el vehículo tiene póliza de seguro
-
-
-
-    @Size(min = 8, message = "El número de póliza debe tener al menos 8 dígitos")
-    @Size(max = 15, message = "El número de póliza no puede exceder 15 caracteres")
-    // Validación para el tamaño máximo del número de póliza
-    private String policyNumber; // Número de póliza del vehículo, puede ser nulo si no tiene póliza
 
     @NotBlank(message = "La marca es obligatoria")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco

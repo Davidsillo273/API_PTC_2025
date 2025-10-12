@@ -97,8 +97,6 @@ public class VehicleService {
         VehicleDTO dto = new VehicleDTO();
         dto.setVehicleId(entity.getVehicleId());
         dto.setPlateNumber(entity.getPlateNumber());
-        dto.setHasPolicy(entity.getHasPolicy());
-        dto.setPolicyNumber(entity.getPolicyNumber());
         dto.setBrand(entity.getBrand());
         dto.setModel(entity.getModel());
 
@@ -132,8 +130,6 @@ public class VehicleService {
         VehicleEntity entity = new VehicleEntity();
 
         entity.setPlateNumber(json.getPlateNumber());
-        entity.setHasPolicy(json.getHasPolicy());
-        entity.setPolicyNumber(json.getPolicyNumber());
         entity.setBrand(json.getBrand());
         entity.setModel(json.getModel());
 

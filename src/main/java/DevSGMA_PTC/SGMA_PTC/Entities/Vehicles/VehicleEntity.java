@@ -30,14 +30,6 @@ public class VehicleEntity {
     @Column(name = "PLATENUMBER", length = 10, nullable = false, unique = true)
     private String plateNumber;
 
-    // Indica si el vehículo tiene póliza (1 = sí, 0 = no)
-    @Column(name = "HASPOLICY" , nullable = false)
-    private Long hasPolicy;
-
-    // Número de póliza, puede ser nulo si no tiene póliza, máximo 15 caracteres
-    @Column(name = "POLICYNUMBER", length = 15)
-    private String policyNumber; // Número de póliza, puede ser nulo si no tiene póliza
-
     // Marca del vehículo, obligatorio, máximo 50 caracteres
     @Column(name = "BRAND", length = 50, nullable = false)
     private String brand;
@@ -96,8 +88,6 @@ public class VehicleEntity {
         return "VehicleEntity{" +
                 "vehicleId=" + vehicleId +
                 ", plateNumber='" + plateNumber + '\'' +
-                ", hasPolicy=" + hasPolicy +
-                ", policyNumber='" + policyNumber + '\'' +
                 ", brand='" + brand + '\'' +
                 ", model='" + model + '\'' +
                 ", typeId=" + typeId +
