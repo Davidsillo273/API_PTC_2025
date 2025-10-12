@@ -27,7 +27,7 @@ public class ModuleDTO {
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco
     @Size(min = 5, message = "El nombre del módulo debe tener al menos 5 caracteres")
     // Validación para el tamaño máximo del nombre
-    @Size(max = 50, message = "El nombre del módulo no puede exceder los 50 caracteres")
+    @Size(max = 100, message = "El nombre del módulo no puede exceder los 50 caracteres")
     // Validación para el tamaño mínimo del nombre
     private String moduleName;
 
