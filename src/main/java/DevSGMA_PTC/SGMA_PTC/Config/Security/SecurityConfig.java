@@ -105,7 +105,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, modules + "/deleteModules/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
 
                         // Instructors
-                        .requestMatchers(HttpMethod.GET, instructors + "/getAllInstructors").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, instructors + "/getAllInstructors").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador","ROLE_Docente")
                         .requestMatchers(HttpMethod.POST, instructors + "/newInstructor").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
                         .requestMatchers(HttpMethod.PUT, instructors + "/updateInstructor/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
                         .requestMatchers(HttpMethod.PUT, instructors + "/update/{id}/password").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador","ROLE_Docente")
@@ -116,12 +116,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, roles + "/getAllRoles").hasAuthority("ROLE_Animador")
 
                         // Students
-                        .requestMatchers(HttpMethod.GET, students + "/getAllStudents").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, students + "/getAllStudents").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador","ROLE_Docente")
                         .requestMatchers(HttpMethod.DELETE, students + "/deleteStudent/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
                         .requestMatchers(HttpMethod.GET, students + "/getStudentById/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
 
                         //Vehicles
-                        .requestMatchers(HttpMethod.GET, vehicles + "/getAllVehicles").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getAllVehicles").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador","ROLE_Docente")
                         .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByPlateNumber/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
                         .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByCirculationCardNumber/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
                         .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByOwnerPhone/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
