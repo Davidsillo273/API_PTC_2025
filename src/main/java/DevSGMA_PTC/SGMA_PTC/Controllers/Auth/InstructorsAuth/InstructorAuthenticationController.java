@@ -158,6 +158,7 @@ public class InstructorAuthenticationController {
                             "email", instructor.getEmail(),
                             "role", instructor.getRoleId().getRoleName(),
                             "level", instructor.getLevelId().getLevelName(),
+                            "instructorImage", instructor.getInstructorImage(), 
                             "authorities", authorities.stream()
                                     .map(GrantedAuthority::getAuthority)
                                     .collect(Collectors.toList())
