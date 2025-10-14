@@ -25,7 +25,7 @@ public class InstructorAuthenticationService {
      * Verifica las credenciales de un instructor usando Argon2.
      * Busca el instructor por correo electrónico y compara la contraseña proporcionada con el hash almacenado.
      *
-     * @param email Correo institucional del instructor
+     * @param email    Correo institucional del instructor
      * @param password Contraseña en texto plano ingresada por el usuario
      * @return true si las credenciales son válidas, false en caso contrario
      */
@@ -40,7 +40,9 @@ public class InstructorAuthenticationService {
             String levelName = instructor.getLevelId().getLevelName(); // Nombre del nivel del instructor
 
             // Log de información básica del usuario encontrado
-            System.out.println("Instructor encontrado, ID: " + instructor.getInstructorId() + ", correo: " + instructor.getEmail() + ", rol: " + rolName + ", nivel: " + levelName);
+            System.out.println("Instructor encontrado, ID: " + instructor.getInstructorId() + ", correo: " +
+                    instructor.getEmail() + ", rol: " +
+                    rolName + ", nivel: " + levelName);
 
             String HashDB = instructor.getPassword(); // Hash de la contraseña almacenada
             boolean verify = objHash.VerifyPassword(HashDB, password); // Verifica la contraseña

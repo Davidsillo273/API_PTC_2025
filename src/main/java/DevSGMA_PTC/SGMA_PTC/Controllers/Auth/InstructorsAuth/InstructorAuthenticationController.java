@@ -4,7 +4,7 @@ import DevSGMA_PTC.SGMA_PTC.Entities.Instructors.InstructorEntity;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Instructors.InstructorDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.Auth.InstructorsAuth.InstructorAuthenticationService;
 import DevSGMA_PTC.SGMA_PTC.Utils.JWT.JWTUtils;
-import jakarta.servlet.http.Cookie;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
  * Controlador para la autenticación de instructores.
  * Proporciona endpoints para el inicio de sesión y la obtención de datos del instructor autenticado.
  */
+
 @RestController
 @RequestMapping("/api/instructorsAuth")
 public class InstructorAuthenticationController {
