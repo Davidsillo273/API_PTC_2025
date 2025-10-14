@@ -50,13 +50,13 @@ public class VehicleDTO {
     // Validación para el tamaño máximo del color
     private String color; // Color del vehículo
 
-    @NotBlank(message = "El número de tarjeta de circulación es obligatorio")
-    // Validación para que el campo no esté vacío o solo contenga espacios en blanco
-    @Size(min = 20, message = "El número de tarjeta debe tener al menos 8 dígitos")
-    // Validación para el tamaño mínimo de la contraseña
-    @Size(max = 20, message = "El número de tarjeta no puede exceder 20 caracteres")
-    // Validación para el tamaño máximo de la tarjeta de circulación
-    private String circulationCardNumber; // Número de tarjeta de circulación del vehículo
+        @NotBlank(message = "El número de tarjeta de circulación es obligatorio")
+        // Validación para que el campo no esté vacío o solo contenga espacios en blanco
+        @Size(min = 20, message = "El número de tarjeta debe tener al menos 8 dígitos")
+        // Validación para el tamaño mínimo de la contraseña
+        @Size(max = 20, message = "El número de tarjeta no puede exceder 20 caracteres")
+        // Validación para el tamaño máximo de la tarjeta de circulación
+        private String circulationCardNumber; // Número de tarjeta de circulación del vehículo
 
     @NotBlank(message = "El nombre del propietario es obligatorio")
     // Validación para que el campo no esté vacío o solo contenga espacios en blanco

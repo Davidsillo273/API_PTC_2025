@@ -4,7 +4,6 @@ import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Students.StudentDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.Auth.StudentsAuth.StudentAuthenticationService;
 import DevSGMA_PTC.SGMA_PTC.Utils.JWT.JWTUtils;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;

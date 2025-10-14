@@ -5,6 +5,7 @@ import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrderEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import DevSGMA_PTC.SGMA_PTC.Entities.VehiclesTypes.VehicleTypeEntity;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.EqualsAndHashCode;
@@ -27,7 +28,8 @@ public class VehicleEntity {
     private Long vehicleId;
 
     // Número de placa, único y obligatorio, máximo 10 caracteres
-    @Column(name = "PLATENUMBER", length = 10, nullable = false, unique = true)
+    @Column(name = "PLATENUMBER", unique = true, length = 10, nullable = false)
+    @NotBlank(message= "El numero de palca debe ser obligatorio")
     private String plateNumber;
 
     // Marca del vehículo, obligatorio, máximo 50 caracteres
