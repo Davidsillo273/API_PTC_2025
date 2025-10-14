@@ -100,38 +100,38 @@ public class SecurityConfig {
                         // AUTH POR ROL ANIMADOR Y COORDINADORA
 
                         // Modules
-                        .requestMatchers(HttpMethod.POST, modules + "/newModules").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.PUT, modules + "/updateModules/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.DELETE, modules + "/deleteModules/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.POST, modules + "/newModules").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.PUT, modules + "/updateModules/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.DELETE, modules + "/deleteModules/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
 
                         // Instructors
-                        .requestMatchers(HttpMethod.GET, instructors + "/getAllInstructors").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.POST, instructors + "/newInstructor").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.PUT, instructors + "/updateInstructor/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.PUT, instructors + "/update/{id}/password").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora","ROLE_Docente")
-                        .requestMatchers(HttpMethod.DELETE, instructors + "/deleteInstructor/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.GET, instructors + "/getInstructorById/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.GET, instructors + "/getAllInstructors").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador","ROLE_Docente")
+                        .requestMatchers(HttpMethod.POST, instructors + "/newInstructor").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.PUT, instructors + "/updateInstructor/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.PUT, instructors + "/update/{id}/password").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador","ROLE_Docente")
+                        .requestMatchers(HttpMethod.DELETE, instructors + "/deleteInstructor/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, instructors + "/getInstructorById/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
 
                         // Roles
                         .requestMatchers(HttpMethod.GET, roles + "/getAllRoles").hasAuthority("ROLE_Animador")
 
                         // Students
-                        .requestMatchers(HttpMethod.GET, students + "/getAllStudents").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.DELETE, students + "/deleteStudent/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.GET, students + "/getStudentById/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.GET, students + "/getAllStudents").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador","ROLE_Docente")
+                        .requestMatchers(HttpMethod.DELETE, students + "/deleteStudent/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, students + "/getStudentById/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
 
                         //Vehicles
-                        .requestMatchers(HttpMethod.GET, vehicles + "/getAllVehicles").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByPlateNumber/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByCirculationCardNumber/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByOwnerPhone/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehiclesByStudentId/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.PATCH, vehicles + "/updateStatusVehicle/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getAllVehicles").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador","ROLE_Docente")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByPlateNumber/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByCirculationCardNumber/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByOwnerPhone/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehiclesByStudentId/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.PATCH, vehicles + "/updateStatusVehicle/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
 
                         // WorkOrders
-                        .requestMatchers(HttpMethod.GET, workOrders + "/getAllWorkOrders").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentIdAndStatus2/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
-                        .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentIdAndStatus2/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinadora")
+                        .requestMatchers(HttpMethod.GET, workOrders + "/getAllWorkOrders").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentIdAndStatus2/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentIdAndStatus2/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
 
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess

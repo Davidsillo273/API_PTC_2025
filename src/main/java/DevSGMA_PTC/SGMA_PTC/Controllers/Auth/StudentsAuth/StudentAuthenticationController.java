@@ -51,8 +51,10 @@ public class StudentAuthenticationController {
         System.out.println("Se está intentando iniciar sesión con: " + data.getEmail());
 
         // Validación de credenciales
-        if (data.getEmail() == null || data.getEmail().isBlank() ||
-                data.getPassword() == null || data.getPassword().isBlank()) {
+        if (data.getEmail() == null ||
+                data.getEmail().isBlank() ||
+                data.getPassword() == null ||
+                data.getPassword().isBlank()) {
             return ResponseEntity.status(401).body("Error: Credenciales incompletas");
         }
 
@@ -91,11 +93,11 @@ public class StudentAuthenticationController {
                             "HttpOnly; " +
                             "Secure=false; " +
                             "SameSite=None; " +
-                            "MaxAge=86400; " ,
+                            "MaxAge=86400; ",
                     token
             );
 
-            System.out.println("Cookie creada"+ cookieValue);
+            System.out.println("Cookie creada" + cookieValue);
             response.addHeader("Set-Cookie", cookieValue);
             response.addHeader("Access-Control-Expose-Headers", "Set-Cookie");
         }
