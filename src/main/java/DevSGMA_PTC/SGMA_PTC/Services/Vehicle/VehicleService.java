@@ -5,6 +5,7 @@ import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.VehiclesTypes.VehicleTypeEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.VehicleType.ExceptionVehicleTypeIdNotFound;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Vehicles.ExceptionCirculationCardDuplicated;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Vehicles.ExceptionPlateNumberDuplicated;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Vehicles.VehicleDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Students.StudentsRepository;
@@ -71,6 +72,10 @@ public class VehicleService {
             throw new ExceptionPlateNumberDuplicated("El número de placa ya existe en el sistema");
         }
 
+        if (verifyCardCirculationExist(json.getCirculationCardNumber())) {
+            throw new ExceptionCirculationCardDuplicated("La tarjeta de circulacion ya esta registrada en el sistema");
+        }
+
         VehicleEntity objEntity = convertToEntity(json);
         VehicleEntity saveVehicle = vehicleRepository.save(objEntity);
 
@@ -91,6 +96,11 @@ public class VehicleService {
     public boolean verifyVehicleExist(String plateNumber) {
 
         return vehicleRepository.existsByPlateNumber(plateNumber);
+    }
+
+    public boolean verifyCardCirculationExist(String CirculationCardNumber) {
+
+        return vehicleRepository.existsByCirculationCardNumber(CirculationCardNumber);
     }
 
     private VehicleDTO convertToDTO(VehicleEntity entity) {
