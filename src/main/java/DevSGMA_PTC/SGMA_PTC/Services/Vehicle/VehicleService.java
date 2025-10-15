@@ -122,24 +122,6 @@ public class VehicleService {
 
         dto.setMaintenanceEXPO(entity.getMaintenanceExpo());
         dto.setIdStatus(entity.getStatus());
-
-        //Validacion donde no deba repetirse el numero de placa
-        if (vehicleRepository.existsByPlateNumber(entity.getPlateNumber())) {
-            throw new IllegalArgumentException("El número de placa ya está registrado.");
-        }
-
-        VehicleDTO vehicle = new VehicleDTO();
-        vehicle.setPlateNumber(entity.getPlateNumber());
-
-        // Validar tarjeta de circulación
-        if (vehicleRepository.existsByCirculationCardNumber(entity.getCirculationCardNumber())) {
-            throw new IllegalArgumentException("El número de tarjeta de circulación ya está registrado.");
-        }
-
-        VehicleDTO vehiclee = new VehicleDTO();
-        vehiclee.setPlateNumber(entity.getPlateNumber());
-        vehiclee.setCirculationCardNumber(entity.getCirculationCardNumber());
-
         return dto;
     }
 
