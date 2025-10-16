@@ -61,6 +61,7 @@ public class SecurityConfig {
 
                         // Students
                         .requestMatchers(HttpMethod.POST, students + "/newStudent").permitAll()
+                        .requestMatchers(HttpMethod.POST,students + "/addNewStudent").permitAll()
 
                         // ENDPOINTS CON AUTENTIFICACIÓN
 
