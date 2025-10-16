@@ -81,7 +81,7 @@ public class SecurityConfig {
 
                         // Vehicles
                         .requestMatchers(HttpMethod.POST, vehicles + "/newVehicle").authenticated()
-                        .requestMatchers(HttpMethod.GET, vehicles + "/getAllVehiclesByStudent/*").hasAnyAuthority("ROLE_null","ROLE_Animador", "ROLE_Coordinador","ROLE_Docente")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getAllVehiclesByStudent/*").hasAnyAuthority("ROLE_Alumno","ROLE_Animador", "ROLE_Coordinador","ROLE_Docente")
 
                         // Modules
                         .requestMatchers(HttpMethod.GET, modules + "/getAllModules").authenticated()
