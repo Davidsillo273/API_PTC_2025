@@ -100,6 +100,7 @@ public class CorsConfig {
                 "https://localhost:",          // Todos los puertos de localhost HTTPS
                 "http://127.0.0.1:*",          // Localhost por IP
                 "https://sistemaweb-sgma.vercel.app",
+                "https://sisweb-sgma.netlify.app/",
                 "https://*.vercel.app",
                 "https://sgma-66ec41075156.herokuapp.com", // ← ¡IMPORTANTE! Tu backend
                 "https://*.herokuapp.com"
