@@ -27,13 +27,12 @@ public class Argon2Password {
 
     /**
      * El metodo recibe ambas contrasenas y mediante el metodo verify de Argon2, evalua si la contrasena es correcta.
-     * @param passwordDB password proveniente de la base de datos
-     * @param password password sin encriptacion, es el valor que el usuario ingresa en el login
+     * @param plainPassword password proveniente de la base de datos
+     * @param hashedPassword password sin encriptacion, es el valor que el usuario ingresa en el login
      * @return
      */
-    public boolean VerifyPassword(String passwordDB, String password){
-
-        return argon2.verify(passwordDB, password);
+    public boolean VerifyPassword(String plainPassword, String hashedPassword) {
+        return argon2.verify(hashedPassword, plainPassword);
     }
 
 }
