@@ -45,7 +45,8 @@ public class InstructorAuthenticationService {
                     rolName + ", nivel: " + levelName);
 
             String HashDB = instructor.getPassword(); // Hash de la contraseña almacenada
-            boolean verify = objHash.VerifyPassword(HashDB, password); // Verifica la contraseña
+            boolean verify = objHash.VerifyPassword(password, HashDB);
+
             return verify;
         }
         return false;
