@@ -41,6 +41,7 @@ public class SecurityConfig {
         String workOrders = "/api/workOrders";
         String instructors = "/api/instructors";
         String roles = "/api/roles";
+        String studentsRegister = "/api/StudentsRegister";
 
         http
                 .csrf(csrf -> csrf.disable())
@@ -61,7 +62,7 @@ public class SecurityConfig {
 
                         // Students
                         .requestMatchers(HttpMethod.POST, students + "/newStudent").permitAll()
-                        .requestMatchers(HttpMethod.POST,students + "/addNewStudent").permitAll()
+                        .requestMatchers(HttpMethod.POST,studentsRegister + "/addNewStudent").permitAll()
 
                         // ENDPOINTS CON AUTENTIFICACIÓN
 

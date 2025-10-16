@@ -125,6 +125,7 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
         String instructorAuth = "/api/instructorsAuth";
         String studentAuth = "/api/studentsAuth";
         String grades = "/api/grades";
+        String studentsRegister = "/api/StudentsRegister";
 
         return
                 // Preflight requests (CORS)
@@ -138,6 +139,9 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
 
                         // GRADES
                         (path.equals(grades + "/getAllGrades") && "GET".equals(method));
+
+                        // AUTH - STUDENTSREGISTER
+                        (path.equals(studentsRegister + "/addNewStudent") && "POST".equals(method));
     }
 
 }
