@@ -44,8 +44,9 @@ public class WorkOrderEntity {
     private String workOrdersImage;
 
     // Estado de la orden de trabajo (por ejemplo: pendiente, en proceso, finalizada)
-    @Column(name = "STATUS")
-    private Long status;
+    // Cambiado a idStatus y mapeado a la columna IDSTATUS en BD para evitar ORA-00904 si la columna real es IDSTATUS
+    @Column(name = "IDSTATUS")
+    private Long idStatus;
 
     //*** ONETOMANYS ***\\
 
@@ -61,7 +62,7 @@ public class WorkOrderEntity {
                 ", moduleId=" + moduleId +
                 ", estimatedTime='" + estimatedTime + '\'' +
                 ", workOrdersImage='" + workOrdersImage + '\'' +
-                ", status=" + status +
+                ", idStatus=" + idStatus +
                 ", entry=" + entry +
                 '}';
     }

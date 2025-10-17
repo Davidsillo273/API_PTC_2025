@@ -18,15 +18,18 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @CrossOrigin
 @Service
 public class WorkOrderService {
 
+    private final WorkOrderRepository repo;
+
     @Autowired
-    private WorkOrderRepository repo;
+    public WorkOrderService(WorkOrderRepository repo) {
+        this.repo = repo;
+    }
 
     public Page<WorkOrderDTO> getAllWorkOrders(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -66,7 +69,7 @@ public class WorkOrderService {
         // 2. Actuaización de campos
         workOrderExist.setWorkOrderId(json.getWorkOrderId());
 
-        workOrderExist.setStatus(json.getStatus());
+        workOrderExist.setIdStatus(json.getIdStatus());
         //3. Actualización del registro
         WorkOrderEntity WorkOrderUpdated = repo.save(workOrderExist);
         //4. Convertir a DTO
@@ -75,8 +78,8 @@ public class WorkOrderService {
 
     // Obtener órdenes por estudiante y estado
     public Map<String, Object> getWorkOrdersByStudentIdAndStatus(Long studentId, Long status) {
-        List<WorkOrderEntity> orders = repo.findByVehicleId_StudentId_StudentIdAndStatus(studentId, status);
-        List<WorkOrderDTO> dtos = orders.stream().map(this::ConvertirADTO).collect(Collectors.toList());
+        List<WorkOrderEntity> orders = repo.findByVehicleId_StudentId_StudentIdAndIdStatus(studentId, status);
+        List<WorkOrderDTO> dtos = orders.stream().map(this::ConvertirADTO).toList();
         return Map.of(
             "workOrders", dtos,
             "cantidad", dtos.size()
@@ -93,7 +96,7 @@ public class WorkOrderService {
         }
 
         dto.setWorkOrderImage(workOrderEntity.getWorkOrdersImage());
-        dto.setStatus(workOrderEntity.getStatus());
+        dto.setIdStatus(workOrderEntity.getIdStatus());
 
         return dto;
     }
@@ -109,11 +112,10 @@ public class WorkOrderService {
         }
 
         entity.setWorkOrdersImage(json.getWorkOrderImage());
-        entity.setStatus(json.getStatus());
+        entity.setIdStatus(json.getIdStatus());
 
         return entity;
     }
-
 
 
 

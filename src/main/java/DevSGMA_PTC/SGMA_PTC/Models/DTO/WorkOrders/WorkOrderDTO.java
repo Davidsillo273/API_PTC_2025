@@ -30,7 +30,7 @@ public class WorkOrderDTO {
     private String workOrderImage;
 
     @NotNull(message = "El estado es obligatorio") // El estado de la orden de trabajo no puede ser nulo
-    private Long status;
+    private Long idStatus;
 
     //Campo adicional
     private String vehiclePlateNumber; // Campo adicional para mostrar el número de placa del vehículo, campo como tal no existe en tbWorkOrders
