@@ -81,7 +81,8 @@ public class SecurityConfig {
 
                         // Vehicles
                         .requestMatchers(HttpMethod.POST, vehicles + "/newVehicle").authenticated()
-                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehiclesByStudent/*").hasAnyAuthority("ROLE_Alumno","ROLE_Animador", "ROLE_Coordinador","ROLE_Docente")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehiclesByStudent/*").hasAuthority("ROLE_Alumno")
+
 
                         // Modules
                         .requestMatchers(HttpMethod.GET, modules + "/getAllModules").authenticated()
@@ -125,7 +126,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByPlateNumber/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
                         .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByCirculationCardNumber/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
                         .requestMatchers(HttpMethod.GET, vehicles + "/getVehicleByOwnerPhone/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
-                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehiclesByStudentId/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, vehicles + "/getVehiclesByStudentId/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador","ROLE_Alumno")
                         .requestMatchers(HttpMethod.PATCH, vehicles + "/updateStatusVehicle/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
 
                         // WorkOrders
