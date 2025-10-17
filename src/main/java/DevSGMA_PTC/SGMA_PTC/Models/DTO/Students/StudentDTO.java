@@ -1,4 +1,3 @@
-
 package DevSGMA_PTC.SGMA_PTC.Models.DTO.Students;
 
 import jakarta.validation.constraints.*;
@@ -67,4 +66,9 @@ public class StudentDTO {
 
     //Campo adicional
     private Long gradeGroup;  // Campo adicional para mostrar el nombre del año académico, campo como tal no existe en tbStudents
+
+    // Nuevo campo: ID del rol del estudiante (fk a tbRoles)
+    @NotNull(message = "El ID del rol es obligatorio")
+    @Positive(message = "El ID del rol debe ser positivo")
+    private Long roleId;
 }

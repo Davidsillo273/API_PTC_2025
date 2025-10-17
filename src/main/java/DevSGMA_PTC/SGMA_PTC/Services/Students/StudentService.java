@@ -3,12 +3,14 @@ package DevSGMA_PTC.SGMA_PTC.Services.Students;
 import DevSGMA_PTC.SGMA_PTC.Config.Crypto.Argon2Password;
 import DevSGMA_PTC.SGMA_PTC.Entities.Grades.GradeEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Students.StudentEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Roles.RoleEntity;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Grades.ExceptionGradeNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Roles.ExceptionRoleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentDuplicated;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Students.ExceptionStudentNotFound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.Students.StudentDTO;
 import DevSGMA_PTC.SGMA_PTC.Repositories.Grades.GradeRepository;
+import DevSGMA_PTC.SGMA_PTC.Repositories.Roles.RoleRepository;
 import DevSGMA_PTC.SGMA_PTC.Utils.PasswordGenerator;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +34,8 @@ public class StudentService {
     private StudentsRepository studentsRepository; // Repositorio que accede a la base de datos
     @Autowired
     private Argon2Password argon2; // Servicio de encriptación de contraseñas
-
+    @Autowired
+    private RoleRepository roleRepository; // Inyectado para validar/obtener roles
 
     //*** MÉTODO PARA OBTENER TODOS LOS ESTUDIANTES ***\\
 
@@ -158,6 +161,13 @@ public class StudentService {
             exist.setGradeId(gradeEntity);
         }
 
+        // Manejo del roleId: si se proporciona, validar existencia y asignar
+        if (json.getRoleId() != null) {
+            RoleEntity roleEntity = roleRepository.findById(json.getRoleId())
+                    .orElseThrow(() -> new ExceptionRoleNotFound("ID del rol del estudiante no encontrado"));
+            exist.setRoleId(roleEntity);
+        }
+
         StudentEntity studentUpdated = studentsRepository.save(exist);
         return ConvertToDTO(studentUpdated);
     }
@@ -235,6 +245,11 @@ public class StudentService {
             dto.setGradeId(studentEntity.getGradeId().getGradeId());
         }
 
+        // Asignar roleId si existe
+        if (studentEntity.getRoleId() != null) {
+            dto.setRoleId(studentEntity.getRoleId().getRoleId());
+        }
+
         return dto;
     }
 
@@ -260,6 +275,14 @@ public class StudentService {
                     .orElseThrow(() -> new ExceptionGradeNotFound("ID del año académico del estudiante no encontrado"));
             entity.setGradeId(gradeEntity);
         }
+
+        // Asignar role si se proporcionó roleId (valida existencia)
+        if (json.getRoleId() != null) {
+            RoleEntity roleEntity = roleRepository.findById(json.getRoleId())
+                    .orElseThrow(() -> new ExceptionRoleNotFound("ID del rol del estudiante no encontrado"));
+            entity.setRoleId(roleEntity);
+        }
+
         return entity;
     }
 

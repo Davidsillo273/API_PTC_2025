@@ -2,6 +2,7 @@ package DevSGMA_PTC.SGMA_PTC.Entities.Students;
 
 import DevSGMA_PTC.SGMA_PTC.Entities.Grades.GradeEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
+import DevSGMA_PTC.SGMA_PTC.Entities.Roles.RoleEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -51,6 +52,11 @@ public class StudentEntity {
     @JoinColumn(name = "GRADEID", referencedColumnName = "GRADEID") // Columna que conecta con la tabla de tbGrades
     private GradeEntity gradeId; // Año académico del estudiante
 
+    // Nueva relación ManyToOne con RoleEntity (tbRoles)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ROLEID", referencedColumnName = "ROLEID")
+    private RoleEntity roleId;
+
 //    *** ONETOMANYS ***\\
 
     @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Relación OneToMany con tbVehicles
@@ -67,6 +73,7 @@ public class StudentEntity {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", gradeId=" + gradeId +
+                ", roleId=" + roleId +
                 ", vehicle=" + vehicle +
                 '}';
     }
