@@ -1,11 +1,15 @@
 package DevSGMA_PTC.SGMA_PTC.Services.WorkOrders;
 
+import DevSGMA_PTC.SGMA_PTC.Entities.Modules.ModuleEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.Vehicles.VehicleEntity;
 import DevSGMA_PTC.SGMA_PTC.Entities.WorkOrders.WorkOrderEntity;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Modules.ExceptionModuleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Vehicles.ExceptionVehicleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotRegistred;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotfound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders.WorkOrderDTO;
+import DevSGMA_PTC.SGMA_PTC.Repositories.Modules.ModuleRepository;
+import DevSGMA_PTC.SGMA_PTC.Repositories.Vehicles.VehicleRepository;
 import DevSGMA_PTC.SGMA_PTC.Repositories.WorkOrders.WorkOrderRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +29,14 @@ import java.util.Map;
 public class WorkOrderService {
 
     private final WorkOrderRepository repo;
+    private final VehicleRepository vehicleRepository;
+    private final ModuleRepository moduleRepository;
 
     @Autowired
-    public WorkOrderService(WorkOrderRepository repo) {
+    public WorkOrderService(WorkOrderRepository repo, VehicleRepository vehicleRepository, ModuleRepository moduleRepository) {
         this.repo = repo;
+        this.vehicleRepository = vehicleRepository;
+        this.moduleRepository = moduleRepository;
     }
 
     public Page<WorkOrderDTO> getAllWorkOrders(int page, int size) {
@@ -46,7 +54,7 @@ public class WorkOrderService {
             WorkOrderEntity workOrderEntity = repo.save(objData);
             return ConvertirADTO(workOrderEntity);
         } catch (Exception e) {
-            log.error("Error al regstrar una Orden de Trabajo" + e.getMessage());
+            log.error("Error al registrar una Orden de Trabajo " + e.getMessage());
             throw new ExceptionWorkOrdernotRegistred("La orden de trabajo no pudo ser registrada");
         }
 
@@ -95,6 +103,11 @@ public class WorkOrderService {
             dto.setVehicleId(workOrderEntity.getVehicleId().getVehicleId());
         }
 
+        if (workOrderEntity.getModuleId() != null) {
+            dto.setModuleName(workOrderEntity.getModuleId().getModuleName());
+            dto.setModuleId(workOrderEntity.getModuleId().getModuleId());
+        }
+
         dto.setWorkOrderImage(workOrderEntity.getWorkOrdersImage());
         dto.setIdStatus(workOrderEntity.getIdStatus());
 
@@ -106,9 +119,15 @@ public class WorkOrderService {
         entity.setWorkOrderId(json.getWorkOrderId());
 
         if (json.getVehicleId() != null) {
-            VehicleEntity vehicleEntity = repo.findById(json.getVehicleId())
-                    .orElseThrow(() -> new ExceptionVehicleNotFound("ID del vehiculo no encontrado")).getVehicleId();
+            VehicleEntity vehicleEntity = vehicleRepository.findById(json.getVehicleId())
+                    .orElseThrow(() -> new ExceptionVehicleNotFound("ID del vehiculo no encontrado"));
             entity.setVehicleId(vehicleEntity);
+        }
+
+        if (json.getModuleId() != null) {
+            ModuleEntity moduleEntity = moduleRepository.findById(json.getModuleId())
+                    .orElseThrow(() -> new ExceptionModuleNotFound("ID del modulo no encontrado"));
+            entity.setModuleId(moduleEntity);
         }
 
         entity.setWorkOrdersImage(json.getWorkOrderImage());
@@ -116,7 +135,6 @@ public class WorkOrderService {
 
         return entity;
     }
-
 
 
 

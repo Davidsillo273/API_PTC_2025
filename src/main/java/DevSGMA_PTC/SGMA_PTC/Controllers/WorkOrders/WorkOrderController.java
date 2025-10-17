@@ -1,5 +1,7 @@
 package DevSGMA_PTC.SGMA_PTC.Controllers.WorkOrders;
 
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Modules.ExceptionModuleNotFound;
+import DevSGMA_PTC.SGMA_PTC.Exceptions.Vehicles.ExceptionVehicleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotfound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders.WorkOrderDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.WorkOrders.WorkOrderService;
@@ -72,6 +74,12 @@ public class WorkOrderController {
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                     "Estado", "Completado",
                     "data", response
+            ));
+        }catch (ExceptionVehicleNotFound | ExceptionModuleNotFound e){
+            // Si falta el vehículo o módulo referenciado en la petición, devolver 404 con detalle claro
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "Not Found",
+                    "message", e.getMessage()
             ));
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
