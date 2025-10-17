@@ -94,6 +94,16 @@ public class WorkOrderService {
         );
     }
 
+    // Obtener todas las órdenes por estudiante (sin filtrar por estado)
+    public Map<String, Object> getWorkOrdersByStudentId(Long studentId) {
+        List<WorkOrderEntity> orders = repo.findByVehicleId_StudentId_StudentId(studentId);
+        List<WorkOrderDTO> dtos = orders.stream().map(this::ConvertirADTO).toList();
+        return Map.of(
+            "workOrders", dtos,
+            "cantidad", dtos.size()
+        );
+    }
+
     private WorkOrderDTO ConvertirADTO(WorkOrderEntity workOrderEntity) {
         WorkOrderDTO dto = new WorkOrderDTO();
         dto.setWorkOrderId(workOrderEntity.getWorkOrderId());

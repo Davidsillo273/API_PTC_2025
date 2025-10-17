@@ -10,6 +10,9 @@ import java.util.List;
 public interface WorkOrderRepository extends JpaRepository<WorkOrderEntity, Long > {
     // Buscar órdenes por id de estudiante y estado (usando el nombre del campo en la entidad: idStatus)
     List<WorkOrderEntity> findByVehicleId_StudentId_StudentIdAndIdStatus(Long studentId, Long idStatus);
+
+    // Buscar todas las órdenes por id de estudiante (sin filtrar por estado)
+    List<WorkOrderEntity> findByVehicleId_StudentId_StudentId(Long studentId);
     //Opcionales
     //Optional<WorkOrderEntity> findByPlate(String plate);
 }

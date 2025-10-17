@@ -131,6 +131,7 @@ public class SecurityConfig {
 
                         // WorkOrders
                         .requestMatchers(HttpMethod.GET, workOrders + "/getAllWorkOrders").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador", "ROLE_Alumno","ROLE_Docente")
+                        .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentId").hasAuthority("ROLE_Alumno")
                         .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentIdAndStatus3/*").hasAuthority("ROLE_Alumno")
                         .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentIdAndStatus2/*").hasAuthority("ROLE_Alumno")
 

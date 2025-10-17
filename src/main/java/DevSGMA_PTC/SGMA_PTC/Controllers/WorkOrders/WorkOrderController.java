@@ -5,7 +5,6 @@ import DevSGMA_PTC.SGMA_PTC.Exceptions.Vehicles.ExceptionVehicleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotfound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders.WorkOrderDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.WorkOrders.WorkOrderService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,7 +32,7 @@ public class WorkOrderController {
      * @return en la parte del FrontEnd devolvera la vista en forma de paginación
      */
     @GetMapping("/getAllWorkOrders")
-    private ResponseEntity<Page<WorkOrderDTO>> getAllWorkOrders(
+    public ResponseEntity<Page<WorkOrderDTO>> getAllWorkOrders(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ){
@@ -55,13 +54,12 @@ public class WorkOrderController {
     /***
      *
      * @param json json sera nuestra variable que literalmente sera una herramienta que nos permitira ocuparla como parametro
-     * @param request con el request hacemos la solicitud, una solicitud para ingresar una nueva orden de trabajo
      * @return el return puede variar, ya sea devolvemos si la insercion no pudo completarse,
      * el segundo caso es que exitosamente pudo crearse
      * y finalmente como tercer caso, un error que no pudo crearse la orden de trabajo
      */
     @PostMapping("/newWorkOrder")
-    private ResponseEntity<Map<String, Object>> insertWorkOrder(@Valid @RequestBody WorkOrderDTO json, HttpServletRequest request){
+    public ResponseEntity<Map<String, Object>> insertWorkOrder(@Valid @RequestBody WorkOrderDTO json){
         try{
             WorkOrderDTO response = workOrderService.insert(json);
             if (response == null){
@@ -160,5 +158,11 @@ public class WorkOrderController {
         return ResponseEntity.ok(result);
     }
 
+    // Obtener todas las órdenes de un estudiante (sin filtrar por estado)
+    @GetMapping("/getWorkOrdersByStudentId/{studentId}")
+    public ResponseEntity<?> getWorkOrdersByStudentId(@PathVariable Long studentId) {
+        Map<String, Object> result = workOrderService.getWorkOrdersByStudentId(studentId);
+        return ResponseEntity.ok(result);
+    }
 
 }
