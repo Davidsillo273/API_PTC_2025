@@ -94,9 +94,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, levels + "/getAllLevels").authenticated()
 
                         // Work Orders
-                        .requestMatchers(HttpMethod.POST, workOrders + "/newWorkOrder").authenticated()
-                        .requestMatchers(HttpMethod.PUT, workOrders + "/updateWorkOrder/*").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, workOrders + "/deleteWorkOrder/*").authenticated()
+                        .requestMatchers(HttpMethod.POST, workOrders + "/newWorkOrder").hasAuthority("ROLE_Alumno")
+                        .requestMatchers(HttpMethod.PUT, workOrders + "/updateWorkOrder/*").hasAuthority("ROLE_Alumno")
+                        .requestMatchers(HttpMethod.DELETE, workOrders + "/deleteWorkOrder/*").hasAuthority("ROLE_Alumno")
 
                         // AUTH POR ROL ANIMADOR Y COORDINADORA
 
@@ -130,9 +130,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, vehicles + "/updateStatusVehicle/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
 
                         // WorkOrders
-                        .requestMatchers(HttpMethod.GET, workOrders + "/getAllWorkOrders").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
-                        .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentIdAndStatus2/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
-                        .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentIdAndStatus2/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, workOrders + "/getAllWorkOrders").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador", "ROLE_Alumno","ROLE_Docente")
+                        .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentIdAndStatus3/*").hasAuthority("ROLE_Alumno")
+                        .requestMatchers(HttpMethod.GET, workOrders + "/getWorkOrdersByStudentIdAndStatus2/*").hasAuthority("ROLE_Alumno")
 
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess
