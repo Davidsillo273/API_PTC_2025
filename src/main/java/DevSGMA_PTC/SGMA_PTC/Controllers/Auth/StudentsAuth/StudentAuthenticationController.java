@@ -17,7 +17,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Controlador para la autenticación de estudiantes.
@@ -81,32 +80,32 @@ public class StudentAuthenticationController {
         if (studentOpt.isPresent()) {
             StudentEntity student = studentOpt.get();
 
-            // Obtener authorities del contexto de seguridad (puede establecerse tras el login)
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            String roleValue = null;
-            if (auth != null && auth.isAuthenticated()) {
-                roleValue = auth.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .findFirst()
-                        .orElse(null); // toma la primera authority disponible como rol representativo
+            // Obtener roleName de forma segura (como se hace en el auth de instructors)
+            String roleName = null;
+            if (student.getRoleId() != null) {
+                try {
+                    roleName = student.getRoleId().getRoleName();
+                } catch (Exception ignored) {
+                    roleName = null;
+                }
             }
 
-            // Obtener grupo de forma segura (null si gradeId es null)
-            String groupValue = null;
-            try {
-                if (student.getGradeId() != null) {
-                    groupValue = String.valueOf(student.getGradeId().getGradeGroup());
+            // Obtener group (grade) de forma segura
+            String group = null;
+            if (student.getGradeId() != null) {
+                try {
+                    group = String.valueOf(student.getGradeId().getGradeGroup());
+                } catch (Exception ignored) {
+                    group = null;
                 }
-            } catch (Exception e) {
-                groupValue = null;
             }
 
             String token = jwtUtils.create(
                     String.valueOf(student.getStudentId()),
                     student.getEmail(),
-                    roleValue,   // ahora incluye rol si está disponible
-                    null,        // nivel no utilizado para estudiantes
-                    groupValue   // grupo del estudiante si existe
+                    roleName, // ahora pasamos el nombre del rol como en instructors
+                    null, // Nivel no utilizado para estudiantes
+                    group  // Grupo del estudiante (puede ser null)
             );
 
             String cookieValue = String.format(
