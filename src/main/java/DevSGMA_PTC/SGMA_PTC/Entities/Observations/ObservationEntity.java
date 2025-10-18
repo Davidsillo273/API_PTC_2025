@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-@Table(name = "TBOBSERVATIONS")
+@Table(name = "TBOBSERVACIONESTRABAJOS")
 public class ObservationEntity {
 
     @Id
