@@ -78,6 +78,8 @@ public class WorkOrderService {
         workOrderExist.setWorkOrderId(json.getWorkOrderId());
 
         workOrderExist.setIdStatus(json.getIdStatus());
+        // Actualizar descripción si se proporciona (puede ser null)
+        workOrderExist.setDescription(json.getDescription());
         //3. Actualización del registro
         WorkOrderEntity WorkOrderUpdated = repo.save(workOrderExist);
         //4. Convertir a DTO
@@ -120,6 +122,8 @@ public class WorkOrderService {
 
         dto.setWorkOrderImage(workOrderEntity.getWorkOrdersImage());
         dto.setIdStatus(workOrderEntity.getIdStatus());
+        // Mapear descripción
+        dto.setDescription(workOrderEntity.getDescription());
 
         return dto;
     }
@@ -142,6 +146,8 @@ public class WorkOrderService {
 
         entity.setWorkOrdersImage(json.getWorkOrderImage());
         entity.setIdStatus(json.getIdStatus());
+        // Mapear descripción
+        entity.setDescription(json.getDescription());
 
         return entity;
     }

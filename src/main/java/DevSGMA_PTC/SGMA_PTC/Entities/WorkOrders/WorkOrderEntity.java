@@ -48,6 +48,10 @@ public class WorkOrderEntity {
     @Column(name = "IDSTATUS")
     private Long idStatus;
 
+    // Nuevo campo descripción
+    @Column(name = "DESCRIPTION", length = 300)
+    private String description;
+
     //*** ONETOMANYS ***\\
 
     @OneToMany(mappedBy = "workOrderId", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Relación OneToMany con tbEntries
@@ -63,6 +67,7 @@ public class WorkOrderEntity {
                 ", estimatedTime='" + estimatedTime + '\'' +
                 ", workOrdersImage='" + workOrdersImage + '\'' +
                 ", idStatus=" + idStatus +
+                ", description='" + description + '\'' +
                 ", entry=" + entry +
                 '}';
     }

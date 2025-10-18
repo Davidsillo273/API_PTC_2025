@@ -35,4 +35,7 @@ public class WorkOrderDTO {
     //Campo adicional
     private String vehiclePlateNumber; // Campo adicional para mostrar el número de placa del vehículo, campo como tal no existe en tbWorkOrders
     private String moduleName; // Campo adicional para mostrar el nombre del módulo, campo como tal no existe en tbWorkOrders
+
+    // Nuevo campo descripción (opcional)
+    private String description;
 }
