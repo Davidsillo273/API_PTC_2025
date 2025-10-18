@@ -150,13 +150,7 @@ public class WorkOrderService {
             log.warn("UpdateStatus - requester ({}) is not owner ({})", studentId, ownerStudentId);
             throw new SecurityException("No autorizado: Solo el estudiante propietario puede actualizar el estado");
         }
-
-        // Validar transición: solo puede pasar de 3 -> 4 o 6
-        Long currentStatus = workOrder.getIdStatus();
-        if (currentStatus == null || !currentStatus.equals(3L)) {
-            log.warn("UpdateStatus - invalid current status: {}", currentStatus);
-            throw new IllegalStateException("Solo se permite cambiar estado desde 3 (En Progreso)");
-        }
+        
 
         if (newStatus == null || !(newStatus.equals(4L) || newStatus.equals(6L))) {
             log.warn("UpdateStatus - invalid target status: {}", newStatus);
