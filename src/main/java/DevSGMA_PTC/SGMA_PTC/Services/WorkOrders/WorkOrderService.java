@@ -50,11 +50,27 @@ public class WorkOrderService {
             throw new IllegalArgumentException("La orden de trabajo debe ser llenada con cada campo requerido");
         }
         try {
+            // Log del DTO recibido para depuración
+            log.info("Insert - DTO received: estimatedTime='{}', description='{}', vehicleId='{}', moduleId='{}', idStatus='{}'",
+                    json.getEstimatedTime(), json.getDescription(), json.getVehicleId(), json.getModuleId(), json.getIdStatus());
+
             WorkOrderEntity objData = ConvertirAEntity(json);
+
+            // Log de la entidad antes de guardar
+            log.info("Insert - Entity to save: estimatedTime='{}', description='{}', vehicleId='{}', moduleId='{}', idStatus='{}'",
+                    objData.getEstimatedTime(), objData.getDescription(),
+                    objData.getVehicleId() != null ? objData.getVehicleId().getVehicleId() : null,
+                    objData.getModuleId() != null ? objData.getModuleId().getModuleId() : null,
+                    objData.getIdStatus());
+
             WorkOrderEntity workOrderEntity = repo.save(objData);
+
+            // Log de la entidad retornada por JPA después de guardar
+            log.info("Insert - Entity saved: workOrderId='{}', estimatedTime='{}', description='{}', idStatus='{}'",
+                    workOrderEntity.getWorkOrderId(), workOrderEntity.getEstimatedTime(), workOrderEntity.getDescription(), workOrderEntity.getIdStatus());
             return ConvertirADTO(workOrderEntity);
         } catch (Exception e) {
-            log.error("Error al registrar una Orden de Trabajo " + e.getMessage());
+            log.error("Error al registrar una Orden de Trabajo " + e.getMessage(), e);
             throw new ExceptionWorkOrdernotRegistred("La orden de trabajo no pudo ser registrada");
         }
 
@@ -80,6 +96,8 @@ public class WorkOrderService {
         workOrderExist.setIdStatus(json.getIdStatus());
         // Actualizar descripción si se proporciona (puede ser null)
         workOrderExist.setDescription(json.getDescription());
+        // Actualizar estimatedTime si se proporciona
+        workOrderExist.setEstimatedTime(json.getEstimatedTime());
         //3. Actualización del registro
         WorkOrderEntity WorkOrderUpdated = repo.save(workOrderExist);
         //4. Convertir a DTO
@@ -124,6 +142,8 @@ public class WorkOrderService {
         dto.setIdStatus(workOrderEntity.getIdStatus());
         // Mapear descripción
         dto.setDescription(workOrderEntity.getDescription());
+        // Mapear estimatedTime
+        dto.setEstimatedTime(workOrderEntity.getEstimatedTime());
 
         return dto;
     }
@@ -148,6 +168,8 @@ public class WorkOrderService {
         entity.setIdStatus(json.getIdStatus());
         // Mapear descripción
         entity.setDescription(json.getDescription());
+        // Mapear estimatedTime
+        entity.setEstimatedTime(json.getEstimatedTime());
 
         return entity;
     }

@@ -1,5 +1,6 @@
 package DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -38,4 +39,15 @@ public class WorkOrderDTO {
 
     // Nuevo campo descripción (opcional)
     private String description;
+
+    // JsonSetters tolerantes: aceptan números o strings y convierten a String internamente
+    @JsonSetter("estimatedTime")
+    public void setEstimatedTimeFromJson(Object value) {
+        this.estimatedTime = value == null ? null : String.valueOf(value);
+    }
+
+    @JsonSetter("description")
+    public void setDescriptionFromJson(Object value) {
+        this.description = value == null ? null : String.valueOf(value);
+    }
 }
