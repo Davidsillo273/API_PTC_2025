@@ -150,7 +150,7 @@ public class WorkOrderService {
             log.warn("UpdateStatus - requester ({}) is not owner ({})", studentId, ownerStudentId);
             throw new SecurityException("No autorizado: Solo el estudiante propietario puede actualizar el estado");
         }
-        
+
 
         if (newStatus == null || !(newStatus.equals(4L) || newStatus.equals(6L))) {
             log.warn("UpdateStatus - invalid target status: {}", newStatus);
