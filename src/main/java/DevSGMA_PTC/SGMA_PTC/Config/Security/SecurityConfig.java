@@ -99,6 +99,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, observations + "/getObservationsByWorkOrder/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador","ROLE_Alumno","ROLE_Docente")
 
                         // Work Orders
+                        .requestMatchers(HttpMethod.POST, workOrders + "/{workOrderId}/status").hasAnyAuthority("ROLE_Alumno", "ROLE_Docente", "ROLE_Animador", "ROLE_Coordinador")
                         .requestMatchers(HttpMethod.POST, workOrders + "/newWorkOrder").hasAuthority("ROLE_Alumno")
                         .requestMatchers(HttpMethod.PUT, workOrders + "/updateWorkOrder/*").hasAuthority("ROLE_Alumno")
                         .requestMatchers(HttpMethod.DELETE, workOrders + "/deleteWorkOrder/*").hasAuthority("ROLE_Alumno")
