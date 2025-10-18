@@ -134,33 +134,20 @@ public class WorkOrderService {
         );
     }
 
-    public WorkOrderDTO updateWorkOrderStatus(Long workOrderId, Long newStatus, Long studentId) {
-        log.info("UpdateStatus - workOrderId={}, newStatus={}, studentId={}", workOrderId, newStatus, studentId);
+    public WorkOrderDTO updateWorkOrderStatus(Long workOrderId, Long newStatus) {
+        log.info("UpdateStatus - workOrderId={}, newStatus={}", workOrderId, newStatus);
         WorkOrderEntity workOrder = repo.findById(workOrderId)
                 .orElseThrow(() -> new ExceptionWorkOrdernotfound("Orden de trabajo no encontrada."));
 
-        // Validaciones de existencia de vehículo y student
-        if (workOrder.getVehicleId() == null || workOrder.getVehicleId().getStudentId() == null) {
-            log.warn("UpdateStatus - workOrder has no vehicle or vehicle has no student");
-            throw new SecurityException("No autorizado: La orden no pertenece a ningún estudiante");
+        if (newStatus == null) {
+            throw new IllegalArgumentException("El nuevo estado no puede ser nulo");
         }
 
-        Long ownerStudentId = workOrder.getVehicleId().getStudentId().getStudentId();
-        if (studentId == null || !ownerStudentId.equals(studentId)) {
-            log.warn("UpdateStatus - requester ({}) is not owner ({})", studentId, ownerStudentId);
-            throw new SecurityException("No autorizado: Solo el estudiante propietario puede actualizar el estado");
-        }
-
-
-        if (newStatus == null || !(newStatus.equals(4L) || newStatus.equals(6L))) {
-            log.warn("UpdateStatus - invalid target status: {}", newStatus);
-            throw new IllegalArgumentException("Estados válidos: 4 (Completado), 6 (Atrasado)");
-        }
-
-        // Aplicar y persistir
+        // Aplicar y persistir sin restricciones adicionales
+        Long previousStatus = workOrder.getIdStatus();
         workOrder.setIdStatus(newStatus);
         WorkOrderEntity saved = repo.save(workOrder);
-        log.info("UpdateStatus - saved workOrderId={}, idStatus={}", saved.getWorkOrderId(), saved.getIdStatus());
+        log.info("UpdateStatus - saved workOrderId={}, previousStatus={}, newStatus={}", saved.getWorkOrderId(), previousStatus, saved.getIdStatus());
         return ConvertirADTO(saved);
     }
 

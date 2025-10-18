@@ -183,28 +183,10 @@ public class WorkOrderController {
     @PutMapping("/{workOrderId}/status")
     public ResponseEntity<Map<String, Object>> updateWorkOrderStatus(
             @PathVariable Long workOrderId,
-            @Valid @RequestBody WorkOrderStatusDTO body,
-            @RequestHeader(value = "X-Student-Id", required = false) String studentIdHeader
+            @Valid @RequestBody WorkOrderStatusDTO body
     ) {
         try {
-            if (studentIdHeader == null || studentIdHeader.isBlank()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
-                        "success", false,
-                        "message", "Cabecera X-Student-Id requerida"
-                ));
-            }
-
-            Long studentId;
-            try {
-                studentId = Long.parseLong(studentIdHeader);
-            } catch (NumberFormatException ex) {
-                return ResponseEntity.badRequest().body(Map.of(
-                        "success", false,
-                        "message", "X-Student-Id debe ser un número válido"
-                ));
-            }
-
-            WorkOrderDTO updated = workOrderService.updateWorkOrderStatus(workOrderId, body.getIdStatus(), studentId);
+            WorkOrderDTO updated = workOrderService.updateWorkOrderStatus(workOrderId, body.getIdStatus());
 
             Map<String, Object> workOrderMap = Map.of(
                     "workOrderId", updated.getWorkOrderId(),
@@ -222,12 +204,7 @@ public class WorkOrderController {
                     "success", false,
                     "message", e.getMessage()
             ));
-        } catch (SecurityException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(
-                    "success", false,
-                    "message", e.getMessage()
-            ));
-        } catch (IllegalStateException | IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of(
                     "success", false,
                     "message", e.getMessage()
