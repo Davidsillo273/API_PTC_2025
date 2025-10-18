@@ -164,6 +164,26 @@ public class WorkOrderService {
         return ConvertirADTO(saved);
     }
 
+    // Obtener órdenes por estado (idStatus)
+    public Map<String, Object> getWorkOrdersByStatus(Long status) {
+        List<WorkOrderEntity> orders = repo.findByIdStatus(status);
+        List<WorkOrderDTO> dtos = orders.stream().map(this::ConvertirADTO).toList();
+        return Map.of(
+                "workOrders", dtos,
+                "cantidad", dtos.size()
+        );
+    }
+
+    // Conveniencia: obtener órdenes con estado = 1
+    public Map<String, Object> getWorkOrdersByStatus1() {
+        return getWorkOrdersByStatus(1L);
+    }
+
+    // Conveniencia: obtener órdenes con estado = 2
+    public Map<String, Object> getWorkOrdersByStatus2() {
+        return getWorkOrdersByStatus(2L);
+    }
+
     private WorkOrderDTO ConvertirADTO(WorkOrderEntity workOrderEntity) {
         WorkOrderDTO dto = new WorkOrderDTO();
         dto.setWorkOrderId(workOrderEntity.getWorkOrderId());

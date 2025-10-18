@@ -16,6 +16,9 @@ public interface WorkOrderRepository extends JpaRepository<WorkOrderEntity, Long
 
     // Buscar órdenes por número de placa del vehículo
     List<WorkOrderEntity> findByVehicleId_PlateNumber(String plateNumber);
+
+    // Buscar órdenes por estado (idStatus)
+    List<WorkOrderEntity> findByIdStatus(Long idStatus);
     //Opcionales
     //Optional<WorkOrderEntity> findByPlate(String plate);
 }

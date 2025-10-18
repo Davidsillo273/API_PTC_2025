@@ -166,6 +166,19 @@ public class WorkOrderController {
         return ResponseEntity.ok(result);
     }
 
+    // Nuevo endpoints para obtener órdenes por estado fijo 1 y 2
+    @GetMapping("/getWorkOrdersByStatus1")
+    public ResponseEntity<?> getWorkOrdersByStatus1() {
+        Map<String, Object> result = workOrderService.getWorkOrdersByStatus1();
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/getWorkOrdersByStatus2")
+    public ResponseEntity<?> getWorkOrdersByStatus2() {
+        Map<String, Object> result = workOrderService.getWorkOrdersByStatus2();
+        return ResponseEntity.ok(result);
+    }
+
     // Nuevo endpoint para actualizar estado: PUT /api/workOrders/{workOrderId}/status
     @PutMapping("/{workOrderId}/status")
     public ResponseEntity<Map<String, Object>> updateWorkOrderStatus(
