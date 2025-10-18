@@ -41,6 +41,7 @@ public class SecurityConfig {
         String workOrders = "/api/workOrders";
         String instructors = "/api/instructors";
         String roles = "/api/roles";
+        String observations = "/api/observations";
 
         http
                 .csrf(csrf -> csrf.disable())
@@ -92,6 +93,10 @@ public class SecurityConfig {
 
                         // Levels
                         .requestMatchers(HttpMethod.GET, levels + "/getAllLevels").authenticated()
+
+                        // Observations
+                        .requestMatchers(HttpMethod.POST, observations + "/newObservation").hasAnyAuthority("ROLE_Alumno", "ROLE_Docente", "ROLE_Animador", "ROLE_Coordinador")
+                        .requestMatchers(HttpMethod.GET, observations + "/getObservationsByWorkOrder/*").hasAnyAuthority("ROLE_Animador", "ROLE_Coordinador","ROLE_Alumno","ROLE_Docente")
 
                         // Work Orders
                         .requestMatchers(HttpMethod.POST, workOrders + "/newWorkOrder").hasAuthority("ROLE_Alumno")

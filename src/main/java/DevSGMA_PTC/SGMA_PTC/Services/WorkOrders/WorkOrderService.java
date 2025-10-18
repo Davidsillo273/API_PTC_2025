@@ -124,6 +124,16 @@ public class WorkOrderService {
         );
     }
 
+    // Obtener todas las órdenes por número de placa del vehículo
+    public Map<String, Object> getWorkOrdersByPlate(String plateNumber) {
+        List<WorkOrderEntity> orders = repo.findByVehicleId_PlateNumber(plateNumber);
+        List<WorkOrderDTO> dtos = orders.stream().map(this::ConvertirADTO).toList();
+        return Map.of(
+            "workOrders", dtos,
+            "cantidad", dtos.size()
+        );
+    }
+
     public WorkOrderDTO updateWorkOrderStatus(Long workOrderId, Long newStatus, Long studentId) {
         log.info("UpdateStatus - workOrderId={}, newStatus={}, studentId={}", workOrderId, newStatus, studentId);
         WorkOrderEntity workOrder = repo.findById(workOrderId)

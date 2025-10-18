@@ -111,16 +111,18 @@ public class CorsConfig {
                 "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
         ));
 
-        // ✅ CABECERAS PERMITIDAS
+        // ✅ CABECERAS PERMITIDAS - AGREGAR X-Student-Id
         configuration.setAllowedHeaders(Arrays.asList(
                 "Origin", "Content-Type", "Accept", "Authorization",
                 "X-Requested-With", "Access-Control-Request-Method",
-                "Access-Control-Request-Headers", "Cookie", "Set-Cookie"
+                "Access-Control-Request-Headers", "Cookie", "Set-Cookie",
+                "X-Student-Id"  // ← AGREGAR ESTA LÍNEA
         ));
 
         // ✅ CABECERAS EXPUESTAS (CRÍTICO para cookies)
         configuration.setExposedHeaders(Arrays.asList(
-                "Set-Cookie", "Authorization", "Content-Disposition"
+                "Set-Cookie", "Authorization", "Content-Disposition",
+                "X-Student-Id"  // ← OPCIONAL: También puedes exponerlo
         ));
 
         // ✅ CONFIGURACIÓN CRÍTICA

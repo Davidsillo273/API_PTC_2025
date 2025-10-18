@@ -228,4 +228,18 @@ public class WorkOrderController {
         }
     }
 
+    // Obtener órdenes por número de placa del vehículo
+    @GetMapping("/getWorkOrdersByPlate/{plateNumber}")
+    public ResponseEntity<?> getWorkOrdersByPlate(@PathVariable String plateNumber) {
+        try {
+            Map<String, Object> result = workOrderService.getWorkOrdersByPlate(plateNumber);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", e.getMessage()
+            ));
+        }
+    }
+
 }
