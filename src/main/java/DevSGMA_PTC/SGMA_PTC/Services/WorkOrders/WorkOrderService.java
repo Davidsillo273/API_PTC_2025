@@ -124,6 +124,42 @@ public class WorkOrderService {
         );
     }
 
+    public WorkOrderDTO updateWorkOrderStatus(Long workOrderId, Long newStatus, Long studentId) {
+        log.info("UpdateStatus - workOrderId={}, newStatus={}, studentId={}", workOrderId, newStatus, studentId);
+        WorkOrderEntity workOrder = repo.findById(workOrderId)
+                .orElseThrow(() -> new ExceptionWorkOrdernotfound("Orden de trabajo no encontrada."));
+
+        // Validaciones de existencia de vehículo y student
+        if (workOrder.getVehicleId() == null || workOrder.getVehicleId().getStudentId() == null) {
+            log.warn("UpdateStatus - workOrder has no vehicle or vehicle has no student");
+            throw new SecurityException("No autorizado: La orden no pertenece a ningún estudiante");
+        }
+
+        Long ownerStudentId = workOrder.getVehicleId().getStudentId().getStudentId();
+        if (studentId == null || !ownerStudentId.equals(studentId)) {
+            log.warn("UpdateStatus - requester ({}) is not owner ({})", studentId, ownerStudentId);
+            throw new SecurityException("No autorizado: Solo el estudiante propietario puede actualizar el estado");
+        }
+
+        // Validar transición: solo puede pasar de 3 -> 4 o 6
+        Long currentStatus = workOrder.getIdStatus();
+        if (currentStatus == null || !currentStatus.equals(3L)) {
+            log.warn("UpdateStatus - invalid current status: {}", currentStatus);
+            throw new IllegalStateException("Solo se permite cambiar estado desde 3 (En Progreso)");
+        }
+
+        if (newStatus == null || !(newStatus.equals(4L) || newStatus.equals(6L))) {
+            log.warn("UpdateStatus - invalid target status: {}", newStatus);
+            throw new IllegalArgumentException("Estados válidos: 4 (Completado), 6 (Atrasado)");
+        }
+
+        // Aplicar y persistir
+        workOrder.setIdStatus(newStatus);
+        WorkOrderEntity saved = repo.save(workOrder);
+        log.info("UpdateStatus - saved workOrderId={}, idStatus={}", saved.getWorkOrderId(), saved.getIdStatus());
+        return ConvertirADTO(saved);
+    }
+
     private WorkOrderDTO ConvertirADTO(WorkOrderEntity workOrderEntity) {
         WorkOrderDTO dto = new WorkOrderDTO();
         dto.setWorkOrderId(workOrderEntity.getWorkOrderId());
@@ -131,11 +167,17 @@ public class WorkOrderService {
         if (workOrderEntity.getVehicleId() != null) {
             dto.setVehiclePlateNumber(workOrderEntity.getVehicleId().getPlateNumber());
             dto.setVehicleId(workOrderEntity.getVehicleId().getVehicleId());
+            // Nuevo: brand/model
+            dto.setVehicleBrand(workOrderEntity.getVehicleId().getBrand());
+            dto.setVehicleModel(workOrderEntity.getVehicleId().getModel());
+            // VehicleYear no existe en la entidad; mantener null
+            dto.setVehicleYear(null);
         }
 
         if (workOrderEntity.getModuleId() != null) {
             dto.setModuleName(workOrderEntity.getModuleId().getModuleName());
             dto.setModuleId(workOrderEntity.getModuleId().getModuleId());
+            dto.setModuleCode(workOrderEntity.getModuleId().getModuleCode());
         }
 
         dto.setWorkOrderImage(workOrderEntity.getWorkOrdersImage());
@@ -144,6 +186,22 @@ public class WorkOrderService {
         dto.setDescription(workOrderEntity.getDescription());
         // Mapear estimatedTime
         dto.setEstimatedTime(workOrderEntity.getEstimatedTime());
+
+        // Mapear statusName (mapeo simple)
+        Long status = workOrderEntity.getIdStatus();
+        String statusName = "";
+        if (status != null) {
+            switch (status.intValue()) {
+                case 1 -> statusName = "Pendiente";
+                case 2 -> statusName = "Aprobado";
+                case 3 -> statusName = "Aprobado - En Progreso";
+                case 4 -> statusName = "Completado";
+                case 5 -> statusName = "Rechazado";
+                case 6 -> statusName = "Atrasado";
+                default -> statusName = "Desconocido";
+            }
+        }
+        dto.setStatusName(statusName);
 
         return dto;
     }

@@ -4,6 +4,7 @@ import DevSGMA_PTC.SGMA_PTC.Exceptions.Modules.ExceptionModuleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.Vehicles.ExceptionVehicleNotFound;
 import DevSGMA_PTC.SGMA_PTC.Exceptions.WorkOrders.ExceptionWorkOrdernotfound;
 import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders.WorkOrderDTO;
+import DevSGMA_PTC.SGMA_PTC.Models.DTO.WorkOrders.WorkOrderStatusDTO;
 import DevSGMA_PTC.SGMA_PTC.Services.WorkOrders.WorkOrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -163,6 +164,68 @@ public class WorkOrderController {
     public ResponseEntity<?> getWorkOrdersByStudentId(@PathVariable Long studentId) {
         Map<String, Object> result = workOrderService.getWorkOrdersByStudentId(studentId);
         return ResponseEntity.ok(result);
+    }
+
+    // Nuevo endpoint para actualizar estado: PUT /api/workOrders/{workOrderId}/status
+    @PutMapping("/{workOrderId}/status")
+    public ResponseEntity<Map<String, Object>> updateWorkOrderStatus(
+            @PathVariable Long workOrderId,
+            @Valid @RequestBody WorkOrderStatusDTO body,
+            @RequestHeader(value = "X-Student-Id", required = false) String studentIdHeader
+    ) {
+        try {
+            if (studentIdHeader == null || studentIdHeader.isBlank()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+                        "success", false,
+                        "message", "Cabecera X-Student-Id requerida"
+                ));
+            }
+
+            Long studentId;
+            try {
+                studentId = Long.parseLong(studentIdHeader);
+            } catch (NumberFormatException ex) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "success", false,
+                        "message", "X-Student-Id debe ser un número válido"
+                ));
+            }
+
+            WorkOrderDTO updated = workOrderService.updateWorkOrderStatus(workOrderId, body.getIdStatus(), studentId);
+
+            Map<String, Object> workOrderMap = Map.of(
+                    "workOrderId", updated.getWorkOrderId(),
+                    "idStatus", updated.getIdStatus()
+            );
+
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "Estado actualizado correctamente",
+                    "workOrder", workOrderMap
+            ));
+
+        } catch (ExceptionWorkOrdernotfound e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "success", false,
+                    "message", e.getMessage()
+            ));
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(
+                    "success", false,
+                    "message", e.getMessage()
+            ));
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", e.getMessage()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "Error al actualizar estado",
+                    "detail", e.getMessage()
+            ));
+        }
     }
 
 }
