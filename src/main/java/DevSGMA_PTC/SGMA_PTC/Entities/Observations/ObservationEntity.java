@@ -15,8 +15,8 @@ import lombok.Setter;
 public class ObservationEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_observations_trabajos")
-    @SequenceGenerator(name = "seq_observations_trabajos", sequenceName = "seq_observations_trabajos", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_observaciones_trabajos")
+    @SequenceGenerator(name = "seq_observaciones_trabajos", sequenceName = "seq_observaciones_trabajos", allocationSize = 1)
     @Column(name = "OBSERVACIONID")
     private Long observacionId;
 
